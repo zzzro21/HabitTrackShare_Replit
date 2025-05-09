@@ -52,25 +52,26 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   }, [userId, calculateWeekScores]);
 
   // 배경 막대 색상
-  const backgroundBarColor = 'rgba(226, 232, 240, 0.6)'; // 연한 회색 배경
+  const backgroundBarColor = 'rgba(240, 240, 245, 0.7)'; // 매우 연한 회색-퍼플 배경
 
   return (
-    <Card className="rounded-xl shadow-sm border-0 bg-white/90">
+    <Card className="rounded-2xl shadow-sm border-0 bg-white/90">
       <CardHeader className="pb-2 px-6">
         <CardTitle className="text-base font-medium text-gray-700">나의 성장 그래프</CardTitle>
       </CardHeader>
-      <CardContent className="px-4 pt-0 pb-4">
+      <CardContent className="px-2 pt-0 pb-6">
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={data}
-              margin={{ top: 5, right: 10, left: -5, bottom: 0 }}
-              barSize={30}
-              barGap={-30} // 그래프 겹치기 위한 음수값
-              barCategoryGap={12}
+              margin={{ top: 5, right: 5, left: 5, bottom: 0 }}
+              barSize={45}
+              barGap={-45} // 막대를 완전히 겹치게 함
+              barCategoryGap={20}
+              layout="horizontal"
             >
               {/* 그리드 없애서 더 깔끔하게 보이게 함 */}
-              <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.3} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} />
               
               {/* X축 스타일 개선 */}
               <XAxis 
@@ -89,8 +90,9 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: '#888' }}
-                dx={-10}
-                tickCount={5}
+                dx={0}
+                tickCount={4}
+                hide
               />
               
               {/* 툴팁 스타일링 */}
@@ -109,44 +111,60 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 itemStyle={{ color: '#666' }}
               />
               
-              {/* 배경 막대 (모든 카테고리를 합친 최대 점수) */}
+              {/* 배경 막대 */}
               <Bar 
                 dataKey="background" 
                 fill={backgroundBarColor}
-                radius={[8, 8, 0, 0]}
+                radius={[10, 10, 0, 0]}
+                maxBarSize={47}
+                // z-index를 낮게 설정하여 배경으로 표시
+                style={{ zIndex: 0 }}
               />
               
-              {/* 스택 형태로 카테고리별 막대 표시 - 배경과 동일한 위치에 배치 */}
+              {/* 스택 형태로 카테고리별 막대 표시 - 배경 위에 겹치도록 표시 */}
               <Bar 
                 dataKey="독서"
                 stackId="actual"
                 name="독서"
                 fill={colors['독서']}
+                // z-index를 높게 설정하여 앞에 표시
+                style={{ zIndex: 1 }}
+                maxBarSize={45} 
+                // barGap을 -45로 설정하여 배경 막대 위에 정확히 겹치도록 함
+                barSize={45}
               />
               <Bar 
                 dataKey="동영상"
                 stackId="actual"
                 name="동영상"
                 fill={colors['동영상']}
+                style={{ zIndex: 1 }}
+                maxBarSize={45}
               />
               <Bar 
                 dataKey="제품애용"
                 stackId="actual"
                 name="제품애용" 
                 fill={colors['제품애용']}
+                style={{ zIndex: 1 }}
+                maxBarSize={45}
               />
               <Bar 
                 dataKey="미팅참석"
                 stackId="actual"
                 name="미팅참석"
                 fill={colors['미팅참석']}
+                style={{ zIndex: 1 }}
+                maxBarSize={45}
               />
               <Bar 
                 dataKey="소비자관리"
                 stackId="actual"
                 name="소비자관리"
                 fill={colors['소비자관리']}
-                radius={[8, 8, 0, 0]}
+                radius={[10, 10, 0, 0]}
+                style={{ zIndex: 1 }}
+                maxBarSize={45}
               />
             </BarChart>
           </ResponsiveContainer>
