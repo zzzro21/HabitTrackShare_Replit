@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHabit } from '@/lib/HabitContext';
 import { useLocation } from 'wouter';
 import TabNavigation from '@/components/TabNavigation';
@@ -81,6 +81,31 @@ const NotePage: React.FC = () => {
     fetchData();
   }, [activeUser, day]);
 
+  // 텍스트영역 참조 배열
+  const textAreaRefs = useRef<{ [key: number]: HTMLTextAreaElement | null }>({});
+  const feedbackTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  
+  // 텍스트 영역 높이 조절 함수
+  const adjustTextAreaHeight = (textArea: HTMLTextAreaElement | null) => {
+    if (textArea) {
+      textArea.style.height = 'auto';
+      textArea.style.height = textArea.scrollHeight + 'px';
+    }
+  };
+  
+  // 모든 텍스트 영역 높이 조절
+  useEffect(() => {
+    if (!isFetching) {
+      // 노트 텍스트 영역 높이 조절
+      Object.values(textAreaRefs.current).forEach(textArea => {
+        adjustTextAreaHeight(textArea);
+      });
+      
+      // 피드백 텍스트 영역 높이 조절
+      adjustTextAreaHeight(feedbackTextAreaRef.current);
+    }
+  }, [isFetching, notes, feedback]);
+  
   // 노트 내용 변경 핸들러
   const handleNoteChange = (habitId: number, content: string) => {
     setNotes(prev => ({
@@ -366,10 +391,11 @@ const NotePage: React.FC = () => {
                   </div>
                   <div className="mt-2">
                     <textarea
+                      ref={el => textAreaRefs.current[1] = el}
                       value={notes[1] || ''}
                       onChange={(e) => handleNoteChange(1, e.target.value)}
                       placeholder="읽은 책의 제목과 내용, 느낀점 등을 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-y"
+                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                     />
                   </div>
                 </div>
@@ -407,10 +433,11 @@ const NotePage: React.FC = () => {
                   </div>
                   <div className="mt-2">
                     <textarea
+                      ref={el => textAreaRefs.current[2] = el}
                       value={notes[2] || ''}
                       onChange={(e) => handleNoteChange(2, e.target.value)}
                       placeholder="시청한 영상의 제목과 내용, 느낀점 등을 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-y"
+                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                     />
                   </div>
                 </div>
@@ -459,10 +486,11 @@ const NotePage: React.FC = () => {
                   </div>
                   <div className="mt-2">
                     <textarea
+                      ref={el => textAreaRefs.current[3] = el}
                       value={notes[3] || ''}
                       onChange={(e) => handleNoteChange(3, e.target.value)}
                       placeholder="애용한 제품명과 후기를 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-y"
+                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                     />
                   </div>
                 </div>
@@ -499,7 +527,6 @@ const NotePage: React.FC = () => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-0.5">세부내용</label>
                     <textarea
                       value={notes[4] || ''}
                       onChange={(e) => handleNoteChange(4, e.target.value)}
@@ -552,7 +579,6 @@ const NotePage: React.FC = () => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-0.5">세부내용</label>
                     <textarea
                       value={notes[5] || ''}
                       onChange={(e) => handleNoteChange(5, e.target.value)}
