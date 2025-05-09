@@ -65,9 +65,9 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
             <BarChart
               data={data}
               margin={{ top: 5, right: 5, left: 5, bottom: 0 }}
-              barSize={45}
-              barGap={-45} // 막대를 완전히 겹치게 함
-              barCategoryGap={20}
+              barSize={60} // 그래프 두께 30% 증가 (45에서 60으로)
+              barGap={-60} // 막대를 완전히 겹치게 함
+              barCategoryGap={14} // 그래프 간격 30% 감소 (20에서 14로)
               layout="horizontal"
             >
               {/* 그리드 없애서 더 깔끔하게 보이게 함 */}
@@ -76,11 +76,15 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
               {/* X축 스타일 개선 */}
               <XAxis 
                 dataKey="week" 
-                fontSize={11} 
+                fontSize={12}
+                fontWeight="500" 
                 tickLine={false}
                 axisLine={{ stroke: '#f0f0f0' }}
-                dy={8}
-                tick={{ fill: '#888' }}
+                dy={10}
+                tick={{ fill: '#666' }}
+                interval={0} // 모든 틱 표시
+                tickFormatter={(value) => value} // 원본 값 그대로 표시
+                tickMargin={5} // 틱과 라벨 사이 간격
                 textAnchor="middle" // 텍스트 중앙 정렬
               />
               
@@ -117,7 +121,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 dataKey="background" 
                 fill={backgroundBarColor}
                 radius={[10, 10, 0, 0]}
-                maxBarSize={47}
+                maxBarSize={58}
                 // z-index를 낮게 설정하여 배경으로 표시
                 style={{ zIndex: 0 }}
               />
@@ -130,9 +134,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 fill={colors['독서']}
                 // z-index를 높게 설정하여 앞에 표시
                 style={{ zIndex: 1 }}
-                maxBarSize={45} 
-                // barGap을 -45로 설정하여 배경 막대 위에 정확히 겹치도록 함
-                barSize={45}
+                maxBarSize={58}
               />
               <Bar 
                 dataKey="동영상"
@@ -140,7 +142,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 name="동영상"
                 fill={colors['동영상']}
                 style={{ zIndex: 1 }}
-                maxBarSize={45}
+                maxBarSize={58}
               />
               <Bar 
                 dataKey="제품애용"
@@ -148,7 +150,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 name="제품애용" 
                 fill={colors['제품애용']}
                 style={{ zIndex: 1 }}
-                maxBarSize={45}
+                maxBarSize={58}
               />
               <Bar 
                 dataKey="미팅참석"
@@ -156,7 +158,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 name="미팅참석"
                 fill={colors['미팅참석']}
                 style={{ zIndex: 1 }}
-                maxBarSize={45}
+                maxBarSize={58}
               />
               <Bar 
                 dataKey="소비자관리"
@@ -165,7 +167,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 fill={colors['소비자관리']}
                 radius={[10, 10, 0, 0]}
                 style={{ zIndex: 1 }}
-                maxBarSize={45}
+                maxBarSize={58}
               />
             </BarChart>
           </ResponsiveContainer>
