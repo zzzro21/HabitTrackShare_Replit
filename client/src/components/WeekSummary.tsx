@@ -13,9 +13,6 @@ const WeekSummary: React.FC = () => {
             <div key={i} className="h-12 bg-gray-200 rounded"></div>
           ))}
         </div>
-        <div className="mt-3 text-right">
-          <div className="h-6 w-1/3 ml-auto bg-gray-200 rounded"></div>
-        </div>
       </div>
     );
   }
@@ -41,10 +38,7 @@ const WeekSummary: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="mt-3 text-right">
-        <div className="text-xs text-gray-500">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 총점</div>
-        <div className="text-lg font-bold text-primary">{totalWeekScore.toFixed(1)}</div>
-      </div>
+      {/* 총점 표시 제거 */}
     </div>
   );
 };
