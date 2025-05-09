@@ -39,7 +39,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   };
 
   // 스택 차트에서 표시될 카테고리 순서 (아래쪽부터 위쪽 순으로)
-  const categories = ['소비자관리', '미팅참석', '제품애용', '동영상', '독서'];
+  const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
 
   return (
     <Card>
