@@ -60,7 +60,7 @@ export const habitNotes = pgTable("habit_notes", {
   userId: integer("user_id").notNull(),
   day: integer("day").notNull(), // 0-55 for the 56 days
   habitId: integer("habit_id").notNull(),
-  note: text("note"), // 습관에 대한 세부 내용
+  note: text("note").notNull().default(""), // 습관에 대한 세부 내용
 });
 
 export const insertHabitNoteSchema = createInsertSchema(habitNotes).pick({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHabit } from '@/lib/HabitContext';
+import { Link } from 'wouter';
 
 const HabitTracker: React.FC = () => {
   const { 
@@ -44,16 +45,23 @@ const HabitTracker: React.FC = () => {
     <div className="mb-5">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-sm font-medium text-gray-800">{activeWeek + 1}주차 습관 기록</h3>
-        <div className="flex gap-1 text-xs">
-          <span className="inline-flex items-center">
-            <span className="inline-block w-3 h-3 bg-white border mr-1"></span>미완료
-          </span>
-          <span className="inline-flex items-center ml-2">
-            <span className="inline-block w-3 h-3 bg-blue-50 border mr-1"></span>부분완료
-          </span>
-          <span className="inline-flex items-center ml-2">
-            <span className="inline-block w-3 h-3 bg-green-100 border mr-1"></span>완료
-          </span>
+        <div className="flex items-center">
+          <Link to="/notes">
+            <button className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded-md mr-2">
+              일지 작성
+            </button>
+          </Link>
+          <div className="flex gap-1 text-xs">
+            <span className="inline-flex items-center">
+              <span className="inline-block w-3 h-3 bg-white border mr-1"></span>미완료
+            </span>
+            <span className="inline-flex items-center ml-2">
+              <span className="inline-block w-3 h-3 bg-blue-50 border mr-1"></span>부분완료
+            </span>
+            <span className="inline-flex items-center ml-2">
+              <span className="inline-block w-3 h-3 bg-green-100 border mr-1"></span>완료
+            </span>
+          </div>
         </div>
       </div>
       
