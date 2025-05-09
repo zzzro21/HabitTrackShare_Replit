@@ -63,6 +63,14 @@ export const habitNotes = pgTable("habit_notes", {
   note: text("note").notNull().default(""), // 습관에 대한 세부 내용
 });
 
+// 일일 소감/피드백 스키마 추가
+export const dailyFeedbacks = pgTable("daily_feedbacks", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  day: integer("day").notNull(), // 0-55 for the 56 days
+  feedback: text("feedback").notNull().default(""), // 일일 소감 및 피드백
+});
+
 export const insertHabitNoteSchema = createInsertSchema(habitNotes).pick({
   userId: true,
   day: true,
@@ -72,6 +80,15 @@ export const insertHabitNoteSchema = createInsertSchema(habitNotes).pick({
 
 export type InsertHabitNote = z.infer<typeof insertHabitNoteSchema>;
 export type HabitNote = typeof habitNotes.$inferSelect;
+
+export const insertDailyFeedbackSchema = createInsertSchema(dailyFeedbacks).pick({
+  userId: true,
+  day: true,
+  feedback: true,
+});
+
+export type InsertDailyFeedback = z.infer<typeof insertDailyFeedbackSchema>;
+export type DailyFeedback = typeof dailyFeedbacks.$inferSelect;
 
 export const predefinedHabits = [
   {

@@ -3,6 +3,7 @@ import {
   users, 
   habitEntries, 
   habitNotes,
+  dailyFeedbacks,
   type User, 
   type InsertUser, 
   type Habit, 
@@ -11,6 +12,8 @@ import {
   type InsertHabitEntry,
   type HabitNote,
   type InsertHabitNote,
+  type DailyFeedback,
+  type InsertDailyFeedback,
   predefinedHabits
 } from "@shared/schema";
 
@@ -37,6 +40,10 @@ export interface IStorage {
   getUserHabitNotes(userId: number, day: number): Promise<HabitNote[]>;
   createOrUpdateHabitNote(note: InsertHabitNote): Promise<HabitNote>;
   
+  // Daily feedback methods
+  getDailyFeedback(userId: number, day: number): Promise<DailyFeedback | undefined>;
+  createOrUpdateDailyFeedback(feedback: InsertDailyFeedback): Promise<DailyFeedback>;
+  
   // Initialize predefined data
   initializePredefinedData(): Promise<void>;
 }
@@ -51,15 +58,20 @@ export class MemStorage implements IStorage {
   private habitEntryIdCounter: number;
   private habitNoteIdCounter: number;
 
+  private dailyFeedbacks: DailyFeedback[];
+  private dailyFeedbackIdCounter: number;
+
   constructor() {
     this.users = new Map();
     this.habits = new Map();
     this.habitEntries = [];
     this.habitNotes = [];
+    this.dailyFeedbacks = [];
     this.userIdCounter = 1;
     this.habitIdCounter = 1;
     this.habitEntryIdCounter = 1;
     this.habitNoteIdCounter = 1;
+    this.dailyFeedbackIdCounter = 1;
   }
 
   // User methods
@@ -172,6 +184,41 @@ export class MemStorage implements IStorage {
       };
       this.habitNotes.push(note);
       return note;
+    }
+  }
+  
+  // Daily feedback methods
+  async getDailyFeedback(userId: number, day: number): Promise<DailyFeedback | undefined> {
+    return this.dailyFeedbacks.find(
+      (feedback) => feedback.userId === userId && feedback.day === day
+    );
+  }
+  
+  async createOrUpdateDailyFeedback(insertFeedback: InsertDailyFeedback): Promise<DailyFeedback> {
+    // Make sure feedback is never undefined
+    const feedbackContent = insertFeedback.feedback || '';
+    
+    // Check if feedback exists already
+    const existingFeedbackIndex = this.dailyFeedbacks.findIndex(
+      (feedback) => 
+        feedback.userId === insertFeedback.userId && 
+        feedback.day === insertFeedback.day
+    );
+    
+    if (existingFeedbackIndex !== -1) {
+      // Update existing feedback
+      this.dailyFeedbacks[existingFeedbackIndex].feedback = feedbackContent;
+      return this.dailyFeedbacks[existingFeedbackIndex];
+    } else {
+      // Create new feedback
+      const id = this.dailyFeedbackIdCounter++;
+      const feedback: DailyFeedback = { 
+        ...insertFeedback, 
+        id,
+        feedback: feedbackContent
+      };
+      this.dailyFeedbacks.push(feedback);
+      return feedback;
     }
   }
   
