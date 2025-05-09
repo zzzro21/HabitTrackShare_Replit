@@ -604,15 +604,6 @@ const NotePage: React.FC = () => {
                     placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
                     className="w-full border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                   />
-                  <div className="mt-1 text-right">
-                    <button
-                      onClick={handleSaveFeedback}
-                      disabled={isSubmitting}
-                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded"
-                    >
-                      저장
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -624,7 +615,7 @@ const NotePage: React.FC = () => {
               disabled={isSubmitting || isFetching}
               className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-md"
             >
-              {isSubmitting ? "저장 중..." : "모든 노트 저장"}
+              {isSubmitting ? "저장 중..." : "오늘도 해냈다! 💪"}
             </button>
           </div>
         </div>
