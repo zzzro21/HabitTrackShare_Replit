@@ -54,6 +54,25 @@ export const insertHabitEntrySchema = createInsertSchema(habitEntries).pick({
 export type InsertHabitEntry = z.infer<typeof insertHabitEntrySchema>;
 export type HabitEntry = typeof habitEntries.$inferSelect;
 
+// 습관 일지(노트) 스키마 추가
+export const habitNotes = pgTable("habit_notes", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  day: integer("day").notNull(), // 0-55 for the 56 days
+  habitId: integer("habit_id").notNull(),
+  note: text("note"), // 습관에 대한 세부 내용
+});
+
+export const insertHabitNoteSchema = createInsertSchema(habitNotes).pick({
+  userId: true,
+  day: true,
+  habitId: true,
+  note: true,
+});
+
+export type InsertHabitNote = z.infer<typeof insertHabitNoteSchema>;
+export type HabitNote = typeof habitNotes.$inferSelect;
+
 export const predefinedHabits = [
   {
     label: "책 읽기 (30분 이상)",
