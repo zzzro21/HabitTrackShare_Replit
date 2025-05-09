@@ -78,7 +78,7 @@ export default function InsightsPage() {
 
   if (loading) {
     return (
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-4 pb-20">
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-[250px]" />
@@ -96,13 +96,14 @@ export default function InsightsPage() {
             </div>
           </CardContent>
         </Card>
+        <TabNavigation />
       </div>
     );
   }
 
   if (!insights) {
     return (
-      <div className="p-4">
+      <div className="p-4 pb-20">
         <Card>
           <CardHeader>
             <CardTitle>AI 습관 인사이트</CardTitle>
@@ -123,16 +124,17 @@ export default function InsightsPage() {
             </Button>
           </CardContent>
         </Card>
+        <TabNavigation />
       </div>
     );
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 pb-20 max-w-4xl mx-auto">
       <Card>
         <CardHeader className="space-y-2">
           <div className="flex justify-between items-center">
-            <CardTitle>AI 습관 인사이트</CardTitle>
+            <CardTitle className="text-xl md:text-2xl">AI 습관 인사이트</CardTitle>
             <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
               {refreshing ? (
                 <>
@@ -151,7 +153,7 @@ export default function InsightsPage() {
             마지막 업데이트: {formatDate(insights.date)}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
             <p className="text-blue-800 text-lg font-medium leading-relaxed">{insights.summary}</p>
           </div>
@@ -165,10 +167,10 @@ export default function InsightsPage() {
             
             <TabsContent value="strengths" className="space-y-4 mt-4">
               <h3 className="text-lg font-medium">당신의 강점</h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {insights.strengths.map((strength, index) => (
                   <li key={index} className="flex items-start">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 mr-2 mt-1">강점 {index + 1}</Badge>
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 mr-2 mt-1 whitespace-nowrap">강점 {index + 1}</Badge>
                     <span className="text-gray-700">{strength}</span>
                   </li>
                 ))}
@@ -177,10 +179,10 @@ export default function InsightsPage() {
             
             <TabsContent value="improvements" className="space-y-4 mt-4">
               <h3 className="text-lg font-medium">개선 할 영역</h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {insights.improvementAreas.map((area, index) => (
                   <li key={index} className="flex items-start">
-                    <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 mr-2 mt-1">영역 {index + 1}</Badge>
+                    <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 mr-2 mt-1 whitespace-nowrap">영역 {index + 1}</Badge>
                     <span className="text-gray-700">{area}</span>
                   </li>
                 ))}
@@ -189,10 +191,10 @@ export default function InsightsPage() {
             
             <TabsContent value="recommendations" className="space-y-4 mt-4">
               <h3 className="text-lg font-medium">맞춤 추천 사항</h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {insights.recommendations.map((recommendation, index) => (
                   <li key={index} className="flex items-start">
-                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 mr-2 mt-1">추천 {index + 1}</Badge>
+                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 mr-2 mt-1 whitespace-nowrap">추천 {index + 1}</Badge>
                     <span className="text-gray-700">{recommendation}</span>
                   </li>
                 ))}
@@ -201,6 +203,7 @@ export default function InsightsPage() {
           </Tabs>
         </CardContent>
       </Card>
+      <TabNavigation />
     </div>
   );
 }
