@@ -44,6 +44,10 @@ export interface IStorage {
   getDailyFeedback(userId: number, day: number): Promise<DailyFeedback | undefined>;
   createOrUpdateDailyFeedback(feedback: InsertDailyFeedback): Promise<DailyFeedback>;
   
+  // Habit insights methods
+  getUserHabitInsight(userId: number): Promise<HabitInsight | undefined>;
+  createOrUpdateHabitInsight(insight: InsertHabitInsight): Promise<HabitInsight>;
+  
   // Initialize predefined data
   initializePredefinedData(): Promise<void>;
 }
