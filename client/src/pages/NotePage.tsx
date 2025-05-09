@@ -197,57 +197,257 @@ const NotePage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="border rounded-lg overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-blue-100">
-                  <tr className="border-b">
-                    <th className="px-3 py-2 text-left border-r w-1/6">행동습관</th>
-                    <th className="px-3 py-2 text-center border-r w-1/6">점수</th>
-                    <th className="px-3 py-2 text-left">세부내용</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {habits.map((habit, index) => (
-                    <tr key={habit.id} className={index % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
-                      <td className="px-3 py-3 border-r align-top">
-                        <div className="font-medium text-gray-800">{index + 1}</div>
-                        <div>{habit.label}</div>
-                      </td>
-                      <td className="px-3 py-3 border-r text-center align-top">
-                        <div className="font-medium">{habit.scoreValue}</div>
-                      </td>
-                      <td className="px-3 py-3">
-                        <textarea
-                          value={notes[habit.id] || ''}
-                          onChange={(e) => handleNoteChange(habit.id, e.target.value)}
-                          placeholder={`${habit.label}에 대한 세부 내용을 작성하세요...`}
-                          className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
-                          rows={3}
-                        />
-                        <div className="mt-1 text-right">
-                          <button
-                            onClick={() => handleSaveNote(habit.id)}
-                            disabled={isSubmitting}
-                            className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded"
-                          >
-                            저장
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  <tr className="bg-gray-100">
-                    <td colSpan={3} className="px-3 py-3">
-                      <div className="font-medium mb-1">소감/피드백</div>
-                      <textarea 
-                        placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
-                        className="w-full border border-gray-300 h-20 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
-                        rows={3}
+            <div className="space-y-4">
+              {/* 1번 책읽기 */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-blue-100 px-4 py-2 font-medium">
+                  1. 책 읽기
+                </div>
+                <div className="p-3">
+                  <div className="flex flex-col space-y-2 mb-2">
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="book-none" 
+                        name="book-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(1, 0)} 
                       />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <label htmlFor="book-none">미완료 (0점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="book-half" 
+                        name="book-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(1, 1)} 
+                      />
+                      <label htmlFor="book-half">30분 미만 (0.5점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="book-full" 
+                        name="book-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(1, 2)} 
+                      />
+                      <label htmlFor="book-full">30분 이상 (1점)</label>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">세부내용</label>
+                    <textarea
+                      value={notes[1] || ''}
+                      onChange={(e) => handleNoteChange(1, e.target.value)}
+                      placeholder="읽은 책의 제목과 내용, 느낀점 등을 작성하세요..."
+                      className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 2번 동영상 시청 */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-blue-100 px-4 py-2 font-medium">
+                  2. 동영상 시청
+                </div>
+                <div className="p-3">
+                  <div className="flex flex-col space-y-2 mb-2">
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="video-none" 
+                        name="video-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(2, 0)} 
+                      />
+                      <label htmlFor="video-none">미완료 (0점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="video-done" 
+                        name="video-score" 
+                        className="mr-2" 
+                        onChange={() => handleHabitEntryUpdate(2, 1)}
+                      />
+                      <label htmlFor="video-done">영상제목 및 시청소감 (1점)</label>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">세부내용</label>
+                    <textarea
+                      value={notes[2] || ''}
+                      onChange={(e) => handleNoteChange(2, e.target.value)}
+                      placeholder="시청한 영상의 제목과 내용, 느낀점 등을 작성하세요..."
+                      className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 3번 제품 애용 */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-blue-100 px-4 py-2 font-medium">
+                  3. 제품 애용
+                </div>
+                <div className="p-3">
+                  <div className="flex flex-col space-y-2 mb-2">
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="product-none" 
+                        name="product-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(3, 0)} 
+                      />
+                      <label htmlFor="product-none">미완료 (0점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="product-used" 
+                        name="product-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(3, 1)} 
+                      />
+                      <label htmlFor="product-used">USED 제품후기 (1점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="product-new" 
+                        name="product-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(3, 2)} 
+                      />
+                      <label htmlFor="product-new">NEW 제품후기 (2점)</label>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">세부내용</label>
+                    <textarea
+                      value={notes[3] || ''}
+                      onChange={(e) => handleNoteChange(3, e.target.value)}
+                      placeholder="애용한 제품명과 후기를 작성하세요..."
+                      className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 4번 미팅 참석 */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-blue-100 px-4 py-2 font-medium">
+                  4. 미팅 참석
+                </div>
+                <div className="p-3">
+                  <div className="flex flex-col space-y-2 mb-2">
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="meeting-none" 
+                        name="meeting-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(4, 0)} 
+                      />
+                      <label htmlFor="meeting-none">미완료 (0점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="meeting-done" 
+                        name="meeting-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(4, 1)} 
+                      />
+                      <label htmlFor="meeting-done">미팅참석 및 소감작성 (5점)</label>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">세부내용</label>
+                    <textarea
+                      value={notes[4] || ''}
+                      onChange={(e) => handleNoteChange(4, e.target.value)}
+                      placeholder="참석한 미팅과 소감을 작성하세요..."
+                      className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 5번 제품 전달 */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-blue-100 px-4 py-2 font-medium">
+                  5. 제품 전달 및 소비자 관리
+                </div>
+                <div className="p-3">
+                  <div className="flex flex-col space-y-2 mb-2">
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="delivery-none" 
+                        name="delivery-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(5, 0)} 
+                      />
+                      <label htmlFor="delivery-none">미완료 (0점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="delivery-explain" 
+                        name="delivery-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(5, 1)} 
+                      />
+                      <label htmlFor="delivery-explain">설명 및 추천 (1점)</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input 
+                        type="radio" 
+                        id="delivery-full" 
+                        name="delivery-score" 
+                        className="mr-2"
+                        onChange={() => handleHabitEntryUpdate(5, 2)} 
+                      />
+                      <label htmlFor="delivery-full">전달 및 추천 (2점)</label>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">세부내용</label>
+                    <textarea
+                      value={notes[5] || ''}
+                      onChange={(e) => handleNoteChange(5, e.target.value)}
+                      placeholder="전달한 제품과 소비자 관리 내용을 작성하세요..."
+                      className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 소감/피드백 */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-gray-100 px-4 py-2 font-medium">
+                  소감/피드백
+                </div>
+                <div className="p-3">
+                  <textarea 
+                    value={feedback || ''}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
+                    className="w-full border border-gray-300 h-20 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                    rows={3}
+                  />
+                </div>
+              </div>
             </div>
           )}
           
