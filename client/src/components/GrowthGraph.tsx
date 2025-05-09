@@ -14,6 +14,18 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   // 최대 점수 상수 설정
   const MAX_SCORE = 77;
   
+  // 카테고리 정의
+  const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
+  
+  // 카테고리별 블루→민트 그라데이션 색상
+  const categoryColors = {
+    독서: '#3B82F6', // 밝은 블루
+    동영상: '#38BDF8', // 라이트 블루
+    제품애용: '#22D3EE', // 밝은 틸
+    미팅참석: '#2DD4BF', // 틸민트
+    소비자관리: '#6CDFCB', // 파스텔 민트
+  };
+  
   // 각 주차별 데이터를 생성
   const data = useMemo(() => {
     const weeks = Array.from({ length: 8 }, (_, i) => i);
@@ -22,19 +34,23 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       const weeklyScores = calculateWeekScores(userId, week);
       const totalScore = weeklyScores.reduce((a, b) => a + b, 0);
       
-      // 샘플 이미지에 맞게 수정: 4주차만 긴 막대, 나머지는 작은 원형으로 표시
-      let valueForGraph = totalScore;
-      let displayMode = 'circle'; // 기본값은 작은 원형
+      // 각 카테고리별 점수
+      const categoryScores = {
+        독서: weeklyScores[0],
+        동영상: weeklyScores[1], 
+        제품애용: weeklyScores[2],
+        미팅참석: weeklyScores[3],
+        소비자관리: weeklyScores[4],
+      };
       
-      // 4주차만 긴 막대로 표시 (샘플 이미지 모방)
-      if (week === 3) {
-        displayMode = 'bar';
-      }
+      // 표시 모드 설정 (점수가 있는 경우에만 표시)
+      let displayMode = totalScore > 0 ? 'bar' : 'none';
       
       return {
-        week: `${week + 1}w`,  // 주차 표시 (1w, 2w, 3w 형식)
-        score: totalScore,     // 실제 점수
-        displayMode,           // 표시 모드 (circle 또는 bar)
+        week: `${week + 1}w`,           // 주차 표시 (1w, 2w, 3w 형식)
+        score: totalScore,              // 실제 점수 총합
+        displayMode,                    // 표시 모드 (bar 또는 none)
+        categoryScores,                 // 카테고리별 점수
       };
     });
   }, [userId, calculateWeekScores]);
@@ -58,7 +74,8 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         <h3 className="text-xl font-bold text-gray-800">8Weeks Growth</h3>
       </div>
       
-      <CardContent className="p-4 pb-8">
+      <CardContent className="p-4 pb-12">
+        
         <div className="h-64 w-full relative">
           <div className="flex h-full items-end justify-between px-4">
             {data.map((item, idx) => (
@@ -79,33 +96,56 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                   }}
                 ></div>
                 
-                {/* 컬러 콘텐츠 - 아래쪽 끝에만 원형으로 표시 */}
-                {item.displayMode === 'circle' ? (
-                  <div 
-                    className="absolute bottom-0 mb-3 z-10"
-                    style={{ 
-                      width: '80%',
-                      height: '24px',
-                      backgroundColor: barColor,
-                      borderRadius: '100px',
-                    }}
-                  ></div>
-                ) : (
-                  /* 4주차만 긴 막대 그래프로 표시 */
-                  <div 
-                    className="absolute bottom-0 w-full z-10"
-                    style={{ 
-                      height: `${Math.min(100, (item.score / MAX_SCORE) * 90)}%`,
-                      backgroundColor: barColor,
-                      borderRadius: '20px',
-                    }}
-                  ></div>
+                {/* 점수가 있을 때만 컬러 막대 표시 */}
+                {item.displayMode === 'bar' && item.score > 0 && (
+                  <div className="absolute bottom-0 w-full z-10 overflow-hidden" style={{ 
+                    height: `${Math.min(100, (item.score / MAX_SCORE) * 90)}%`,
+                    borderRadius: '20px',
+                  }}>
+                    {/* 카테고리별로 쌓인 스택 막대 구현 */}
+                    {Object.entries(item.categoryScores).map(([category, score], catIdx) => {
+                      // 이전 카테고리들의 총 점수 비율 계산
+                      const previousCategoriesTotal = Object.entries(item.categoryScores)
+                        .slice(0, catIdx)
+                        .reduce((sum, [_, val]) => sum + val, 0);
+                      
+                      // 현재 카테고리의 비율 계산
+                      const categoryPercentage = score > 0 ? (score / item.score) * 100 : 0;
+                      const bottomPercentage = previousCategoriesTotal > 0 ? 
+                        (previousCategoriesTotal / item.score) * 100 : 0;
+                      
+                      return score > 0 ? (
+                        <div 
+                          key={`${idx}-${category}`}
+                          className="absolute w-full"
+                          style={{
+                            height: `${categoryPercentage}%`,
+                            bottom: `${bottomPercentage}%`,
+                            backgroundColor: categoryColors[category as keyof typeof categoryColors],
+                            borderRadius: catIdx === 0 ? '0 0 20px 20px' : 
+                                        catIdx === 4 ? '20px 20px 0 0' : '0',
+                          }}
+                        />
+                      ) : null;
+                    })}
+                  </div>
                 )}
                 
                 {/* 툴팁 */}
                 {hoveredWeek === idx && (
-                  <div className="absolute bottom-full mb-2 z-20 bg-white px-2 py-1 rounded-lg shadow-md text-xs whitespace-nowrap">
-                    {item.score}점
+                  <div className="absolute bottom-full mb-2 z-20 bg-white p-2 rounded-lg shadow-md text-xs whitespace-nowrap">
+                    <div className="font-bold mb-1">{item.week} - 총 {item.score}점</div>
+                    {Object.entries(item.categoryScores)
+                      .filter(([_, score]) => score > 0)
+                      .map(([category, score]) => (
+                        <div key={`tooltip-${idx}-${category}`} className="flex items-center gap-1.5 mb-0.5">
+                          <div className="w-2 h-2 rounded-sm" style={{ 
+                            backgroundColor: categoryColors[category as keyof typeof categoryColors] 
+                          }}></div>
+                          <span>{category}: {score}점</span>
+                        </div>
+                      ))
+                    }
                   </div>
                 )}
                 
@@ -118,6 +158,18 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
           </div>
         </div>
       </CardContent>
+      
+      {/* 색상 범례 */}
+      <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mb-4 text-xs text-gray-500">
+        {categories.map(category => (
+          <div key={category} className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm" style={{ 
+              backgroundColor: categoryColors[category as keyof typeof categoryColors] 
+            }}></div>
+            <span>{category}</span>
+          </div>
+        ))}
+      </div>
     </Card>
   );
 }
