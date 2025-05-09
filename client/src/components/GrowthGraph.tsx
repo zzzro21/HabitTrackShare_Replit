@@ -31,7 +31,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
 
   // 색상 설정
   const barColor = '#8B5CF6'; // 보라색 계열로 변경
-  const backgroundBarColor = '#EEEEF2'; // 연한 회색 배경
+  const backgroundBarColor = '#E5E7EB'; // 좀 더 진한 회색 배경
 
   return (
     <Card className="rounded-3xl shadow-md border-0 bg-white overflow-hidden">
@@ -77,24 +77,33 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 formatter={(value) => [`${value}점`, '점수']}
               />
               
-              {/* 배경 막대 - 최대값 표시 */}
+              {/* 배경 막대 먼저 그리기 */}
               <Bar 
                 dataKey="maxValue" 
                 fill={backgroundBarColor}
                 radius={[12, 12, 12, 12]}
                 isAnimationActive={false}
+                style={{
+                  // 배경 막대의 z-index를 낮게 설정
+                  zIndex: 0,
+                  opacity: 0.5,
+                }}
               >
                 {data.map((_, index) => (
                   <Cell key={`background-${index}`} fill={backgroundBarColor} />
                 ))}
               </Bar>
               
-              {/* 실제 값 막대 - 위에 그려서 배경 막대 안에 표시되도록 함 */}
+              {/* 실제 값 막대를 나중에 그려서 맨 위에 위치하도록 함 */}
               <Bar 
                 dataKey="value" 
                 fill={barColor}
                 radius={[12, 12, 12, 12]}
                 animationDuration={1500}
+                style={{
+                  // 실제 막대의 z-index를 높게 설정해 위에 그려지도록 함
+                  zIndex: 1
+                }}
               >
                 {data.map((_, index) => (
                   <Cell key={`actual-${index}`} fill={barColor} />
