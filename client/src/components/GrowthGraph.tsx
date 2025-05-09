@@ -16,27 +16,28 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   // 각 주차별 데이터를 생성
   const data = useMemo(() => {
     const weeks = Array.from({ length: 8 }, (_, i) => i);
-    const currentWeek = Math.min(4, weeks.length); // 예시로 현재 주차를 4로 가정 (실제 앱에서는 현재 주차 계산 로직 필요)
     
     return weeks.map(week => {
       const weeklyScores = calculateWeekScores(userId, week);
-      const isStarted = week < currentWeek; // 현재 주차보다 이전인지 확인
       
-      // 각 카테고리별 실제 데이터 및 자리표시 데이터 생성
+      // 1-8주 모두에 자리표시 배경을 깔고, 실제 데이터도 표시
       return {
         week: `${week + 1}w`,
-        독서: isStarted ? weeklyScores[0] : 0, // 실제 데이터
-        독서_placeholder: isStarted ? 0 : 15, // 자리표시 데이터
-        동영상: isStarted ? weeklyScores[1] : 0,
-        동영상_placeholder: isStarted ? 0 : 15,
-        제품애용: isStarted ? weeklyScores[2] : 0,
-        제품애용_placeholder: isStarted ? 0 : 16,
-        미팅참석: isStarted ? weeklyScores[3] : 0,
-        미팅참석_placeholder: isStarted ? 0 : 16,
-        소비자관리: isStarted ? weeklyScores[4] : 0,
-        소비자관리_placeholder: isStarted ? 0 : 15,
-        total: weeklyScores.reduce((a, b) => a + b, 0),
-        isStarted // 주차가 시작되었는지 표시
+        // 실제 데이터
+        독서: weeklyScores[0],
+        동영상: weeklyScores[1],
+        제품애용: weeklyScores[2],
+        미팅참석: weeklyScores[3],
+        소비자관리: weeklyScores[4],
+        
+        // 배경 자리표시 데이터 (고정값)
+        독서_placeholder: 15,
+        동영상_placeholder: 15,
+        제품애용_placeholder: 16,
+        미팅참석_placeholder: 16,
+        소비자관리_placeholder: 15,
+        
+        total: weeklyScores.reduce((a, b) => a + b, 0)
       };
     });
   }, [userId, calculateWeekScores]);
@@ -79,36 +80,29 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="week" fontSize={10} />
               <YAxis fontSize={10} domain={[0, MAX_SCORE]} />
-              <Tooltip 
-                formatter={(value, name) => {
-                  // 자리표시용 바는 툴팁에서 표시하지 않음
-                  if (name.includes('placeholder')) return [null, null];
-                  return [value, name];
-                }}
-              />
+              <Tooltip />
               
               {/* 최대 점수 선 */}
               <ReferenceLine y={MAX_SCORE} stroke="#ddd" strokeDasharray="3 3" />
               
-              {/* 실제 데이터 바 */}
+              {/* 자리표시 데이터 바 (먼저 렌더링하여 뒤에 배치) */}
+              {placeholderCategories.map((category) => (
+                <Bar 
+                  key={category} 
+                  dataKey={category} 
+                  fill={placeholderColors[category as keyof typeof placeholderColors]}
+                  name={category}
+                  radius={[2, 2, 0, 0]}
+                />
+              ))}
+              
+              {/* 실제 데이터 바 (나중에 렌더링하여 앞에 배치) */}
               {categories.map((category) => (
                 <Bar 
                   key={category} 
                   dataKey={category} 
                   stackId="a"
                   fill={colors[category as keyof typeof colors]}
-                  name={category}
-                  radius={[2, 2, 0, 0]}
-                />
-              ))}
-              
-              {/* 자리표시 데이터 바 */}
-              {placeholderCategories.map((category) => (
-                <Bar 
-                  key={category} 
-                  dataKey={category} 
-                  stackId="placeholder"
-                  fill={placeholderColors[category as keyof typeof placeholderColors]}
                   name={category}
                   radius={[2, 2, 0, 0]}
                 />
