@@ -197,37 +197,57 @@ const NotePage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="space-y-4">
-              {habits.map((habit) => (
-                <div key={habit.id} className="border rounded-lg overflow-hidden">
-                  <div className="bg-blue-50 p-3 border-b">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-medium">{habit.label}</h3>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-sm text-gray-500">점수: {habit.scoreValue}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">세부내용</label>
-                    <textarea
-                      value={notes[habit.id] || ''}
-                      onChange={(e) => handleNoteChange(habit.id, e.target.value)}
-                      placeholder={`${habit.label}에 대한 세부 내용을 작성하세요...`}
-                      className="w-full rounded-md border border-gray-300 h-24 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                    <div className="mt-2 text-right">
-                      <button
-                        onClick={() => handleSaveNote(habit.id)}
-                        disabled={isSubmitting}
-                        className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded"
-                      >
-                        저장
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="border rounded-lg overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-blue-100">
+                  <tr className="border-b">
+                    <th className="px-3 py-2 text-left border-r w-1/6">행동습관</th>
+                    <th className="px-3 py-2 text-center border-r w-1/6">점수</th>
+                    <th className="px-3 py-2 text-left">세부내용</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {habits.map((habit, index) => (
+                    <tr key={habit.id} className={index % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+                      <td className="px-3 py-3 border-r align-top">
+                        <div className="font-medium text-gray-800">{index + 1}</div>
+                        <div>{habit.label}</div>
+                      </td>
+                      <td className="px-3 py-3 border-r text-center align-top">
+                        <div className="font-medium">{habit.scoreValue}</div>
+                      </td>
+                      <td className="px-3 py-3">
+                        <textarea
+                          value={notes[habit.id] || ''}
+                          onChange={(e) => handleNoteChange(habit.id, e.target.value)}
+                          placeholder={`${habit.label}에 대한 세부 내용을 작성하세요...`}
+                          className="w-full border border-gray-300 h-16 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                          rows={3}
+                        />
+                        <div className="mt-1 text-right">
+                          <button
+                            onClick={() => handleSaveNote(habit.id)}
+                            disabled={isSubmitting}
+                            className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded"
+                          >
+                            저장
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-gray-100">
+                    <td colSpan={3} className="px-3 py-3">
+                      <div className="font-medium mb-1">소감/피드백</div>
+                      <textarea 
+                        placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
+                        className="w-full border border-gray-300 h-20 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
+                        rows={3}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
           
