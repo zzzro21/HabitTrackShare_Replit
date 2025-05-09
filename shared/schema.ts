@@ -121,7 +121,7 @@ export const predefinedHabits = [
     scoring: (value: number) => value === 2 ? 1 : value === 1 ? 0.5 : 0
   },
   {
-    label: "동영상 시청 및 소감 작성",
+    label: "동영상 시청",
     scoreType: "binary",
     scoreValue: 1,
     scoring: (value: number) => value ? 1 : 0
@@ -139,7 +139,7 @@ export const predefinedHabits = [
     scoring: (value: number) => value ? 5 : 0
   },
   {
-    label: "소비자 제품 전달/설명 및 추천",
+    label: "소비자 제품전달",
     scoreType: "partial",
     scoreValue: 2,
     scoring: (value: number) => value === 2 ? 2 : value === 1 ? 1 : 0

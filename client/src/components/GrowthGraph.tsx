@@ -34,7 +34,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       
       // 각 주차별로 카테고리별 데이터 유지
       const result = {
-        week: `${week + 1}`,  // 숫자만 표시
+        week: `${week + 1}w`,  // 주차 표시 (1w, 2w, 3w 형식)
         // 카테고리별 실제 점수
         독서: weeklyScores[0],
         동영상: weeklyScores[1], 
@@ -80,7 +80,8 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 tickLine={false}
                 axisLine={{ stroke: '#f0f0f0' }}
                 dy={8}
-                tick={{ fill: '#888' }} 
+                tick={{ fill: '#888' }}
+                textAnchor="middle" // 텍스트 중앙 정렬
               />
               
               {/* Y축 간소화 */}
