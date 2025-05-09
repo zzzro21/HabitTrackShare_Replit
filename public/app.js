@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 저장 버튼 설정
   setupSaveButton();
+  
+  // 설정 저장 버튼 설정
+  setupSettingsSaveButton();
 });
 
 // 탭 기능 구현
@@ -204,8 +207,31 @@ function setupSaveButton() {
 function setupImageUpload() {
   const imageUpload = document.getElementById('image-upload');
   const profileImg = document.getElementById('profile-img');
+  const settingsProfileImg = document.getElementById('settings-profile-img');
+  const changePhotoBtn = document.getElementById('change-photo-btn');
+  const profileClock = document.getElementById('profile-clock');
   
-  if (!imageUpload || !profileImg) return;
+  // 현재 시간 업데이트 함수
+  function updateProfileClock() {
+    if (!profileClock) return;
+    
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    profileClock.textContent = timeString;
+  }
+  
+  // 초기 시계 설정과 1분마다 업데이트
+  updateProfileClock();
+  setInterval(updateProfileClock, 60000);
+  
+  if (!imageUpload) return;
+  
+  // 설정 페이지에서 사진 변경 버튼 이벤트 연결
+  if (changePhotoBtn) {
+    changePhotoBtn.addEventListener('click', function() {
+      imageUpload.click();
+    });
+  }
   
   imageUpload.addEventListener('change', function(event) {
     const file = event.target.files[0];
@@ -227,7 +253,15 @@ function setupImageUpload() {
     const reader = new FileReader();
     
     reader.onload = function(e) {
-      profileImg.src = e.target.result;
+      // 메인 프로필 이미지 업데이트
+      if (profileImg) {
+        profileImg.src = e.target.result;
+      }
+      
+      // 설정 페이지 프로필 이미지 업데이트
+      if (settingsProfileImg) {
+        settingsProfileImg.src = e.target.result;
+      }
       
       // 로컬 스토리지에 이미지 URL 저장
       try {
@@ -243,6 +277,57 @@ function setupImageUpload() {
   // 페이지 로드 시 저장된 이미지가 있으면 표시
   const savedImage = localStorage.getItem('profileImage');
   if (savedImage) {
-    profileImg.src = savedImage;
+    if (profileImg) {
+      profileImg.src = savedImage;
+    }
+    if (settingsProfileImg) {
+      settingsProfileImg.src = savedImage;
+    }
+  }
+}
+
+// 설정 저장 버튼 설정
+function setupSettingsSaveButton() {
+  const saveSettingsBtn = document.querySelector('.save-settings-btn');
+  
+  if (!saveSettingsBtn) return;
+  
+  saveSettingsBtn.addEventListener('click', function() {
+    // 현재 설정 상태 저장
+    const toggles = document.querySelectorAll('.toggle input[type="checkbox"]');
+    const language = document.querySelector('.language-select');
+    
+    // 토글 상태 저장
+    toggles.forEach((toggle, index) => {
+      localStorage.setItem(`setting_toggle_${index}`, toggle.checked);
+    });
+    
+    // 언어 설정 저장
+    if (language) {
+      localStorage.setItem('setting_language', language.value);
+    }
+    
+    // 저장 성공 알림
+    alert('설정이 저장되었습니다!');
+  });
+  
+  // 페이지 로드 시 저장된 설정 불러오기
+  const toggles = document.querySelectorAll('.toggle input[type="checkbox"]');
+  const language = document.querySelector('.language-select');
+  
+  // 토글 상태 불러오기
+  toggles.forEach((toggle, index) => {
+    const savedState = localStorage.getItem(`setting_toggle_${index}`);
+    if (savedState !== null) {
+      toggle.checked = savedState === 'true';
+    }
+  });
+  
+  // 언어 설정 불러오기
+  if (language) {
+    const savedLanguage = localStorage.getItem('setting_language');
+    if (savedLanguage) {
+      language.value = savedLanguage;
+    }
   }
 }
