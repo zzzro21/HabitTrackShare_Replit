@@ -2,12 +2,15 @@ import {
   habits, 
   users, 
   habitEntries, 
+  habitNotes,
   type User, 
   type InsertUser, 
   type Habit, 
   type InsertHabit, 
   type HabitEntry, 
   type InsertHabitEntry,
+  type HabitNote,
+  type InsertHabitNote,
   predefinedHabits
 } from "@shared/schema";
 
@@ -29,6 +32,11 @@ export interface IStorage {
   getUserHabitEntries(userId: number): Promise<HabitEntry[]>;
   createOrUpdateHabitEntry(entry: InsertHabitEntry): Promise<HabitEntry>;
   
+  // Habit note methods
+  getHabitNote(userId: number, habitId: number, day: number): Promise<HabitNote | undefined>;
+  getUserHabitNotes(userId: number, day: number): Promise<HabitNote[]>;
+  createOrUpdateHabitNote(note: InsertHabitNote): Promise<HabitNote>;
+  
   // Initialize predefined data
   initializePredefinedData(): Promise<void>;
 }
@@ -37,17 +45,21 @@ export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private habits: Map<number, Habit>;
   private habitEntries: HabitEntry[];
+  private habitNotes: HabitNote[];
   private userIdCounter: number;
   private habitIdCounter: number;
   private habitEntryIdCounter: number;
+  private habitNoteIdCounter: number;
 
   constructor() {
     this.users = new Map();
     this.habits = new Map();
     this.habitEntries = [];
+    this.habitNotes = [];
     this.userIdCounter = 1;
     this.habitIdCounter = 1;
     this.habitEntryIdCounter = 1;
+    this.habitNoteIdCounter = 1;
   }
 
   // User methods
@@ -121,6 +133,41 @@ export class MemStorage implements IStorage {
     }
   }
 
+  // Habit note methods
+  async getHabitNote(userId: number, habitId: number, day: number): Promise<HabitNote | undefined> {
+    return this.habitNotes.find(
+      (note) => note.userId === userId && note.habitId === habitId && note.day === day
+    );
+  }
+
+  async getUserHabitNotes(userId: number, day: number): Promise<HabitNote[]> {
+    return this.habitNotes.filter(
+      (note) => note.userId === userId && note.day === day
+    );
+  }
+
+  async createOrUpdateHabitNote(insertNote: InsertHabitNote): Promise<HabitNote> {
+    // Check if note exists already
+    const existingNoteIndex = this.habitNotes.findIndex(
+      (note) => 
+        note.userId === insertNote.userId && 
+        note.habitId === insertNote.habitId && 
+        note.day === insertNote.day
+    );
+
+    if (existingNoteIndex !== -1) {
+      // Update existing note
+      this.habitNotes[existingNoteIndex].note = insertNote.note;
+      return this.habitNotes[existingNoteIndex];
+    } else {
+      // Create new note
+      const id = this.habitNoteIdCounter++;
+      const note: HabitNote = { ...insertNote, id };
+      this.habitNotes.push(note);
+      return note;
+    }
+  }
+  
   // Initialize predefined data
   async initializePredefinedData(): Promise<void> {
     // Create 8 demo users if they don't exist
