@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
-import { insertHabitEntrySchema, insertHabitNoteSchema } from "@shared/schema";
+import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize predefined data
@@ -146,6 +146,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const note = await storage.createOrUpdateHabitNote(validatedData);
       res.status(201).json(note);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data format", errors: error.errors });
+      }
+      throw error;
+    }
+  });
+
+  // Get daily feedback for a user on a specific day
+  app.get("/api/users/:userId/feedback/:day", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const day = parseInt(req.params.day);
+    
+    if (isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+    
+    if (isNaN(day) || day < 0 || day > 55) {
+      return res.status(400).json({ message: "Day must be between 0 and 55" });
+    }
+    
+    const feedback = await storage.getDailyFeedback(userId, day);
+    if (!feedback) {
+      return res.json({ feedback: "" });
+    }
+    
+    res.json(feedback);
+  });
+  
+  // Create or update daily feedback
+  app.post("/api/feedback", async (req, res) => {
+    try {
+      const validatedData = insertDailyFeedbackSchema.parse(req.body);
+      
+      // Validate that user exists
+      const user = await storage.getUser(validatedData.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Validate day is within range (0-55)
+      if (validatedData.day < 0 || validatedData.day > 55) {
+        return res.status(400).json({ message: "Day must be between 0 and 55" });
+      }
+      
+      const feedback = await storage.createOrUpdateDailyFeedback(validatedData);
+      res.status(201).json(feedback);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });

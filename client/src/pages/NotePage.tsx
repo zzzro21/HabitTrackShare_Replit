@@ -9,6 +9,8 @@ const NotePage: React.FC = () => {
   const { activeUser, habits, isLoading } = useHabit();
   const [day, setDay] = useState<number>(0);
   const [notes, setNotes] = useState<{[key: number]: string}>({});
+  const [habitEntries, setHabitEntries] = useState<{[key: number]: number}>({});
+  const [feedback, setFeedback] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [, setLocation] = useLocation();
@@ -17,15 +19,17 @@ const NotePage: React.FC = () => {
   // 날짜 범위 생성 (1-56일)
   const daysArray = Array.from({ length: 56 }, (_, i) => i);
 
-  // 노트 데이터 가져오기
+  // 노트 데이터 및 습관 항목 상태 가져오기
   useEffect(() => {
-    const fetchNotes = async () => {
+    const fetchData = async () => {
       if (!activeUser || day === undefined) return;
       
       try {
         setIsFetching(true);
-        const response = await fetch(`/api/users/${activeUser}/notes/${day}`);
-        const notesData = await response.json();
+        
+        // 노트 데이터 가져오기
+        const notesResponse = await fetch(`/api/users/${activeUser}/notes/${day}`);
+        const notesData = await notesResponse.json();
         
         // 노트 데이터를 habitId를 키로 하는 객체로 변환
         const notesMap = notesData.reduce((acc: {[key: number]: string}, note: any) => {
@@ -34,16 +38,47 @@ const NotePage: React.FC = () => {
         }, {});
         
         setNotes(notesMap);
+        
+        // 습관 항목 상태 가져오기
+        const entriesResponse = await fetch(`/api/users/${activeUser}/entries`);
+        const entriesData = await entriesResponse.json();
+        
+        // 해당 날짜의 습관 항목만 필터링
+        const dayEntries = entriesData.filter((entry: any) => entry.day === day);
+        
+        // 습관 항목을 habitId를 키로 하는 객체로 변환
+        const entriesMap = dayEntries.reduce((acc: {[key: number]: number}, entry: any) => {
+          acc[entry.habitId] = entry.value;
+          return acc;
+        }, {});
+        
+        setHabitEntries(entriesMap);
+        
+        // 일일 피드백 가져오기
+        try {
+          const feedbackResponse = await fetch(`/api/users/${activeUser}/feedback/${day}`);
+          if (feedbackResponse.ok) {
+            const feedbackData = await feedbackResponse.json();
+            if (feedbackData && feedbackData.feedback) {
+              setFeedback(feedbackData.feedback);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching feedback:', error);
+        }
+        
       } catch (error) {
-        console.error('Error fetching notes:', error);
-        // 노트 데이터가 없으면 빈 객체 설정
+        console.error('Error fetching data:', error);
+        // 데이터가 없으면 빈 객체 설정
         setNotes({});
+        setHabitEntries({});
+        setFeedback("");
       } finally {
         setIsFetching(false);
       }
     };
     
-    fetchNotes();
+    fetchData();
   }, [activeUser, day]);
 
   // 노트 내용 변경 핸들러
@@ -86,6 +121,79 @@ const NotePage: React.FC = () => {
     }
   };
 
+  // 습관 항목 업데이트 핸들러 
+  const handleHabitEntryUpdate = async (habitId: number, value: number) => {
+    if (!activeUser) return;
+    
+    try {
+      // UI 상태 즉시 업데이트
+      setHabitEntries(prev => ({
+        ...prev,
+        [habitId]: value
+      }));
+      
+      // 서버에 업데이트 요청
+      const response = await apiRequest('POST', '/api/entries', {
+        userId: activeUser,
+        habitId,
+        day,
+        value
+      });
+      
+      if (response.ok) {
+        toast({
+          title: "점수 업데이트",
+          description: "습관 점수가 업데이트되었습니다.",
+        });
+      }
+    } catch (error) {
+      console.error('Error updating habit entry:', error);
+      toast({
+        title: "점수 업데이트 실패",
+        description: "습관 점수 업데이트 중 오류가 발생했습니다.",
+        variant: "destructive"
+      });
+      
+      // 오류 발생 시 이전 상태로 복원
+      setHabitEntries(prev => {
+        const prevState = { ...prev };
+        delete prevState[habitId];
+        return prevState;
+      });
+    }
+  };
+  
+  // 피드백 저장 핸들러
+  const handleSaveFeedback = async () => {
+    if (!activeUser) return;
+    
+    try {
+      setIsSubmitting(true);
+      
+      const response = await apiRequest('POST', '/api/feedback', {
+        userId: activeUser,
+        day,
+        feedback: feedback || ''
+      });
+      
+      if (response.ok) {
+        toast({
+          title: "저장 완료",
+          description: "소감/피드백이 저장되었습니다.",
+        });
+      }
+    } catch (error) {
+      console.error('Error saving feedback:', error);
+      toast({
+        title: "저장 실패",
+        description: "소감/피드백 저장 중 오류가 발생했습니다.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   // 모든 노트 저장 핸들러
   const handleSaveAllNotes = async () => {
     if (!activeUser) return;
@@ -93,7 +201,8 @@ const NotePage: React.FC = () => {
     try {
       setIsSubmitting(true);
       
-      const savePromises = Object.entries(notes).map(([habitId, note]) => 
+      // 노트 저장
+      const saveNotesPromises = Object.entries(notes).map(([habitId, note]) => 
         apiRequest('POST', '/api/notes', {
           userId: activeUser,
           habitId: parseInt(habitId),
@@ -102,17 +211,25 @@ const NotePage: React.FC = () => {
         })
       );
       
-      await Promise.all(savePromises);
+      // 피드백 저장
+      const saveFeedbackPromise = apiRequest('POST', '/api/feedback', {
+        userId: activeUser,
+        day,
+        feedback: feedback || ''
+      });
+      
+      // 모든 저장 작업 병렬로 실행
+      await Promise.all([...saveNotesPromises, saveFeedbackPromise]);
       
       toast({
         title: "저장 완료",
-        description: "모든 습관 노트가 저장되었습니다.",
+        description: "모든 습관 노트와 소감/피드백이 저장되었습니다.",
       });
     } catch (error) {
-      console.error('Error saving notes:', error);
+      console.error('Error saving data:', error);
       toast({
         title: "저장 실패",
-        description: "습관 노트 저장 중 오류가 발생했습니다.",
+        description: "데이터 저장 중 오류가 발생했습니다.",
         variant: "destructive"
       });
     } finally {
@@ -211,6 +328,7 @@ const NotePage: React.FC = () => {
                         id="book-none" 
                         name="book-score" 
                         className="mr-2"
+                        checked={habitEntries[1] === 0}
                         onChange={() => handleHabitEntryUpdate(1, 0)} 
                       />
                       <label htmlFor="book-none">미완료 (0점)</label>
@@ -446,6 +564,15 @@ const NotePage: React.FC = () => {
                     className="w-full border border-gray-300 h-20 py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
                     rows={3}
                   />
+                  <div className="mt-1 text-right">
+                    <button
+                      onClick={handleSaveFeedback}
+                      disabled={isSubmitting}
+                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1 px-2 rounded"
+                    >
+                      저장
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
