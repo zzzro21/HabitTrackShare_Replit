@@ -7,6 +7,11 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+// GET request
+export async function apiRequest<T = any>(url: string): Promise<T>;
+// POST/PUT/DELETE request with method and url
+export async function apiRequest<T = any>(method: string, url: string, data?: unknown): Promise<T>;
+// Implementation
 export async function apiRequest<T = any>(
   urlOrMethod: string,
   urlOrData?: string | unknown,
@@ -17,8 +22,11 @@ export async function apiRequest<T = any>(
   let url: string;
   let bodyData: unknown | undefined;
 
-  if (arguments.length === 1 || (arguments.length === 2 && typeof urlOrData !== 'string')) {
-    // GET request: apiRequest(url) or apiRequest(url, queryParams)
+  // Check if this is a simple GET request or a method-specified request
+  const isSimpleGet = urlOrData === undefined || typeof urlOrData !== 'string';
+  
+  if (isSimpleGet) {
+    // GET request: apiRequest(url)
     method = 'GET';
     url = urlOrMethod;
     bodyData = urlOrData;
