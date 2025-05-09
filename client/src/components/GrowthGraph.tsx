@@ -18,7 +18,7 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
       const weeklyScores = calculateWeekScores(userId, week);
       
       return {
-        week: `${week + 1}주차`,
+        week: `${week + 1}w`,
         독서: weeklyScores[0], // 책 읽기
         동영상: weeklyScores[1], // 동영상 시청
         제품애용: weeklyScores[2], // 제품 애용
