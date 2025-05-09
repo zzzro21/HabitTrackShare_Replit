@@ -377,7 +377,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="book-half" className="text-xs">30분 미만 (0.5점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[1] === 2 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[1] === 2 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="book-full" 
@@ -407,8 +407,8 @@ const NotePage: React.FC = () => {
                   2. 동영상 시청
                 </div>
                 <div className="p-2">
-                  <div className="flex flex-row space-x-4 mb-2">
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[2] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                  <div className="habit-option-group">
+                    <div className={`habit-option ${habitEntries[2] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="video-none" 
@@ -419,7 +419,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="video-none" className="text-xs">미완료 (0점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[2] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[2] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="video-done" 
@@ -449,8 +449,8 @@ const NotePage: React.FC = () => {
                   3. 제품 애용
                 </div>
                 <div className="p-2">
-                  <div className="flex flex-row space-x-4 mb-2">
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[3] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                  <div className="habit-option-group">
+                    <div className={`habit-option ${habitEntries[3] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="product-none" 
@@ -461,7 +461,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="product-none" className="text-xs">미완료 (0점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[3] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[3] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="product-used" 
@@ -472,7 +472,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="product-used" className="text-xs">USED 제품후기 (1점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[3] === 2 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[3] === 2 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="product-new" 
@@ -502,8 +502,8 @@ const NotePage: React.FC = () => {
                   4. 미팅 참석
                 </div>
                 <div className="p-2">
-                  <div className="flex flex-row space-x-4 mb-2">
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[4] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                  <div className="habit-option-group">
+                    <div className={`habit-option ${habitEntries[4] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="meeting-none" 
@@ -514,7 +514,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="meeting-none" className="text-xs">미완료 (0점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[4] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[4] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="meeting-done" 
@@ -544,8 +544,8 @@ const NotePage: React.FC = () => {
                   5. 제품 전달 및 소비자 관리
                 </div>
                 <div className="p-2">
-                  <div className="flex flex-row space-x-4 mb-2">
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[5] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                  <div className="habit-option-group">
+                    <div className={`habit-option ${habitEntries[5] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="delivery-none" 
@@ -556,7 +556,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="delivery-none" className="text-xs">미완료 (0점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[5] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[5] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="delivery-explain" 
