@@ -4,10 +4,13 @@ import ProgressSummary from '@/components/ProgressSummary';
 import WeekSelector from '@/components/WeekSelector';
 import HabitTracker from '@/components/HabitTracker';
 import WeekSummary from '@/components/WeekSummary';
-import Leaderboard from '@/components/Leaderboard';
+import GrowthGraph from '@/components/GrowthGraph';
 import TabNavigation from '@/components/TabNavigation';
+import { useHabit } from '@/lib/HabitContext';
 
 const Home: React.FC = () => {
+  const { activeUser } = useHabit();
+
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-16">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -23,7 +26,7 @@ const Home: React.FC = () => {
         <WeekSelector />
         <HabitTracker />
         <WeekSummary />
-        <Leaderboard />
+        <GrowthGraph userId={activeUser} />
       </main>
       
       <TabNavigation />
