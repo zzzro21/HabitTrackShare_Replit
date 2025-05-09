@@ -11,11 +11,14 @@ import RankingPage from "@/pages/RankingPage";
 import SettingsPage from "@/pages/SettingsPage";
 import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
+import MorningPage from "@/pages/MorningPage";
 
+// APP이 안정적으로 실행될 때까지 기본 구성 유지
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/morning" component={MorningPage} />
       <Route path="/friends" component={FriendsPage} />
       <Route path="/ranking" component={RankingPage} />
       <Route path="/insights" component={InsightsPage} />

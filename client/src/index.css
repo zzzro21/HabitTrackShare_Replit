@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 모자이크 효과를 위한 애니메이션 */
+@keyframes mosaic {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+
+.animate-mosaic {
+  animation: mosaic 1s ease forwards;
+  transition: all 1s;
+}
+
 @layer components {
   /* 버튼 간격 및 크기 조정 */
   .habit-option-group {

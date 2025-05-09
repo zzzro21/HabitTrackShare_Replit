@@ -6,45 +6,72 @@ import { z } from "zod";
 import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Initialize predefined data
-  await storage.initializePredefinedData();
+  try {
+    // Initialize predefined data
+    console.log("Initializing predefined data...");
+    await storage.initializePredefinedData();
+    console.log("Predefined data initialized successfully");
+  } catch (error) {
+    console.error("Error initializing predefined data:", error);
+    // Continue even if there's an error with predefined data
+  }
 
   // Get all users
   app.get("/api/users", async (req, res) => {
-    const users = await storage.getAllUsers();
-    res.json(users);
+    try {
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Error fetching users", error: String(error) });
+    }
   });
 
   // Get user by ID
   app.get("/api/users/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "Invalid user ID" });
-    }
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
 
-    const user = await storage.getUser(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+      const user = await storage.getUser(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-    res.json(user);
+      res.json(user);
+    } catch (error) {
+      console.error(`Error fetching user ${req.params.id}:`, error);
+      res.status(500).json({ message: "Error fetching user", error: String(error) });
+    }
   });
 
   // Get all habits
   app.get("/api/habits", async (req, res) => {
-    const habits = await storage.getAllHabits();
-    res.json(habits);
+    try {
+      const habits = await storage.getAllHabits();
+      res.json(habits);
+    } catch (error) {
+      console.error("Error fetching habits:", error);
+      res.status(500).json({ message: "Error fetching habits", error: String(error) });
+    }
   });
 
   // Get all habit entries for a user
   app.get("/api/users/:userId/entries", async (req, res) => {
-    const userId = parseInt(req.params.userId);
-    if (isNaN(userId)) {
-      return res.status(400).json({ message: "Invalid user ID" });
-    }
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
 
-    const entries = await storage.getUserHabitEntries(userId);
-    res.json(entries);
+      const entries = await storage.getUserHabitEntries(userId);
+      res.json(entries);
+    } catch (error) {
+      console.error(`Error fetching entries for user ${req.params.userId}:`, error);
+      res.status(500).json({ message: "Error fetching habit entries", error: String(error) });
+    }
   });
 
   // Create or update a habit entry
@@ -80,47 +107,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
       }
-      throw error;
+      console.error("Error creating/updating habit entry:", error);
+      res.status(500).json({ 
+        message: "Error creating or updating habit entry", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
     }
   });
 
   // Get habit notes for a user on a specific day
   app.get("/api/users/:userId/notes/:day", async (req, res) => {
-    const userId = parseInt(req.params.userId);
-    const day = parseInt(req.params.day);
-    
-    if (isNaN(userId)) {
-      return res.status(400).json({ message: "Invalid user ID" });
+    try {
+      const userId = parseInt(req.params.userId);
+      const day = parseInt(req.params.day);
+      
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
+      
+      if (isNaN(day) || day < 0 || day > 55) {
+        return res.status(400).json({ message: "Day must be between 0 and 55" });
+      }
+      
+      const notes = await storage.getUserHabitNotes(userId, day);
+      res.json(notes);
+    } catch (error) {
+      console.error(`Error fetching notes for user ${req.params.userId}, day ${req.params.day}:`, error);
+      res.status(500).json({ message: "Error fetching habit notes", error: String(error) });
     }
-    
-    if (isNaN(day) || day < 0 || day > 55) {
-      return res.status(400).json({ message: "Day must be between 0 and 55" });
-    }
-    
-    const notes = await storage.getUserHabitNotes(userId, day);
-    res.json(notes);
   });
   
   // Get a specific habit note
   app.get("/api/users/:userId/habits/:habitId/notes/:day", async (req, res) => {
-    const userId = parseInt(req.params.userId);
-    const habitId = parseInt(req.params.habitId);
-    const day = parseInt(req.params.day);
-    
-    if (isNaN(userId) || isNaN(habitId) || isNaN(day)) {
-      return res.status(400).json({ message: "Invalid parameters" });
+    try {
+      const userId = parseInt(req.params.userId);
+      const habitId = parseInt(req.params.habitId);
+      const day = parseInt(req.params.day);
+      
+      if (isNaN(userId) || isNaN(habitId) || isNaN(day)) {
+        return res.status(400).json({ message: "Invalid parameters" });
+      }
+      
+      if (day < 0 || day > 55) {
+        return res.status(400).json({ message: "Day must be between 0 and 55" });
+      }
+      
+      const note = await storage.getHabitNote(userId, habitId, day);
+      if (!note) {
+        return res.status(404).json({ message: "Note not found" });
+      }
+      
+      res.json(note);
+    } catch (error) {
+      console.error(`Error fetching specific note:`, error);
+      res.status(500).json({ message: "Error fetching habit note", error: String(error) });
     }
-    
-    if (day < 0 || day > 55) {
-      return res.status(400).json({ message: "Day must be between 0 and 55" });
-    }
-    
-    const note = await storage.getHabitNote(userId, habitId, day);
-    if (!note) {
-      return res.status(404).json({ message: "Note not found" });
-    }
-    
-    res.json(note);
   });
   
   // Create or update a habit note
@@ -151,29 +192,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
       }
-      throw error;
+      console.error("Error creating/updating habit note:", error);
+      res.status(500).json({ 
+        message: "Error creating or updating habit note", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
     }
   });
 
   // Get daily feedback for a user on a specific day
   app.get("/api/users/:userId/feedback/:day", async (req, res) => {
-    const userId = parseInt(req.params.userId);
-    const day = parseInt(req.params.day);
-    
-    if (isNaN(userId)) {
-      return res.status(400).json({ message: "Invalid user ID" });
+    try {
+      const userId = parseInt(req.params.userId);
+      const day = parseInt(req.params.day);
+      
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
+      
+      if (isNaN(day) || day < 0 || day > 55) {
+        return res.status(400).json({ message: "Day must be between 0 and 55" });
+      }
+      
+      const feedback = await storage.getDailyFeedback(userId, day);
+      if (!feedback) {
+        return res.json({ feedback: "" });
+      }
+      
+      res.json(feedback);
+    } catch (error) {
+      console.error(`Error fetching feedback for user ${req.params.userId}, day ${req.params.day}:`, error);
+      res.status(500).json({ message: "Error fetching daily feedback", error: String(error) });
     }
-    
-    if (isNaN(day) || day < 0 || day > 55) {
-      return res.status(400).json({ message: "Day must be between 0 and 55" });
-    }
-    
-    const feedback = await storage.getDailyFeedback(userId, day);
-    if (!feedback) {
-      return res.json({ feedback: "" });
-    }
-    
-    res.json(feedback);
   });
   
   // Create or update daily feedback
@@ -198,7 +248,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
       }
-      throw error;
+      console.error("Error creating/updating daily feedback:", error);
+      res.status(500).json({ 
+        message: "Error creating or updating daily feedback", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
     }
   });
 
@@ -227,13 +281,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Otherwise, generate new insights
-      const insights = await generateHabitInsights(userId, storage);
-      const savedInsights = await storage.createOrUpdateHabitInsight(insights);
-      
-      res.json(savedInsights);
+      try {
+        const insights = await generateHabitInsights(userId, storage);
+        const savedInsights = await storage.createOrUpdateHabitInsight(insights);
+        return res.json(savedInsights);
+      } catch (error) {
+        console.error("Error in habit insights generation:", error);
+        // 기본 인사이트 제공
+        const defaultInsights = {
+          userId,
+          summary: "인사이트 생성 중 오류가 발생했습니다.",
+          strengths: ["데이터를 계속 기록해주세요."],
+          improvementAreas: ["더 많은 데이터가 필요합니다."],
+          recommendations: ["매일 습관을 기록하세요."],
+          date: new Date()
+        };
+        const savedDefaultInsights = await storage.createOrUpdateHabitInsight(defaultInsights);
+        return res.json(savedDefaultInsights);
+      }
     } catch (error) {
       console.error("Error generating insights:", error);
-      res.status(500).json({ 
+      return res.status(500).json({ 
         message: "Error generating insights", 
         error: error instanceof Error ? error.message : String(error) 
       });
@@ -257,7 +325,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
       }
-      throw error;
+      console.error("Error creating/updating habit insight:", error);
+      res.status(500).json({ 
+        message: "Error creating or updating habit insight", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
     }
   });
 
