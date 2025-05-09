@@ -29,13 +29,13 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
     });
   }, [userId, calculateWeekScores]);
 
-  // 각 카테고리에 대한 고유 색상 지정
+  // 각 카테고리에 대한 파스텔톤 색상 지정
   const colors = {
-    독서: '#4CAF50', // GREEN
-    동영상: '#FF9800', // ORANGE
-    제품애용: '#3B82F6', // BLUE (primary 컬러)
-    미팅참석: '#9C27B0', // VIOLET
-    소비자관리: '#FFEB3B', // YELLOW
+    독서: '#9ED5A1', // 파스텔 그린
+    동영상: '#FFB7A0', // 파스텔 코랄
+    제품애용: '#A0C5E8', // 파스텔 블루
+    미팅참석: '#D0A5D6', // 파스텔 퍼플
+    소비자관리: '#FDDA9B', // 파스텔 옐로우
   };
 
   const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
