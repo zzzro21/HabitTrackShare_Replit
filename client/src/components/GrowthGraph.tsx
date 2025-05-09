@@ -7,7 +7,7 @@ interface GrowthGraphProps {
   userId: number;
 }
 
-const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
+function GrowthGraph({ userId }: GrowthGraphProps) {
   const { calculateWeekScores } = useHabit();
   
   // 각 주차별 데이터를 생성
@@ -29,7 +29,7 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
     });
   }, [userId, calculateWeekScores]);
 
-  // 각 카테고리에 대한 블루 계열 색상 지정 (기존 파스텔톤에서 블루 계열로 변경)
+  // 블루 계열 색상 지정
   const colors = {
     독서: '#A0C5E8', // 연한 블루
     동영상: '#7BAFD4', // 약간 진한 블루
@@ -40,7 +40,6 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
 
   const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
 
-  // 스택 바 차트 설정을 위한 데이터 구성
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -56,10 +55,7 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="week" fontSize={10} />
               <YAxis fontSize={10} />
-              <Tooltip 
-                formatter={(value, name) => [value, name]}
-                labelFormatter={(label) => `${label}`}
-              />
+              <Tooltip />
               {categories.map((category) => (
                 <Bar 
                   key={category} 
@@ -76,6 +72,6 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
       </CardContent>
     </Card>
   );
-};
+}
 
 export default GrowthGraph;
