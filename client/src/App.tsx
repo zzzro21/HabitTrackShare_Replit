@@ -10,6 +10,7 @@ import FriendsPage from "@/pages/FriendsPage";
 import RankingPage from "@/pages/RankingPage";
 import SettingsPage from "@/pages/SettingsPage";
 import NotePage from "@/pages/NotePage";
+import InsightsPage from "@/pages/InsightsPage";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/friends" component={FriendsPage} />
       <Route path="/ranking" component={RankingPage} />
+      <Route path="/insights" component={InsightsPage} />
       <Route path="/settings" component={SettingsPage} />
       <Route path="/notes" component={NotePage} />
       <Route component={NotFound} />
