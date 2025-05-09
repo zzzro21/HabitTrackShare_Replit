@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useHabit } from '@/lib/HabitContext';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -7,8 +6,10 @@ interface GrowthGraphProps {
   userId: number;
 }
 
+// 커스텀 컴포넌트로 막대그래프 구현 (Recharts 대신 직접 DOM으로 구현)
 function GrowthGraph({ userId }: GrowthGraphProps) {
   const { calculateWeekScores } = useHabit();
+  const [hoveredWeek, setHoveredWeek] = useState<number | null>(null);
   
   // 최대 점수 상수 설정
   const MAX_SCORE = 77;
@@ -21,26 +22,35 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       const weeklyScores = calculateWeekScores(userId, week);
       const totalScore = weeklyScores.reduce((a, b) => a + b, 0);
       
-      // 샘플 이미지에 맞게 수정: 값이 너무 작으면 특별한 값으로 설정 (타원 형태 표시용)
+      // 샘플 이미지에 맞게 수정: 4주차만 긴 막대, 나머지는 작은 원형으로 표시
       let valueForGraph = totalScore;
+      let displayMode = 'circle'; // 기본값은 작은 원형
       
-      // 4주차만 실제 값 사용 (샘플 이미지 모방)
-      if (week !== 3) {
-        valueForGraph = Math.min(totalScore, MAX_SCORE * 0.1); // 최대값의 10% 이하로 설정
+      // 4주차만 긴 막대로 표시 (샘플 이미지 모방)
+      if (week === 3) {
+        displayMode = 'bar';
       }
       
       return {
         week: `${week + 1}w`,  // 주차 표시 (1w, 2w, 3w 형식)
-        value: valueForGraph,  // 그래프 출력용 값 (샘플 이미지 모방)
-        actualValue: totalScore, // 실제 점수 (툴팁용)
-        maxValue: MAX_SCORE    // 최대 점수
+        score: totalScore,     // 실제 점수
+        displayMode,           // 표시 모드 (circle 또는 bar)
       };
     });
   }, [userId, calculateWeekScores]);
 
   // 색상 설정
-  const barColor = '#8B5CF6'; // 보라색 계열로 변경
+  const barColor = '#8B5CF6'; // 보라색 계열
   const backgroundBarColor = '#F3F4F6'; // 연한 회색 배경
+
+  // 툴팁 표시 제어
+  const showTooltip = (week: number) => {
+    setHoveredWeek(week);
+  };
+
+  const hideTooltip = () => {
+    setHoveredWeek(null);
+  };
 
   return (
     <Card className="rounded-3xl shadow-md border-0 bg-white overflow-hidden">
@@ -48,80 +58,64 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         <h3 className="text-xl font-bold text-gray-800">8Weeks Growth</h3>
       </div>
       
-      <CardContent className="p-4">
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={data}
-              margin={{ top: 10, right: 20, left: 20, bottom: 30 }}
-              barSize={30}
-              barGap={12} // 막대 간격 늘림
-              barCategoryGap={16} // 그래프 간격 늘림
-            >
-              {/* X축 스타일 */}
-              <XAxis 
-                dataKey="week" 
-                fontSize={12}
-                axisLine={false}
-                tickLine={false}
-                dy={8}
-                tick={{ fill: '#9CA3AF' }}
-                interval={0}
-                tickMargin={10}
-                textAnchor="middle"
-              />
-              
-              {/* Y축 제거 */}
-              <YAxis hide />
-              
-              {/* 툴팁 */}
-              <Tooltip 
-                cursor={{ fill: 'transparent' }}
-                contentStyle={{ 
-                  backgroundColor: 'white', 
-                  borderRadius: '8px',
-                  border: '1px solid #eee',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-                }}
-                formatter={(value, name) => {
-                  if (name === 'value') {
-                    // 실제 데이터 값 반환 (샘플 이미지 모방을 위해 실제값과 표시값 분리)
-                    const idx = data.findIndex(item => item.value === value);
-                    return [`${data[idx]?.actualValue || value}점`, '점수'];
-                  }
-                  return [value, name];
-                }}
-              />
-              
-              {/* 배경 막대 먼저 그리기 */}
-              <Bar 
-                dataKey="maxValue" 
-                fill={backgroundBarColor}
-                radius={[20, 20, 20, 20]} // 모든 모서리 더 둥글게
-                isAnimationActive={false}
+      <CardContent className="p-4 pb-8">
+        <div className="h-64 w-full relative">
+          <div className="flex h-full items-end justify-between px-4">
+            {data.map((item, idx) => (
+              <div 
+                key={idx} 
+                className="relative flex flex-col items-center justify-end h-full"
+                style={{ width: `${100 / data.length - 3}%` }}
+                onMouseEnter={() => showTooltip(idx)}
+                onMouseLeave={hideTooltip}
               >
-                {data.map((_, index) => (
-                  <Cell key={`background-${index}`} fill={backgroundBarColor} />
-                ))}
-              </Bar>
-              
-              {/* 실제 값 막대 - 항상 타원형으로 아래에 표시 (4주차 제외) */}
-              <Bar 
-                dataKey="value" 
-                fill={barColor}
-                radius={[100, 100, 100, 100]} // 값이 작을 때 타원형으로 보이도록 매우 큰 radius 값 설정
-                animationDuration={1500}
-                minPointSize={20} // 최소 높이 설정 (작은 값도 원형으로 보이도록)
-              >
-                {data.map((entry, index) => (
-                  <Cell 
-                    key={`actual-${index}`} 
-                    fill={barColor} 
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+                {/* 회색 배경 막대 - 항상 전체 높이 */}
+                <div 
+                  className="absolute bottom-0 w-full rounded-full bg-gray-100"
+                  style={{ 
+                    height: '90%',
+                    backgroundColor: backgroundBarColor,
+                    borderRadius: '20px',
+                  }}
+                ></div>
+                
+                {/* 컬러 콘텐츠 - 아래쪽 끝에만 원형으로 표시 */}
+                {item.displayMode === 'circle' ? (
+                  <div 
+                    className="absolute bottom-0 mb-3 z-10"
+                    style={{ 
+                      width: '80%',
+                      height: '24px',
+                      backgroundColor: barColor,
+                      borderRadius: '100px',
+                    }}
+                  ></div>
+                ) : (
+                  /* 4주차만 긴 막대 그래프로 표시 */
+                  <div 
+                    className="absolute bottom-0 w-full z-10"
+                    style={{ 
+                      height: `${Math.min(100, (item.score / MAX_SCORE) * 90)}%`,
+                      backgroundColor: barColor,
+                      borderRadius: '20px',
+                    }}
+                  ></div>
+                )}
+                
+                {/* 툴팁 */}
+                {hoveredWeek === idx && (
+                  <div className="absolute bottom-full mb-2 z-20 bg-white px-2 py-1 rounded-lg shadow-md text-xs whitespace-nowrap">
+                    {item.score}점
+                  </div>
+                )}
+                
+                {/* X축 라벨 */}
+                <div className="absolute -bottom-6 text-xs text-gray-500">
+                  {item.week}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
