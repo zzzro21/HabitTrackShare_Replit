@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* 버튼 간격 및 크기 조정 */
+  .habit-option-group {
+    @apply flex flex-wrap gap-2 mb-2;
+  }
+  
+  .habit-option {
+    @apply flex items-center px-2 py-1 rounded-md text-xs;
+  }
+  
+  /* 폰트 크기 30% 축소 */
+  html {
+    font-size: 12px;
+  }
+  
+  /* textarea 자동 높이 조절 */
+  .auto-resize-textarea {
+    min-height: 40px;
+    overflow: hidden;
+    resize: none;
+  }
+}
+
 :root {
       --background: 0 0% 100%;
 --foreground: 20 14.3% 4.1%;
