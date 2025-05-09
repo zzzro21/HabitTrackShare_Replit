@@ -147,6 +147,9 @@ export class MemStorage implements IStorage {
   }
 
   async createOrUpdateHabitNote(insertNote: InsertHabitNote): Promise<HabitNote> {
+    // Make sure note is never undefined
+    const noteContent = insertNote.note || '';
+    
     // Check if note exists already
     const existingNoteIndex = this.habitNotes.findIndex(
       (note) => 
@@ -157,12 +160,16 @@ export class MemStorage implements IStorage {
 
     if (existingNoteIndex !== -1) {
       // Update existing note
-      this.habitNotes[existingNoteIndex].note = insertNote.note;
+      this.habitNotes[existingNoteIndex].note = noteContent;
       return this.habitNotes[existingNoteIndex];
     } else {
       // Create new note
       const id = this.habitNoteIdCounter++;
-      const note: HabitNote = { ...insertNote, id };
+      const note: HabitNote = { 
+        ...insertNote, 
+        id,
+        note: noteContent
+      };
       this.habitNotes.push(note);
       return note;
     }

@@ -83,6 +83,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get habit notes for a user on a specific day
+  app.get("/api/users/:userId/notes/:day", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const day = parseInt(req.params.day);
+    
+    if (isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+    
+    if (isNaN(day) || day < 0 || day > 55) {
+      return res.status(400).json({ message: "Day must be between 0 and 55" });
+    }
+    
+    const notes = await storage.getUserHabitNotes(userId, day);
+    res.json(notes);
+  });
+  
+  // Get a specific habit note
+  app.get("/api/users/:userId/habits/:habitId/notes/:day", async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const habitId = parseInt(req.params.habitId);
+    const day = parseInt(req.params.day);
+    
+    if (isNaN(userId) || isNaN(habitId) || isNaN(day)) {
+      return res.status(400).json({ message: "Invalid parameters" });
+    }
+    
+    if (day < 0 || day > 55) {
+      return res.status(400).json({ message: "Day must be between 0 and 55" });
+    }
+    
+    const note = await storage.getHabitNote(userId, habitId, day);
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+    
+    res.json(note);
+  });
+  
+  // Create or update a habit note
+  app.post("/api/notes", async (req, res) => {
+    try {
+      const validatedData = insertHabitNoteSchema.parse(req.body);
+      
+      // Validate that user exists
+      const user = await storage.getUser(validatedData.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Validate that habit exists
+      const habit = await storage.getHabit(validatedData.habitId);
+      if (!habit) {
+        return res.status(404).json({ message: "Habit not found" });
+      }
+      
+      // Validate day is within range (0-55)
+      if (validatedData.day < 0 || validatedData.day > 55) {
+        return res.status(400).json({ message: "Day must be between 0 and 55" });
+      }
+      
+      const note = await storage.createOrUpdateHabitNote(validatedData);
+      res.status(201).json(note);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data format", errors: error.errors });
+      }
+      throw error;
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
