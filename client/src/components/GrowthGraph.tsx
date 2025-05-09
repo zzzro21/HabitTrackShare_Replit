@@ -65,21 +65,20 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
             <BarChart
               data={data}
               margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
-              barSize={24}
-              barGap={0}
+              barSize={40}
+              barGap={-40} // 그래프 겹치기 위한 음수값
+              barCategoryGap={20}
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <CartesianGrid strokeDasharray="5 5" vertical={false} />
               <XAxis dataKey="week" fontSize={10} />
               <YAxis fontSize={10} domain={[0, MAX_SCORE]} />
               <Tooltip 
                 formatter={(value, name) => {
-                  if (name === 'background') return ['', '최대 점수'];
+                  if (name === 'background') return ['77', '최대 점수'];
                   return [value, name];
                 }}
+                itemStyle={{ color: '#666' }}
               />
-              
-              {/* 최대 점수 선 */}
-              <ReferenceLine y={MAX_SCORE} stroke="#ddd" strokeDasharray="3 3" />
               
               {/* 배경 막대 (모든 카테고리를 합친 최대 점수) */}
               <Bar 
@@ -88,22 +87,38 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 radius={[5, 5, 0, 0]}
               />
               
-              {/* 스택 형태로 카테고리별 막대 표시 */}
-              {categories.map((category) => (
-                <Bar 
-                  key={category} 
-                  dataKey={category} 
-                  stackId="a"
-                  name={category}
-                  radius={[0, 0, 0, 0]}
-                  // 맨 위 카테고리만 radius 적용
-                  {...(category === '소비자관리' ? { radius: [5, 5, 0, 0] } : {})}
-                >
-                  {data.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={colors[category as keyof typeof colors]} />
-                  ))}
-                </Bar>
-              ))}
+              {/* 스택 형태로 카테고리별 막대 표시 - 배경과 동일한 위치에 배치 */}
+              <Bar 
+                dataKey="독서"
+                stackId="actual"
+                name="독서"
+                fill={colors['독서']}
+              />
+              <Bar 
+                dataKey="동영상"
+                stackId="actual"
+                name="동영상"
+                fill={colors['동영상']}
+              />
+              <Bar 
+                dataKey="제품애용"
+                stackId="actual"
+                name="제품애용" 
+                fill={colors['제품애용']}
+              />
+              <Bar 
+                dataKey="미팅참석"
+                stackId="actual"
+                name="미팅참석"
+                fill={colors['미팅참석']}
+              />
+              <Bar 
+                dataKey="소비자관리"
+                stackId="actual"
+                name="소비자관리"
+                fill={colors['소비자관리']}
+                radius={[5, 5, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
