@@ -567,7 +567,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="delivery-explain" className="text-xs">설명 및 추천 (1점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[5] === 2 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[5] === 2 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="delivery-full" 
