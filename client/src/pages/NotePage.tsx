@@ -305,6 +305,15 @@ const NotePage: React.FC = () => {
         
         <div className="mb-4">
           <h2 className="text-base font-semibold mb-3">자장격지 행동습관 점검표 {day + 1}일차</h2>
+          <select
+            value={day}
+            onChange={(e) => setDay(parseInt(e.target.value))}
+            className="w-full rounded-md border border-gray-300 py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent mb-3"
+          >
+            {daysArray.map((d) => (
+              <option key={d} value={d}>{d + 1}일차</option>
+            ))}
+          </select>
           
           {isFetching ? (
             <div className="animate-pulse space-y-3">
@@ -356,7 +365,6 @@ const NotePage: React.FC = () => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-0.5">세부내용</label>
                     <textarea
                       value={notes[1] || ''}
                       onChange={(e) => handleNoteChange(1, e.target.value)}
@@ -394,11 +402,10 @@ const NotePage: React.FC = () => {
                         checked={habitEntries[2] === 1}
                         onChange={() => handleHabitEntryUpdate(2, 1)}
                       />
-                      <label htmlFor="video-done" className="text-xs">영상제목 및 시청소감 (1점)</label>
+                      <label htmlFor="video-done" className="text-xs">동영상 시청 1개이상 (1점)</label>
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-0.5">세부내용</label>
                     <textarea
                       value={notes[2] || ''}
                       onChange={(e) => handleNoteChange(2, e.target.value)}
@@ -451,7 +458,6 @@ const NotePage: React.FC = () => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-0.5">세부내용</label>
                     <textarea
                       value={notes[3] || ''}
                       onChange={(e) => handleNoteChange(3, e.target.value)}
