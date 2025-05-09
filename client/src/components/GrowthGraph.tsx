@@ -29,16 +29,17 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
     });
   }, [userId, calculateWeekScores]);
 
-  // 블루에서 민트 계열로 그라데이션 지정
+  // 블루에서 파스텔 민트로 그라데이션 지정
   const colors = {
     독서: '#0A5B8C', // 진한 블루
     동영상: '#1A7794', // 블루틸
     제품애용: '#009BA8', // 틸
     미팅참석: '#00B5A7', // 틸민트
-    소비자관리: '#02C39A', // 민트
+    소비자관리: '#6CDFCB', // 파스텔 민트
   };
 
-  const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
+  // 스택 차트에서 표시될 카테고리 순서 (아래쪽부터 위쪽 순으로)
+  const categories = ['소비자관리', '미팅참석', '제품애용', '동영상', '독서'];
 
   return (
     <Card>
