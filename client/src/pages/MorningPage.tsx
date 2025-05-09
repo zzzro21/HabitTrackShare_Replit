@@ -105,7 +105,7 @@ const MorningPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-6 bg-gradient-to-b from-indigo-50 to-white">
+    <div className="flex flex-col min-h-screen p-6 bg-gradient-to-b from-pink-50 via-indigo-50 to-white">
       {/* 상단 날씨 및 시간 정보 */}
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -120,28 +120,69 @@ const MorningPage: React.FC = () => {
       
       {/* 사용자 이미지 */}
       <div className="mx-auto mb-8 w-full max-w-xs">
-        <div className="aspect-square rounded-full overflow-hidden border-4 border-white shadow-lg">
-          <img 
-            src="https://via.placeholder.com/300x300.png?text=Profile" 
-            alt="Morning Profile"
-            className="w-full h-full object-cover"
-          />
+        <div className="relative">
+          <div className="aspect-square rounded-full overflow-hidden border-4 border-white shadow-lg">
+            <img 
+              src="https://via.placeholder.com/300x300.png?text=Profile" 
+              alt="Morning Profile"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          
+          {/* 행동 버튼 (이미지에서 본 디자인 요소) */}
+          <div className="absolute top-5 right-0 flex items-center bg-white rounded-full px-3 py-1.5 shadow-md">
+            <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </div>
+            <span className="text-sm font-medium">명상하기</span>
+          </div>
+          
+          {/* 행동 버튼 (이미지에서 본 또 다른 요소) */}
+          <div className="absolute bottom-5 left-0 flex items-center bg-white rounded-full px-3 py-1.5 shadow-md">
+            <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 11l-3 -3 3 -3" />
+                <path d="M21 11l3 -3 -3 -3" />
+                <path d="M12 14l0 7" />
+                <path d="M8 14l8 0" />
+                <path d="M9 3l3 3 3 -3" />
+              </svg>
+            </div>
+            <span className="text-sm font-medium">메시지</span>
+          </div>
         </div>
       </div>
       
       {/* 명언 카드 */}
-      <Card className="p-6 mb-8 text-center shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-        <h2 className="text-xl font-bold mb-4">오늘의 명언</h2>
-        <p className="text-lg mb-6">{quote}</p>
+      <Card className="p-6 mb-8 text-center shadow-lg border-0 bg-white/90 backdrop-blur-sm rounded-3xl">
+        <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">오늘의 명언</h2>
+        <p className="text-lg mb-6 leading-relaxed">{quote}</p>
       </Card>
       
       {/* 시작 버튼 */}
-      <Button 
-        className="w-full py-6 text-lg rounded-full bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 border-0 shadow-lg transition-all hover:shadow-xl" 
-        onClick={goToMainPage}
-      >
-        오늘 습관 시작하기
-      </Button>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold text-center">
+          <span className="block">습관을</span>
+          <div className="flex justify-center items-center gap-2 my-1">
+            <span className="bg-orange-500 text-white px-2 py-1 rounded">단 몇초 만에</span>
+            <span>기록하기</span>
+          </div>
+        </h1>
+        
+        <p className="text-center text-gray-600 mb-4">
+          "단 몇 번의 터치만으로 오늘의 습관을 기록하고<br />
+          당신의 성장을 직접 확인하세요!"
+        </p>
+        
+        <Button 
+          className="w-full py-6 text-lg rounded-full bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 border-0 shadow-lg transition-all hover:shadow-xl" 
+          onClick={goToMainPage}
+        >
+          시작하기
+        </Button>
+      </div>
     </div>
   );
 };

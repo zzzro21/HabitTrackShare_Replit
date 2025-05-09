@@ -4,20 +4,37 @@ import { IStorage } from './storage';
 
 // OpenAI 클라이언트 초기화를 안전하게 처리
 let openai: OpenAI | null = null;
+let openaiInitializing = false;
 
-// API 키가 존재하는 경우에만 클라이언트 초기화
-try {
-  if (process.env.OPENAI_API_KEY) {
-    openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    console.log("OpenAI client initialized successfully");
-  } else {
-    console.log("OpenAI API Key not found. AI features will be disabled.");
+// API 키가 존재하는 경우에만 클라이언트 초기화 - lazy initialization
+function getOpenAIClient(): OpenAI | null {
+  if (openai) return openai;
+  
+  // If we're already trying to initialize, don't try again
+  if (openaiInitializing) return null;
+  
+  openaiInitializing = true;
+  
+  try {
+    if (process.env.OPENAI_API_KEY) {
+      openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+      });
+      console.log("OpenAI client initialized successfully");
+    } else {
+      console.log("OpenAI API Key not found. AI features will be disabled.");
+    }
+  } catch (error) {
+    console.error("Failed to initialize OpenAI client:", error);
+  } finally {
+    openaiInitializing = false;
   }
-} catch (error) {
-  console.error("Failed to initialize OpenAI client:", error);
+  
+  return openai;
 }
+
+// We'll initialize on demand instead of automatically
+// This ensures the server starts as quickly as possible
 
 // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const MODEL = "gpt-4o";
@@ -98,8 +115,9 @@ export async function generateHabitInsights(
       recommendations: ["매일 습관 기록을 작성하세요.", "동료와 함께 습관을 공유하세요.", "작은 목표부터 시작하세요.", "성취를 축하하는 시간을 가지세요.", "실패해도 다시 시작하세요."]
     };
     
-    // OpenAI가 사용 가능한 경우에만 실제 인사이트 생성 시도
-    if (openai) {
+    // Get OpenAI client and use it if available
+    const openaiClient = getOpenAIClient();
+    if (openaiClient) {
       try {
         // Generate AI insights
         const prompt = `
@@ -128,8 +146,7 @@ Format your response as JSON with the following structure:
 }
 `;
 
-        // Non-null assertion - we already checked that openai is not null
-        const response = await openai!.chat.completions.create({
+        const response = await openaiClient.chat.completions.create({
           model: MODEL,
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.7,
