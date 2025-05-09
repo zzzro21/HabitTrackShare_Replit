@@ -68,7 +68,8 @@ export async function generateHabitInsights(
     const habitCompletion = habits.map(habit => {
       const habitEntries = userEntries.filter(entry => entry.habitId === habit.id);
       const completedDays = habitEntries.filter(entry => entry.value > 0).length;
-      const totalDays = [...new Set(userEntries.map(entry => entry.day))].length || 1;
+      const uniqueDays = Array.from(new Set(userEntries.map(entry => entry.day)));
+      const totalDays = uniqueDays.length || 1;
       return {
         habitId: habit.id,
         label: habit.label,
