@@ -4,6 +4,7 @@ import {
   habitEntries, 
   habitNotes,
   dailyFeedbacks,
+  habitInsights,
   type User, 
   type InsertUser, 
   type Habit, 
@@ -14,6 +15,8 @@ import {
   type InsertHabitNote,
   type DailyFeedback,
   type InsertDailyFeedback,
+  type HabitInsight,
+  type InsertHabitInsight,
   predefinedHabits
 } from "@shared/schema";
 
@@ -64,6 +67,9 @@ export class MemStorage implements IStorage {
 
   private dailyFeedbacks: DailyFeedback[];
   private dailyFeedbackIdCounter: number;
+  
+  private habitInsights: Map<number, HabitInsight>;
+  private habitInsightIdCounter: number;
 
   constructor() {
     this.users = new Map();
@@ -71,11 +77,13 @@ export class MemStorage implements IStorage {
     this.habitEntries = [];
     this.habitNotes = [];
     this.dailyFeedbacks = [];
+    this.habitInsights = new Map();
     this.userIdCounter = 1;
     this.habitIdCounter = 1;
     this.habitEntryIdCounter = 1;
     this.habitNoteIdCounter = 1;
     this.dailyFeedbackIdCounter = 1;
+    this.habitInsightIdCounter = 1;
   }
 
   // User methods
@@ -226,6 +234,33 @@ export class MemStorage implements IStorage {
     }
   }
   
+  // Habit insights methods
+  async getUserHabitInsight(userId: number): Promise<HabitInsight | undefined> {
+    // Find the most recent insight for this user
+    const insights = Array.from(this.habitInsights.values())
+      .filter(insight => insight.userId === userId)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    
+    return insights.length > 0 ? insights[0] : undefined;
+  }
+  
+  async createOrUpdateHabitInsight(insertInsight: InsertHabitInsight): Promise<HabitInsight> {
+    const id = this.habitInsightIdCounter++;
+    
+    // Ensure date is always a Date object
+    const date = insertInsight.date || new Date();
+    
+    const insight: HabitInsight = {
+      ...insertInsight,
+      id,
+      date
+    };
+    
+    // Store by ID, not by user ID (to allow multiple insights per user over time)
+    this.habitInsights.set(id, insight);
+    return insight;
+  }
+
   // Initialize predefined data
   async initializePredefinedData(): Promise<void> {
     // Create 8 demo users if they don't exist

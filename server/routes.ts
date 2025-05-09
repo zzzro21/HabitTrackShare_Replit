@@ -1,8 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { generateHabitInsights } from "./ai";
 import { z } from "zod";
-import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema } from "@shared/schema";
+import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize predefined data
@@ -193,6 +194,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const feedback = await storage.createOrUpdateDailyFeedback(validatedData);
       res.status(201).json(feedback);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data format", errors: error.errors });
+      }
+      throw error;
+    }
+  });
+
+  // Get habit insights for a user
+  app.get("/api/users/:userId/insights", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
+      
+      // Check if the user exists
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Check if we already have recent insights
+      const existingInsight = await storage.getUserHabitInsight(userId);
+      
+      // If there are existing insights and they're less than 1 day old, return them
+      if (existingInsight && 
+          (new Date().getTime() - new Date(existingInsight.date).getTime() < 24 * 60 * 60 * 1000)) {
+        return res.json(existingInsight);
+      }
+      
+      // Otherwise, generate new insights
+      const insights = await generateHabitInsights(userId, storage);
+      const savedInsights = await storage.createOrUpdateHabitInsight(insights);
+      
+      res.json(savedInsights);
+    } catch (error) {
+      console.error("Error generating insights:", error);
+      res.status(500).json({ 
+        message: "Error generating insights", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+  });
+  
+  // Manually create habit insights (mostly for testing)
+  app.post("/api/insights", async (req, res) => {
+    try {
+      const validatedData = insertHabitInsightSchema.parse(req.body);
+      
+      // Validate that user exists
+      const user = await storage.getUser(validatedData.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const insight = await storage.createOrUpdateHabitInsight(validatedData);
+      res.status(201).json(insight);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
