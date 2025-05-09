@@ -597,13 +597,22 @@ const NotePage: React.FC = () => {
                   소감/피드백
                 </div>
                 <div className="p-2">
-                  <textarea 
-                    ref={feedbackTextAreaRef}
-                    value={feedback || ''}
-                    onChange={(e) => setFeedback(e.target.value)}
-                    placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
-                    className="w-full border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
-                  />
+                  <div className="flex">
+                    <textarea 
+                      ref={feedbackTextAreaRef}
+                      value={feedback || ''}
+                      onChange={(e) => setFeedback(e.target.value)}
+                      placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
+                      className="flex-grow border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
+                    />
+                    <button
+                      onClick={handleSaveFeedback}
+                      disabled={isSubmitting}
+                      className="ml-2 self-start bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1.5 px-2 rounded text-xs h-8"
+                    >
+                      저장
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
