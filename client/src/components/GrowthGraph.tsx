@@ -33,7 +33,7 @@ const GrowthGraph: React.FC<GrowthGraphProps> = ({ userId }) => {
   const colors = {
     독서: '#4CAF50', // GREEN
     동영상: '#FF9800', // ORANGE
-    제품애용: '#00BCD4', // SKY BLUE
+    제품애용: '#3B82F6', // BLUE (primary 컬러)
     미팅참석: '#9C27B0', // VIOLET
     소비자관리: '#FFEB3B', // YELLOW
   };
