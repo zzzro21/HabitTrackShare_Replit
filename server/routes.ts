@@ -1,20 +1,11 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateHabitInsights } from "./ai";
 import { z } from "zod";
 import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
 
-export async function registerRoutes(app: Express): Promise<Server> {
-  try {
-    // Initialize predefined data
-    console.log("Initializing predefined data...");
-    await storage.initializePredefinedData();
-    console.log("Predefined data initialized successfully");
-  } catch (error) {
-    console.error("Error initializing predefined data:", error);
-    // Continue even if there's an error with predefined data
-  }
+export async function registerRoutes(app: Express): Promise<void> {
+  // Data initialization is now handled in storage class constructor
 
   // Get all users
   app.get("/api/users", async (req, res) => {
@@ -333,6 +324,5 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  const httpServer = createServer(app);
-  return httpServer;
+  // Routes registered successfully
 }

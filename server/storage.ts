@@ -84,6 +84,9 @@ export class MemStorage implements IStorage {
     this.habitNoteIdCounter = 1;
     this.dailyFeedbackIdCounter = 1;
     this.habitInsightIdCounter = 1;
+    
+    // Skip data initialization in constructor - we'll do this after server starts
+    // This allows the server to start and listen quickly
   }
 
   // User methods
