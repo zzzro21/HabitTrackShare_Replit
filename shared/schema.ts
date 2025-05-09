@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, json, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -89,6 +89,29 @@ export const insertDailyFeedbackSchema = createInsertSchema(dailyFeedbacks).pick
 
 export type InsertDailyFeedback = z.infer<typeof insertDailyFeedbackSchema>;
 export type DailyFeedback = typeof dailyFeedbacks.$inferSelect;
+
+// Habit Insights schema
+export const habitInsights = pgTable("habit_insights", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  summary: text("summary").notNull(),
+  strengths: text("strengths").array().notNull(),
+  improvementAreas: text("improvement_areas").array().notNull(),
+  recommendations: text("recommendations").array().notNull(),
+  date: timestamp("date").notNull().defaultNow(),
+});
+
+export const insertHabitInsightSchema = createInsertSchema(habitInsights).pick({
+  userId: true,
+  summary: true,
+  strengths: true,
+  improvementAreas: true,
+  recommendations: true,
+  date: true,
+});
+
+export type InsertHabitInsight = z.infer<typeof insertHabitInsightSchema>;
+export type HabitInsight = typeof habitInsights.$inferSelect;
 
 export const predefinedHabits = [
   {
