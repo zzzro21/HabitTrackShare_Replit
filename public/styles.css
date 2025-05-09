@@ -1,0 +1,559 @@
+/* 기본 스타일 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* 탭 네비게이션 */
+.tab-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  background: white;
+  border-radius: 10px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background-color: #f1f3f5;
+}
+
+.tab-btn.active {
+  background-color: #e7f5ff;
+  color: #1971c2;
+  font-weight: 600;
+}
+
+/* 탭 컨텐츠 */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 카드 스타일 */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 사용자 선택 */
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.user-card.active {
+  border: 2px solid #4263eb;
+}
+
+.avatar {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* 주차 선택 */
+.week-selector {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.week-buttons {
+  display: flex;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  gap: 0.5rem;
+}
+
+.week-btn {
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.week-btn:hover {
+  background-color: #e9ecef;
+}
+
+.week-btn.active {
+  background-color: #4263eb;
+  color: white;
+  border-color: #4263eb;
+}
+
+/* 습관 트래커 */
+.habit-tracker {
+  margin-bottom: 2rem;
+}
+
+.habits-list {
+  margin-top: 1rem;
+}
+
+.habit-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.habit-info {
+  display: flex;
+  align-items: center;
+}
+
+.habit-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e7f5ff;
+  color: #1971c2;
+  border-radius: 8px;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.habit-name {
+  font-weight: 500;
+}
+
+.habit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.habit-btn {
+  padding: 0.5rem 1rem;
+  background: #f1f3f5;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.habit-btn:hover {
+  background: #e9ecef;
+}
+
+.habit-btn.active {
+  background: #4263eb;
+  color: white;
+}
+
+/* 성장 그래프 */
+.growth-chart {
+  margin-bottom: 2rem;
+}
+
+.chart-container {
+  height: 250px;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.chart-bars {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.chart-bar {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 0 0.5rem;
+}
+
+.bar-bg {
+  position: absolute;
+  bottom: 25px;
+  width: 100%;
+  height: 80%;
+  background: #f1f3f5;
+  border-radius: 10px;
+}
+
+.bar-fill {
+  position: absolute;
+  bottom: 25px;
+  width: 100%;
+  background: #5c7cfa;
+  border-radius: 10px;
+  transition: height 0.5s ease;
+}
+
+.bar-label {
+  position: absolute;
+  bottom: 0;
+  font-size: 0.8rem;
+  color: #868e96;
+  margin-top: 0.5rem;
+}
+
+/* 인사이트 페이지 */
+.insights-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.summary-box {
+  background: #e7f5ff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.insights-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.strengths, .improvement-areas {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.strengths h3, .improvement-areas h3, .recommendations h3 {
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.recommendations {
+  background: #fff4e6;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+ul {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* 아침 페이지 */
+.morning-page {
+  padding: 1rem;
+}
+
+.time-weather {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+}
+
+.current-time {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.date {
+  color: #6c757d;
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+}
+
+.weather-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.temperature {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.profile-image {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 2rem;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.action-btn {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.meditate {
+  top: 0;
+  right: -80px;
+}
+
+.message {
+  bottom: 0;
+  left: -80px;
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+.quote-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.quote-card h3 {
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #4263eb, #22b8cf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+.start-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.highlight {
+  background: #ff922b;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.start-btn {
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #ff922b, #f76707);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+/* 메모 페이지 */
+.notes-page {
+  padding: 1rem;
+}
+
+.habit-notes {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.habit-note {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.habit-note h3 {
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.daily-reflection {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.daily-reflection textarea {
+  min-height: 120px;
+}
+
+.save-btn {
+  padding: 1rem 2rem;
+  background: #4263eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  transition: background 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #364fc7;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .user-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .insights-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .tab-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+  
+  .action-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .meditate {
+    right: -60px;
+  }
+  
+  .message {
+    left: -60px;
+  }
+}
