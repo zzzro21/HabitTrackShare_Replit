@@ -354,8 +354,8 @@ const NotePage: React.FC = () => {
                   1. 책 읽기
                 </div>
                 <div className="p-2">
-                  <div className="flex flex-row space-x-4 mb-2">
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[1] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                  <div className="habit-option-group">
+                    <div className={`habit-option ${habitEntries[1] === 0 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="book-none" 
@@ -366,7 +366,7 @@ const NotePage: React.FC = () => {
                       />
                       <label htmlFor="book-none" className="text-xs">미완료 (0점)</label>
                     </div>
-                    <div className={`flex items-center px-2 py-1 rounded-md ${habitEntries[1] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
+                    <div className={`habit-option ${habitEntries[1] === 1 ? 'bg-blue-200' : 'hover:bg-gray-100'}`}>
                       <input 
                         type="radio" 
                         id="book-half" 
@@ -528,10 +528,11 @@ const NotePage: React.FC = () => {
                   </div>
                   <div className="mt-2">
                     <textarea
+                      ref={el => textAreaRefs.current[4] = el}
                       value={notes[4] || ''}
                       onChange={(e) => handleNoteChange(4, e.target.value)}
                       placeholder="참석한 미팅과 소감을 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-y"
+                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                     />
                   </div>
                 </div>
@@ -580,10 +581,11 @@ const NotePage: React.FC = () => {
                   </div>
                   <div className="mt-2">
                     <textarea
+                      ref={el => textAreaRefs.current[5] = el}
                       value={notes[5] || ''}
                       onChange={(e) => handleNoteChange(5, e.target.value)}
                       placeholder="전달한 제품과 소비자 관리 내용을 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-y"
+                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                     />
                   </div>
                 </div>
@@ -596,10 +598,11 @@ const NotePage: React.FC = () => {
                 </div>
                 <div className="p-2">
                   <textarea 
+                    ref={feedbackTextAreaRef}
                     value={feedback || ''}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
-                    className="w-full border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-y"
+                    className="w-full border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                   />
                   <div className="mt-1 text-right">
                     <button
