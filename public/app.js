@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // 아침 페이지 시간 설정
   updateTime();
   
+  // 이미지 업로드 기능 설정
+  setupImageUpload();
+  
   // 시작 버튼 설정
   setupStartButton();
   
@@ -195,4 +198,51 @@ function setupSaveButton() {
       textarea.value = '';
     });
   });
+}
+
+// 이미지 업로드 기능 설정
+function setupImageUpload() {
+  const imageUpload = document.getElementById('image-upload');
+  const profileImg = document.getElementById('profile-img');
+  
+  if (!imageUpload || !profileImg) return;
+  
+  imageUpload.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // 파일이 이미지인지 확인
+    if (!file.type.match('image.*')) {
+      alert('이미지 파일을 선택해주세요.');
+      return;
+    }
+    
+    // 파일 크기 제한 (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('이미지 크기는 5MB 이하여야 합니다.');
+      return;
+    }
+    
+    // 이미지 미리보기
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      profileImg.src = e.target.result;
+      
+      // 로컬 스토리지에 이미지 URL 저장
+      try {
+        localStorage.setItem('profileImage', e.target.result);
+      } catch (err) {
+        console.error('로컬 스토리지에 이미지를 저장하는 데 실패했습니다:', err);
+      }
+    };
+    
+    reader.readAsDataURL(file);
+  });
+  
+  // 페이지 로드 시 저장된 이미지가 있으면 표시
+  const savedImage = localStorage.getItem('profileImage');
+  if (savedImage) {
+    profileImg.src = savedImage;
+  }
 }
