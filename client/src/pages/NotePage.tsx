@@ -150,8 +150,8 @@ const NotePage: React.FC = () => {
   const handleHabitEntryUpdate = async (habitId: number, value: number) => {
     if (!activeUser) return;
     
-    // 책읽기(1번)을 제외한 습관에 대해서는 내용이 작성된 후에만 체크 가능
-    if (habitId !== 1 && value > 0 && !notes[habitId]) {
+    // 모든 습관은 내용이 작성된 후에만 체크 가능
+    if (value > 0 && !notes[habitId]) {
       toast({
         title: "세부내용 필요",
         description: "세부내용을 작성한 후에 체크할 수 있습니다.",
