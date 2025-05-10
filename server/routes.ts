@@ -235,6 +235,44 @@ export async function registerRoutes(app: Express): Promise<void> {
     }
   });
   
+  // 사용자 이름 업데이트
+  app.post("/api/auth/update-name", authenticateUser, async (req: Request, res: Response) => {
+    try {
+      const { name } = req.body;
+      
+      if (!req.session.userId) {
+        return res.status(401).json({ 
+          success: false,
+          message: '로그인이 필요합니다.' 
+        });
+      }
+      
+      if (!name || typeof name !== 'string' || name.trim().length < 2) {
+        return res.status(400).json({
+          success: false,
+          message: '이름은 2자 이상이어야 합니다.'
+        });
+      }
+      
+      // 사용자 이름 업데이트
+      await db
+        .update(users)
+        .set({ name })
+        .where(eq(users.id, req.session.userId));
+      
+      return res.json({ 
+        success: true,
+        message: '이름이 변경되었습니다.' 
+      });
+    } catch (error) {
+      console.error('이름 변경 오류:', error);
+      return res.status(500).json({ 
+        success: false,
+        message: '이름을 변경하는 중 오류가 발생했습니다.' 
+      });
+    }
+  });
+  
   // Google API 키 업데이트
   app.post("/api/auth/api-key", authenticateUser, async (req: Request, res: Response) => {
     try {
