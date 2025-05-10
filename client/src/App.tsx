@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "./lib/queryClient";
@@ -92,7 +93,7 @@ function Router() {
       <Route path="/login">
         {isAuthenticated ? (() => { 
           // 이미 인증되었다면 홈으로 리다이렉트
-          window.location.replace('/');
+          window.location.replace('/home');
           return (
             <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
               <div className="text-center">
@@ -103,14 +104,15 @@ function Router() {
           );
         })() : <LoginPage />}
       </Route>
-      <Route path="/" component={(props) => <ProtectedRoute component={Home} {...props} />} />
-      <Route path="/morning" component={(props) => <ProtectedRoute component={MorningPage} {...props} />} />
-      <Route path="/friends" component={(props) => <ProtectedRoute component={FriendsPage} {...props} />} />
-      <Route path="/ranking" component={(props) => <ProtectedRoute component={RankingPage} {...props} />} />
-      <Route path="/insights" component={(props) => <ProtectedRoute component={InsightsPage} {...props} />} />
-      <Route path="/settings" component={(props) => <ProtectedRoute component={SettingsPage} {...props} />} />
-      <Route path="/notes" component={(props) => <ProtectedRoute component={NotePage} {...props} />} />
-      <Route component={NotFound} />
+      <Route path="/home">{() => <Home />}</Route>
+      <Route path="/">{() => <LoginPage />}</Route>
+      <Route path="/morning">{() => <MorningPage />}</Route>
+      <Route path="/friends">{() => <FriendsPage />}</Route>
+      <Route path="/ranking">{() => <RankingPage />}</Route>
+      <Route path="/insights">{() => <InsightsPage />}</Route>
+      <Route path="/settings">{() => <SettingsPage />}</Route>
+      <Route path="/notes">{() => <NotePage />}</Route>
+      <Route>{() => <NotFound />}</Route>
     </Switch>
   );
 }
