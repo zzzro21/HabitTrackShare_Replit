@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>간이 로그인 - 습관 추적 앱</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 400px;
+      width: 100%;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
+      color: #333;
+      font-size: 1.75rem;
+    }
+    
+    p {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-size: 0.9rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #4338ca;
+    }
+    
+    .alert {
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 0.85rem;
+    }
+    
+    .alert-success {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .alert-error {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    
+    .test-accounts {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9fafb;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    
+    .test-accounts h3 {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    
+    .test-accounts ul {
+      list-style: none;
+      padding-left: 10px;
+    }
+    
+    .test-accounts li {
+      margin-bottom: 5px;
+      color: #666;
+    }
+    
+    .test-accounts code {
+      background-color: #eef2ff;
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-family: monospace;
+      color: #4f46e5;
+    }
+    
+    .version {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>로그인</h1>
+    <p>습관 추적 앱을 시작하세요</p>
+    
+    <div id="success-alert" class="alert alert-success" style="display: none;">
+      로그인 성공! 잠시 후 홈 화면으로 이동합니다.
+    </div>
+    
+    <div id="error-alert" class="alert alert-error" style="display: none;">
+      아이디 또는 비밀번호가 올바르지 않습니다.
+    </div>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label for="username">아이디</label>
+        <input type="text" id="username" placeholder="아이디 입력" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" placeholder="비밀번호 입력" required>
+      </div>
+      
+      <button type="submit" id="login-button">로그인</button>
+    </form>
+    
+    <div class="test-accounts">
+      <h3>테스트 계정 정보:</h3>
+      <ul>
+        <li>아이디: <code>admin</code>, 비밀번호: <code>password123</code></li>
+        <li>아이디: <code>user1</code> ~ <code>user8</code>, 비밀번호: <code>password123</code></li>
+      </ul>
+    </div>
+    
+    <div class="version">
+      v1.0.0 - 최종 간이 로그인 페이지
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 이미 로그인되어 있으면 홈으로 리다이렉트
+      if (localStorage.getItem('isLoggedIn') === 'true') {
+        window.location.href = '/home';
+      }
+      
+      // 로그인 폼 제출 처리
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        // 간단한 인증 로직 (클라이언트 측)
+        if (password === 'password123') {
+          // 사용자 ID 설정
+          const userId = username === 'admin' ? 1 : 
+                        username.startsWith('user') ? parseInt(username.replace('user', '')) || 2 : 
+                        Math.floor(Math.random() * 100) + 10;
+          
+          // 로컬 스토리지에 로그인 정보 저장
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('username', username);
+          localStorage.setItem('userId', userId.toString());
+          localStorage.setItem('loginTime', new Date().toISOString());
+          
+          // 성공 메시지 표시
+          document.getElementById('success-alert').style.display = 'block';
+          document.getElementById('error-alert').style.display = 'none';
+          
+          // 3초 후 홈 화면으로 이동
+          setTimeout(function() {
+            window.location.href = '/home';
+          }, 3000);
+        } else {
+          // 오류 메시지 표시
+          document.getElementById('error-alert').style.display = 'block';
+          document.getElementById('success-alert').style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

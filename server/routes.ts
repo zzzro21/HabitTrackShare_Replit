@@ -22,14 +22,19 @@ import path from 'path';
 import fs from 'fs';
 
 export async function registerRoutes(app: Express): Promise<void> {
-  // 간이 로그인 페이지 제공
-  app.get('/quick-login', (req, res) => {
-    res.sendFile(path.resolve(process.cwd(), 'client/login.html'));
+  // 최종 간소화된 로그인 시스템
+  app.get('/ultimate-login', (req, res) => {
+    res.sendFile(path.resolve(process.cwd(), 'public/ultimate-login.html'));
   });
   
-  // 간이 회원가입 페이지 제공
-  app.get('/quick-register', (req, res) => {
-    res.sendFile(path.resolve(process.cwd(), 'client/register.html'));
+  // 메인 페이지도 로그인 페이지로 리다이렉트
+  app.get('/', (req, res) => {
+    res.redirect('/ultimate-login');
+  });
+  
+  // 홈 페이지
+  app.get('/home.html', (req, res) => {
+    res.sendFile(path.resolve(process.cwd(), 'public/home.html'));
   });
   // 정적 HTML 페이지 라우트
   const publicPath = path.resolve(process.cwd(), 'public');
