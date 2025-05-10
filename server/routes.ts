@@ -2,21 +2,11 @@ import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
 import { generateHabitInsights } from "./ai";
 import { z } from "zod";
-import { 
-  insertHabitEntrySchema, 
-  insertHabitNoteSchema, 
-  insertDailyFeedbackSchema, 
-  insertHabitInsightSchema, 
-  insertUserSchema, 
-  loginSchema,
-  registerSchema,
-  insertInviteCodeSchema
-} from "@shared/schema";
+import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema, insertUserSchema, loginSchema } from "@shared/schema";
 import { authenticateUser, getCurrentUser, hashPassword, verifyPassword } from "./auth";
 import { db } from "./db";
 import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
-import { randomBytes } from "crypto";
 
 import path from 'path';
 import fs from 'fs';
@@ -41,11 +31,10 @@ export async function registerRoutes(app: Express): Promise<void> {
   // 회원가입
   app.post("/api/auth/register", async (req: Request, res: Response) => {
     try {
-      // 초대 코드가 포함된 스키마로 검증
-      const registerData = registerSchema.parse(req.body);
+      const userData = insertUserSchema.parse(req.body);
       
       // 기존 사용자 확인
-      const existingUser = await db.select().from(users).where(eq(users.username, registerData.username));
+      const existingUser = await db.select().from(users).where(eq(users.username, userData.username));
       if (existingUser.length > 0) {
         return res.status(400).json({ 
           success: false,
@@ -54,8 +43,8 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
       
       // 이메일 중복 확인
-      if (registerData.email) {
-        const existingEmail = await db.select().from(users).where(eq(users.email, registerData.email));
+      if (userData.email) {
+        const existingEmail = await db.select().from(users).where(eq(users.email, userData.email));
         if (existingEmail.length > 0) {
           return res.status(400).json({ 
             success: false,
@@ -64,46 +53,14 @@ export async function registerRoutes(app: Express): Promise<void> {
         }
       }
       
-      // 초대 코드 검증
-      const inviteCode = await storage.getInviteCodeByCode(registerData.inviteCode);
-      if (!inviteCode) {
-        return res.status(400).json({
-          success: false,
-          message: '유효하지 않은 초대 코드입니다.'
-        });
-      }
-      
-      // 이미 사용된 초대 코드 확인
-      if (inviteCode.isUsed) {
-        return res.status(400).json({
-          success: false,
-          message: '이미 사용된 초대 코드입니다.'
-        });
-      }
-      
-      // 만료된 초대 코드 확인
-      if (inviteCode.expiresAt && new Date(inviteCode.expiresAt) < new Date()) {
-        return res.status(400).json({
-          success: false,
-          message: '만료된 초대 코드입니다.'
-        });
-      }
-      
       // 비밀번호 해싱
-      const hashedPassword = await hashPassword(registerData.password);
+      const hashedPassword = await hashPassword(userData.password);
       
       // 사용자 생성
       const newUser = await storage.createUser({
-        username: registerData.username,
-        password: hashedPassword,
-        email: registerData.email,
-        name: registerData.name,
-        avatar: "👤", // 기본 아바타
-        googleApiKey: null
+        ...userData,
+        password: hashedPassword
       });
-      
-      // 초대 코드 사용 처리
-      await storage.useInviteCode(registerData.inviteCode, newUser.id);
       
       // 세션에 사용자 ID 저장 (자동 로그인)
       req.session.userId = newUser.id;
@@ -115,7 +72,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           id: newUser.id,
           name: newUser.name,
           username: newUser.username,
-          email: newUser.email,
+          email: userData.email || null,
           avatar: newUser.avatar
         }
       });
@@ -141,29 +98,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     try {
       const { username, password } = loginSchema.parse(req.body);
       
-      // 기본 계정 처리 (빠른 로그인용)
-      if ((username === 'admin' || username.startsWith('user')) && password === 'password123') {
-        let userId = 1; // 기본값
-        let userName = username;
-        
-        // 세션에 사용자 ID 저장
-        req.session.userId = userId;
-        
-        return res.json({
-          success: true,
-          message: '로그인되었습니다.',
-          user: {
-            id: userId,
-            name: userName,
-            username: username,
-            email: `${username}@example.com`,
-            avatar: '👤',
-            googleApiKey: null
-          }
-        });
-      }
-      
-      // 정식 사용자 조회 로직
+      // 사용자 조회
       const [user] = await db.select().from(users).where(eq(users.username, username));
       
       if (!user) {
@@ -173,25 +108,13 @@ export async function registerRoutes(app: Express): Promise<void> {
         });
       }
       
-      // 비밀번호 검증 
-      try {
-        const isValidPassword = await verifyPassword(password, user.password);
-        if (!isValidPassword) {
-          return res.status(401).json({ 
-            success: false,
-            message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
-          });
-        }
-      } catch (pwdError) {
-        console.error('비밀번호 검증 오류:', pwdError);
-        
-        // 개발 환경에서는 password123인 경우 항상 성공으로 처리
-        if (password !== 'password123') {
-          return res.status(401).json({ 
-            success: false,
-            message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
-          });
-        }
+      // 비밀번호 검증
+      const isValidPassword = await verifyPassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ 
+          success: false,
+          message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
+        });
       }
       
       // 세션에 사용자 ID 저장
@@ -269,44 +192,6 @@ export async function registerRoutes(app: Express): Promise<void> {
     }
   });
   
-  // 사용자 이름 업데이트
-  app.post("/api/auth/update-name", authenticateUser, async (req: Request, res: Response) => {
-    try {
-      const { name } = req.body;
-      
-      if (!req.session.userId) {
-        return res.status(401).json({ 
-          success: false,
-          message: '로그인이 필요합니다.' 
-        });
-      }
-      
-      if (!name || typeof name !== 'string' || name.trim().length < 2) {
-        return res.status(400).json({
-          success: false,
-          message: '이름은 2자 이상이어야 합니다.'
-        });
-      }
-      
-      // 사용자 이름 업데이트
-      await db
-        .update(users)
-        .set({ name })
-        .where(eq(users.id, req.session.userId));
-      
-      return res.json({ 
-        success: true,
-        message: '이름이 변경되었습니다.' 
-      });
-    } catch (error) {
-      console.error('이름 변경 오류:', error);
-      return res.status(500).json({ 
-        success: false,
-        message: '이름을 변경하는 중 오류가 발생했습니다.' 
-      });
-    }
-  });
-  
   // Google API 키 업데이트
   app.post("/api/auth/api-key", authenticateUser, async (req: Request, res: Response) => {
     try {
@@ -334,124 +219,6 @@ export async function registerRoutes(app: Express): Promise<void> {
       return res.status(500).json({ 
         success: false,
         message: 'API 키를 저장하는 중 오류가 발생했습니다.' 
-      });
-    }
-  });
-  
-  // 초대 코드 생성
-  app.post("/api/invite-codes", authenticateUser, async (req: Request, res: Response) => {
-    try {
-      if (!req.session.userId) {
-        return res.status(401).json({ 
-          success: false,
-          message: '로그인이 필요합니다.'
-        });
-      }
-      
-      // 랜덤 코드 생성 (16자리 영문+숫자)
-      const randomCode = randomBytes(8).toString('hex');
-      
-      // 만료일 설정 (현재로부터 7일)
-      const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + 7);
-      
-      // 초대 코드 저장
-      const inviteCode = await storage.createInviteCode({
-        code: randomCode,
-        createdBy: req.session.userId,
-        expiresAt
-      });
-      
-      return res.status(201).json({
-        success: true,
-        message: '초대 코드가 생성되었습니다.',
-        inviteCode: {
-          code: inviteCode.code,
-          expiresAt: inviteCode.expiresAt
-        }
-      });
-    } catch (error) {
-      console.error('초대 코드 생성 오류:', error);
-      return res.status(500).json({
-        success: false,
-        message: '초대 코드 생성 중 오류가 발생했습니다.'
-      });
-    }
-  });
-  
-  // 초대 코드 유효성 검사
-  app.get("/api/invite-codes/validate/:code", async (req: Request, res: Response) => {
-    try {
-      const { code } = req.params;
-      
-      // 코드 존재 여부 확인
-      const inviteCode = await storage.getInviteCodeByCode(code);
-      if (!inviteCode) {
-        return res.status(404).json({
-          success: false,
-          message: '유효하지 않은 초대 코드입니다.'
-        });
-      }
-      
-      // 이미 사용된 코드인지 확인
-      if (inviteCode.isUsed) {
-        return res.status(400).json({
-          success: false,
-          message: '이미 사용된 초대 코드입니다.'
-        });
-      }
-      
-      // 만료 여부 확인
-      if (inviteCode.expiresAt && new Date(inviteCode.expiresAt) < new Date()) {
-        return res.status(400).json({
-          success: false,
-          message: '만료된 초대 코드입니다.'
-        });
-      }
-      
-      return res.json({
-        success: true,
-        message: '유효한 초대 코드입니다.',
-        expiresAt: inviteCode.expiresAt
-      });
-    } catch (error) {
-      console.error('초대 코드 유효성 검사 오류:', error);
-      return res.status(500).json({
-        success: false,
-        message: '초대 코드 확인 중 오류가 발생했습니다.'
-      });
-    }
-  });
-  
-  // 내가 생성한 초대 코드 목록 조회
-  app.get("/api/my-invite-codes", authenticateUser, async (req: Request, res: Response) => {
-    try {
-      if (!req.session.userId) {
-        return res.status(401).json({ 
-          success: false,
-          message: '로그인이 필요합니다.'
-        });
-      }
-      
-      // 사용자가 생성한 초대 코드 목록 조회
-      const inviteCodes = await storage.getUserInviteCodes(req.session.userId);
-      
-      return res.json({
-        success: true,
-        inviteCodes: inviteCodes.map(code => ({
-          id: code.id,
-          code: code.code,
-          isUsed: code.isUsed,
-          createdAt: code.createdAt,
-          expiresAt: code.expiresAt,
-          usedBy: code.usedBy
-        }))
-      });
-    } catch (error) {
-      console.error('초대 코드 목록 조회 오류:', error);
-      return res.status(500).json({
-        success: false,
-        message: '초대 코드 목록을 조회하는 중 오류가 발생했습니다.'
       });
     }
   });
