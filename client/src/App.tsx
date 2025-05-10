@@ -105,15 +105,15 @@ function Router() {
           );
         })() : <LoginPage />}
       </Route>
-      <Route path="/home">{() => <Home />}</Route>
+      <Route path="/home">{() => <ProtectedRoute component={Home} />}</Route>
       <Route path="/">{() => <LoginPage />}</Route>
-      <Route path="/morning">{() => <MorningPage />}</Route>
-      <Route path="/friends">{() => <FriendsPage />}</Route>
-      <Route path="/ranking">{() => <RankingPage />}</Route>
-      <Route path="/insights">{() => <InsightsPage />}</Route>
-      <Route path="/journey">{() => <JourneyVisualization />}</Route>
-      <Route path="/settings">{() => <SettingsPage />}</Route>
-      <Route path="/notes">{() => <NotePage />}</Route>
+      <Route path="/morning">{() => <ProtectedRoute component={MorningPage} />}</Route>
+      <Route path="/friends">{() => <ProtectedRoute component={FriendsPage} />}</Route>
+      <Route path="/ranking">{() => <ProtectedRoute component={RankingPage} />}</Route>
+      <Route path="/insights">{() => <ProtectedRoute component={InsightsPage} />}</Route>
+      <Route path="/journey">{() => <ProtectedRoute component={JourneyVisualization} />}</Route>
+      <Route path="/settings">{() => <ProtectedRoute component={SettingsPage} />}</Route>
+      <Route path="/notes">{() => <ProtectedRoute component={NotePage} />}</Route>
       <Route>{() => <NotFound />}</Route>
     </Switch>
   );
