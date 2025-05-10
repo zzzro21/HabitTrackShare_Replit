@@ -8,6 +8,8 @@ export const users = pgTable("users", {
   avatar: text("avatar").notNull(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  email: text("email").notNull().unique(),
+  googleApiKey: text("google_api_key"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -15,6 +17,13 @@ export const insertUserSchema = createInsertSchema(users).pick({
   avatar: true,
   username: true,
   password: true,
+  email: true,
+  googleApiKey: true,
+});
+
+export const loginSchema = z.object({
+  username: z.string().min(3, { message: "아이디는 최소 3자 이상이어야 합니다." }),
+  password: z.string().min(6, { message: "비밀번호는 최소 6자 이상이어야 합니다." }),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
