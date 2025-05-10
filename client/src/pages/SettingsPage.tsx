@@ -1,7 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation } from 'wouter';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 import TabNavigation from '@/components/TabNavigation';
+import { ApiKeyManager } from '@/components/ApiKeyManager';
 
 const SettingsPage: React.FC = () => {
+  const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // 사용자 정보 가져오기
+  const { data: userData, isLoading } = useQuery({
+    queryKey: ['/api/auth/me'],
+    queryFn: () => apiRequest('/api/auth/me'),
+    staleTime: 5 * 60 * 1000, // 5분
+  });
+
+  const user = userData?.success ? userData.user : null;
+
+  // 로그아웃 처리
+  const handleLogout = async () => {
+    try {
+      setLogoutLoading(true);
+      setMessage(null);
+      
+      const response = await apiRequest<{ success: boolean; message: string }>('POST', '/api/auth/logout');
+      
+      if (response.success) {
+        // 캐시 초기화
+        queryClient.clear();
+        // 로그인 페이지로 이동
+        setLocation('/login');
+      } else {
+        setMessage({ type: 'error', text: response.message || '로그아웃 중 오류가 발생했습니다.' });
+      }
+    } catch (error: any) {
+      setMessage({ 
+        type: 'error', 
+        text: error.message || '로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.' 
+      });
+    } finally {
+      setLogoutLoading(false);
+    }
+  };
+
+  const handleApiKeyUpdate = (newKey: string) => {
+    // 사용자 정보 캐시 업데이트
+    queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+          <p className="mt-2 text-gray-600">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-16">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -13,6 +73,38 @@ const SettingsPage: React.FC = () => {
       
       <main className="p-4">
         <div className="space-y-6">
+          {user && (
+            <div>
+              <h2 className="text-lg font-medium mb-3">계정 정보</h2>
+              <div className="bg-white border rounded-lg divide-y">
+                <div className="px-4 py-3 flex items-center space-x-3">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+                    <img 
+                      src={user.avatar || '/default-avatar.png'} 
+                      alt={user.name} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="font-medium">{user.name}</div>
+                    <div className="text-sm text-gray-500">{user.email || user.username}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* API 키 관리 섹션 */}
+          {user && (
+            <div>
+              <h2 className="text-lg font-medium mb-3">API 키 관리</h2>
+              <ApiKeyManager
+                currentKey={user.googleApiKey}
+                onKeyUpdated={handleApiKeyUpdate}
+              />
+            </div>
+          )}
+
           <div>
             <h2 className="text-lg font-medium mb-3">앱 정보</h2>
             <div className="bg-white border rounded-lg divide-y">
@@ -62,8 +154,14 @@ const SettingsPage: React.FC = () => {
           <div>
             <h2 className="text-lg font-medium mb-3">기타 설정</h2>
             <div className="bg-white border rounded-lg divide-y">
-              <button className="w-full px-4 py-3 text-left">
-                <div className="font-medium text-red-500">로그아웃</div>
+              <button 
+                className="w-full px-4 py-3 text-left"
+                onClick={handleLogout}
+                disabled={logoutLoading}
+              >
+                <div className="font-medium text-red-500">
+                  {logoutLoading ? '로그아웃 중...' : '로그아웃'}
+                </div>
               </button>
               <button className="w-full px-4 py-3 text-left">
                 <div className="font-medium text-gray-500">도움말</div>
@@ -73,6 +171,13 @@ const SettingsPage: React.FC = () => {
               </button>
             </div>
           </div>
+          
+          {/* 메시지 표시 */}
+          {message && (
+            <div className={`rounded-md p-4 ${message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
+              {message.text}
+            </div>
+          )}
         </div>
       </main>
       

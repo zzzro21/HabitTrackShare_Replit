@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API 키 관리 - 습관 트래커</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-16">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div class="px-4 py-3">
+        <h1 class="text-lg font-bold text-center">설정</h1>
+        <p class="text-xs text-center text-gray-500">API 키 관리</p>
+      </div>
+    </header>
+    
+    <main class="p-4">
+      <div class="space-y-6">
+        <!-- 사용자 정보 -->
+        <div id="user-info" class="animate-pulse">
+          <h2 class="text-lg font-medium mb-3">계정 정보</h2>
+          <div class="bg-white border rounded-lg divide-y">
+            <div class="px-4 py-3 flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-full bg-gray-200"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-gray-200 rounded w-24"></div>
+                <div class="h-3 bg-gray-200 rounded w-40"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- API 키 관리 섹션 -->
+        <div>
+          <h2 class="text-lg font-medium mb-3">Google API 키 관리</h2>
+          <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+            <form id="api-key-form" class="space-y-4">
+              <div>
+                <label for="api-key" class="mb-2 block text-sm font-medium text-gray-700">
+                  Google API 키
+                </label>
+                <div class="relative">
+                  <input
+                    id="api-key"
+                    type="password"
+                    class="block w-full rounded-md border border-gray-300 p-2.5 pr-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="API 키를 입력하세요"
+                  />
+                  <button
+                    type="button"
+                    id="toggle-visibility"
+                    class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
+                  >
+                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <svg id="eye-off-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7A9.97 9.97 0 014.02 8.971m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  </button>
+                </div>
+                <p class="mt-1 text-xs text-gray-500">
+                  Google API 키는 안전하게 저장되며 Google 서비스 연동에 사용됩니다.
+                </p>
+              </div>
+              
+              <div id="status-message" class="hidden rounded-md p-4">
+                <!-- 메시지 내용 동적 삽입 -->
+              </div>
+              
+              <div class="flex items-center space-x-2">
+                <button
+                  type="submit"
+                  id="save-button"
+                  class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  저장
+                </button>
+                
+                <button
+                  type="button"
+                  id="copy-button"
+                  class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hidden"
+                >
+                  API 키 복사
+                </button>
+              </div>
+            </form>
+            
+            <div class="mt-6">
+              <h4 class="mb-2 text-sm font-medium text-gray-700">빠른 접근 링크</h4>
+              <div class="flex flex-wrap gap-2">
+                <a 
+                  href="https://console.cloud.google.com/apis/credentials" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  class="inline-flex items-center rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 hover:bg-gray-200"
+                >
+                  Google Cloud Console
+                </a>
+                <a 
+                  href="https://developers.google.com/identity/protocols/oauth2" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  class="inline-flex items-center rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 hover:bg-gray-200"
+                >
+                  Google OAuth 문서
+                </a>
+                <a 
+                  href="https://developers.google.com/calendar/api/guides/overview" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  class="inline-flex items-center rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 hover:bg-gray-200"
+                >
+                  Calendar API 문서
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 메인 메뉴 링크 -->
+        <div class="flex justify-center mt-6">
+          <a href="/" class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+            메인 페이지로 돌아가기
+          </a>
+        </div>
+      </div>
+    </main>
+    
+    <!-- 탭 네비게이션 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+      <div class="max-w-md mx-auto px-4 flex justify-between">
+        <a href="/" class="text-center py-3 flex-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="text-xs text-gray-500">홈</span>
+        </a>
+        <a href="/friends.html" class="text-center py-3 flex-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <span class="text-xs text-gray-500">친구</span>
+        </a>
+        <a href="/insights.html" class="text-center py-3 flex-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="text-xs text-gray-500">인사이트</span>
+        </a>
+        <a href="/api-key.html" class="text-center py-3 flex-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="text-xs text-blue-500">설정</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // DOM 요소
+      const apiKeyForm = document.getElementById('api-key-form');
+      const apiKeyInput = document.getElementById('api-key');
+      const toggleVisibilityBtn = document.getElementById('toggle-visibility');
+      const eyeIcon = document.getElementById('eye-icon');
+      const eyeOffIcon = document.getElementById('eye-off-icon');
+      const saveButton = document.getElementById('save-button');
+      const copyButton = document.getElementById('copy-button');
+      const statusMessage = document.getElementById('status-message');
+      const userInfo = document.getElementById('user-info');
+      
+      let currentApiKey = null;
+      
+      // 사용자 정보 가져오기
+      async function fetchUserInfo() {
+        try {
+          const response = await fetch('/api/auth/me');
+          const data = await response.json();
+          
+          if (response.ok && data.success) {
+            // 사용자 정보 업데이트
+            userInfo.innerHTML = `
+              <h2 class="text-lg font-medium mb-3">계정 정보</h2>
+              <div class="bg-white border rounded-lg divide-y">
+                <div class="px-4 py-3 flex items-center space-x-3">
+                  <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+                    <img 
+                      src="${data.user.avatar || '/default-avatar.png'}" 
+                      alt="${data.user.name}" 
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div class="font-medium">${data.user.name}</div>
+                    <div class="text-sm text-gray-500">${data.user.email || data.user.username}</div>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            // API 키 업데이트
+            if (data.user.googleApiKey) {
+              currentApiKey = data.user.googleApiKey;
+              apiKeyInput.value = currentApiKey;
+              copyButton.classList.remove('hidden');
+            }
+          } else {
+            // 로그인되지 않은 경우
+            window.location.href = '/login.html';
+          }
+        } catch (error) {
+          console.error('사용자 정보 조회 오류:', error);
+          showStatusMessage('error', '사용자 정보를 가져오는 중 오류가 발생했습니다.');
+        }
+      }
+      
+      // 상태 메시지 표시
+      function showStatusMessage(type, message) {
+        statusMessage.className = type === 'success' 
+          ? 'rounded-md p-4 bg-green-50 text-green-800' 
+          : 'rounded-md p-4 bg-red-50 text-red-800';
+        statusMessage.textContent = message;
+        statusMessage.classList.remove('hidden');
+        
+        // 3초 후 자동 숨김
+        setTimeout(() => {
+          statusMessage.classList.add('hidden');
+        }, 3000);
+      }
+      
+      // API 키 저장
+      async function saveApiKey(event) {
+        event.preventDefault();
+        
+        const apiKey = apiKeyInput.value.trim();
+        
+        if (!apiKey) {
+          showStatusMessage('error', 'API 키를 입력해주세요.');
+          return;
+        }
+        
+        try {
+          saveButton.textContent = '저장 중...';
+          saveButton.disabled = true;
+          
+          const response = await fetch('/api/auth/api-key', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ googleApiKey: apiKey }),
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok && data.success) {
+            currentApiKey = apiKey;
+            copyButton.classList.remove('hidden');
+            showStatusMessage('success', 'API 키가 성공적으로 저장되었습니다.');
+          } else {
+            showStatusMessage('error', data.message || 'API 키 저장 중 오류가 발생했습니다.');
+          }
+        } catch (error) {
+          console.error('API 키 저장 오류:', error);
+          showStatusMessage('error', 'API 키 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+        } finally {
+          saveButton.textContent = '저장';
+          saveButton.disabled = false;
+        }
+      }
+      
+      // API 키 복사
+      function copyApiKey() {
+        if (!currentApiKey) return;
+        
+        navigator.clipboard.writeText(currentApiKey)
+          .then(() => {
+            showStatusMessage('success', 'API 키가 클립보드에 복사되었습니다.');
+          })
+          .catch(err => {
+            console.error('클립보드 복사 오류:', err);
+            showStatusMessage('error', 'API 키 복사 중 오류가 발생했습니다.');
+          });
+      }
+      
+      // 비밀번호 표시/숨김 토글
+      function togglePasswordVisibility() {
+        const type = apiKeyInput.type === 'password' ? 'text' : 'password';
+        apiKeyInput.type = type;
+        
+        if (type === 'text') {
+          eyeIcon.classList.add('hidden');
+          eyeOffIcon.classList.remove('hidden');
+        } else {
+          eyeIcon.classList.remove('hidden');
+          eyeOffIcon.classList.add('hidden');
+        }
+      }
+      
+      // 이벤트 리스너
+      apiKeyForm.addEventListener('submit', saveApiKey);
+      toggleVisibilityBtn.addEventListener('click', togglePasswordVisibility);
+      copyButton.addEventListener('click', copyApiKey);
+      
+      // 초기화
+      fetchUserInfo();
+    });
+  </script>
+</body>
+</html>

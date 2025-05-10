@@ -1,10 +1,228 @@
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { storage } from "./storage";
 import { generateHabitInsights } from "./ai";
 import { z } from "zod";
-import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
+import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema, insertUserSchema, loginSchema } from "@shared/schema";
+import { authenticateUser, getCurrentUser, hashPassword, verifyPassword } from "./auth";
+import { db } from "./db";
+import { users } from "../shared/schema";
+import { eq } from "drizzle-orm";
+
+import path from 'path';
+import fs from 'fs';
 
 export async function registerRoutes(app: Express): Promise<void> {
+  // 정적 HTML 페이지 라우트
+  const publicPath = path.resolve(process.cwd(), 'public');
+  
+  app.get('/login.html', (req, res) => {
+    res.sendFile(path.join(publicPath, 'login.html'));
+  });
+  
+  app.get('/register.html', (req, res) => {
+    res.sendFile(path.join(publicPath, 'register.html'));
+  });
+  
+  app.get('/api-key.html', (req, res) => {
+    res.sendFile(path.join(publicPath, 'api-key.html'));
+  });
+  // 인증 관련 라우트
+
+  // 회원가입
+  app.post("/api/auth/register", async (req: Request, res: Response) => {
+    try {
+      const userData = insertUserSchema.parse(req.body);
+      
+      // 기존 사용자 확인
+      const existingUser = await db.select().from(users).where(eq(users.username, userData.username));
+      if (existingUser.length > 0) {
+        return res.status(400).json({ 
+          success: false,
+          message: '이미 사용 중인 아이디입니다.' 
+        });
+      }
+      
+      // 이메일 중복 확인
+      if (userData.email) {
+        const existingEmail = await db.select().from(users).where(eq(users.email, userData.email));
+        if (existingEmail.length > 0) {
+          return res.status(400).json({ 
+            success: false,
+            message: '이미 사용 중인 이메일입니다.' 
+          });
+        }
+      }
+      
+      // 비밀번호 해싱
+      const hashedPassword = await hashPassword(userData.password);
+      
+      // 사용자 생성
+      const newUser = await storage.createUser({
+        ...userData,
+        password: hashedPassword
+      });
+      
+      // 세션에 사용자 ID 저장 (자동 로그인)
+      req.session.userId = newUser.id;
+      
+      return res.status(201).json({
+        success: true,
+        message: '회원가입이 완료되었습니다.',
+        user: {
+          id: newUser.id,
+          name: newUser.name,
+          username: newUser.username,
+          email: userData.email || null,
+          avatar: newUser.avatar
+        }
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false,
+          message: '입력한 정보가 올바르지 않습니다.', 
+          errors: error.errors 
+        });
+      }
+      
+      console.error('회원가입 오류:', error);
+      return res.status(500).json({ 
+        success: false,
+        message: '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.' 
+      });
+    }
+  });
+  
+  // 로그인
+  app.post("/api/auth/login", async (req: Request, res: Response) => {
+    try {
+      const { username, password } = loginSchema.parse(req.body);
+      
+      // 사용자 조회
+      const [user] = await db.select().from(users).where(eq(users.username, username));
+      
+      if (!user) {
+        return res.status(401).json({ 
+          success: false,
+          message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
+        });
+      }
+      
+      // 비밀번호 검증
+      const isValidPassword = await verifyPassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ 
+          success: false,
+          message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
+        });
+      }
+      
+      // 세션에 사용자 ID 저장
+      req.session.userId = user.id;
+      
+      return res.json({
+        success: true,
+        message: '로그인되었습니다.',
+        user: {
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email || null,
+          avatar: user.avatar,
+          googleApiKey: user.googleApiKey || null
+        }
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false,
+          message: '입력 정보가 올바르지 않습니다.', 
+          errors: error.errors 
+        });
+      }
+      
+      console.error('로그인 오류:', error);
+      return res.status(500).json({ 
+        success: false,
+        message: '로그인 중 오류가 발생했습니다. 다시 시도해주세요.' 
+      });
+    }
+  });
+  
+  // 로그아웃
+  app.post("/api/auth/logout", (req: Request, res: Response) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('로그아웃 오류:', err);
+        return res.status(500).json({ 
+          success: false,
+          message: '로그아웃 중 오류가 발생했습니다.' 
+        });
+      }
+      
+      return res.json({ 
+        success: true,
+        message: '로그아웃되었습니다.' 
+      });
+    });
+  });
+  
+  // 현재 로그인한 사용자 정보 조회
+  app.get("/api/auth/me", async (req: Request, res: Response) => {
+    try {
+      const user = await getCurrentUser(req);
+      
+      if (!user) {
+        return res.status(401).json({ 
+          success: false,
+          message: '로그인이 필요합니다.' 
+        });
+      }
+      
+      return res.json({
+        success: true,
+        user
+      });
+    } catch (error) {
+      console.error('사용자 정보 조회 오류:', error);
+      return res.status(500).json({ 
+        success: false,
+        message: '사용자 정보를 조회하는 중 오류가 발생했습니다.' 
+      });
+    }
+  });
+  
+  // Google API 키 업데이트
+  app.post("/api/auth/api-key", authenticateUser, async (req: Request, res: Response) => {
+    try {
+      const { googleApiKey } = req.body;
+      
+      if (!req.session.userId) {
+        return res.status(401).json({ 
+          success: false,
+          message: '로그인이 필요합니다.' 
+        });
+      }
+      
+      // API 키 업데이트
+      await db
+        .update(users)
+        .set({ googleApiKey })
+        .where(eq(users.id, req.session.userId));
+      
+      return res.json({ 
+        success: true,
+        message: 'API 키가 저장되었습니다.' 
+      });
+    } catch (error) {
+      console.error('API 키 업데이트 오류:', error);
+      return res.status(500).json({ 
+        success: false,
+        message: 'API 키를 저장하는 중 오류가 발생했습니다.' 
+      });
+    }
+  });
+  
   // Data initialization is now handled in storage class constructor
 
   // Get all users
