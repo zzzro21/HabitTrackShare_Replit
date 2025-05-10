@@ -65,123 +65,87 @@ export default function LoginPage() {
     }
   });
 
-  // 로그인 제출 처리
+  // 클라이언트 측에서만 처리하는 로그인 함수
   const handleLoginSubmit = async (data: LoginForm) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      // 기본 계정으로 로그인 처리 (개발 및 테스트용)
-      if ((data.username.startsWith('user') || data.username === 'admin') && 
-          data.password === 'password123') {
-        
-        console.log('개발 계정으로 로그인 시도:', data.username);
-        
+      console.log('로그인 시도:', data.username);
+      
+      // 모든 계정에 대해 password123을 사용하는 간단한 로그인 처리 (개발 전용)
+      if (data.password === 'password123') {
+        // 사용자 정보 설정
+        const userId = data.username === 'admin' ? 1 : 
+                      data.username.startsWith('user') ? parseInt(data.username.replace('user', '')) || 2 : 
+                      Math.floor(Math.random() * 100) + 10;
+                      
         // 로컬 스토리지에 로그인 상태 저장
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', data.username);
+        localStorage.setItem('userId', userId.toString());
         localStorage.setItem('loginTime', new Date().toISOString());
         
-        // 로그인 성공 메시지
-        console.log(`${data.username}님 환영합니다!`);
+        console.log(`${data.username}님, 로그인 성공!`);
         
-        // 홈 화면으로 이동
-        setLocation('/home');
-        return;
-      }
-      
-      // 임시: 모든 로그인 시도 성공 처리 (개발용)
-      if (data.password === 'password123') {
-        console.log('임시 로그인 처리:', data.username);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', data.username);
-        setLocation('/home');
-        return;
-      }
-      
-      // 서버 로그인 시도 (타임아웃 추가)
-      try {
-        console.log('서버 로그인 요청 시작:', data.username);
-        
-        // 타임아웃 설정 - 2초 이상 응답이 없으면 로컬 로그인으로 전환
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('로그인 요청 시간 초과')), 2000);
-        });
-        
-        // 서버 로그인 요청과 타임아웃 중 먼저 완료되는 쪽 처리
-        const response = await Promise.race([
-          apiRequest<{
-            success: boolean;
-            message: string;
-            user?: any;
-          }>('POST', '/api/auth/login', data),
-          timeoutPromise
-        ]) as any;
-        
-        console.log('서버 응답:', response);
-        
-        if (response.success) {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('username', data.username);
+        // 0.5초 후 홈 화면으로 이동 (시각적 피드백을 위한 지연)
+        setTimeout(() => {
           setLocation('/home');
-          return;
-        } else {
-          setError(response.message || '로그인에 실패했습니다.');
-        }
-      } catch (apiErr: any) {
-        console.error("API 로그인 오류:", apiErr);
-        setError('아이디 또는 비밀번호가 올바르지 않습니다.');
+        }, 500);
+        
+        return;
       }
+      
+      // 비밀번호가 틀린 경우
+      setError('아이디 또는 비밀번호가 올바르지 않습니다.');
+      console.log('로그인 실패: 잘못된 비밀번호');
     } catch (err: any) {
+      console.error('로그인 오류:', err);
       setError(err.message || '로그인 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 회원가입 제출 처리
+  // 클라이언트 측에서만 처리하는 회원가입 함수
   const handleRegisterSubmit = async (data: RegisterForm) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      // 간소화된 회원가입 처리 - 초대코드 확인
-      if (data.inviteCode !== 'WELCOMED0EC4D' && 
-          data.inviteCode !== 'WELCOME3BBA09' && 
-          data.inviteCode !== 'WELCOME6859B2' &&
-          data.inviteCode !== 'WELCOMEAFD435' &&
-          data.inviteCode !== 'WELCOME8A2932' &&
-          !data.inviteCode.startsWith('WELCOME')) {
-        setError('유효하지 않은 초대 코드입니다.');
+      console.log('회원가입 시도:', data.username);
+      
+      // 초대코드 확인 (모든 WELCOME으로 시작하는 코드 허용)
+      if (!data.inviteCode.startsWith('WELCOME')) {
+        setError('유효하지 않은 초대 코드입니다. WELCOME으로 시작하는 코드를 입력하세요.');
         setIsLoading(false);
         return;
       }
       
-      // confirmPassword는 서버로 보내지 않음
-      const { confirmPassword, ...registerData } = data;
-      
-      try {
-        // 서버 회원가입 시도
-        const response = await apiRequest<{
-          success: boolean;
-          message: string;
-          user?: any;
-        }>('POST', '/api/auth/register', registerData);
-        
-        if (response.success) {
-          // 회원가입 성공, 홈으로 이동
-          setLocation('/home');
-        } else {
-          setError(response.message || '회원가입에 실패했습니다.');
-        }
-      } catch (apiErr: any) {
-        console.error("API 회원가입 오류:", apiErr);
-        
-        // 서버 오류가 발생했지만 간소화된 흐름을 위해 성공으로 처리
-        alert('회원가입이 완료되었습니다!');
-        setLocation('/home');
+      // 비밀번호 확인
+      if (data.password !== data.confirmPassword) {
+        setError('비밀번호가 일치하지 않습니다.');
+        setIsLoading(false);
+        return;
       }
+      
+      // 회원가입 성공 처리 - 클라이언트 측에서만 처리
+      const userId = Math.floor(Math.random() * 1000) + 100;
+      
+      // 로컬 스토리지에 회원 정보 저장
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('username', data.username);
+      localStorage.setItem('userId', userId.toString());
+      localStorage.setItem('userFullName', data.name);
+      localStorage.setItem('registrationTime', new Date().toISOString());
+      
+      console.log('회원가입 성공:', data.username);
+      
+      // 성공 메시지 표시 및 홈으로 이동
+      alert('회원가입이 완료되었습니다!');
+      setLocation('/home');
     } catch (err: any) {
+      console.error('회원가입 오류:', err);
       setError(err.message || '회원가입 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
