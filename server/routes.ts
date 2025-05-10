@@ -22,6 +22,15 @@ import path from 'path';
 import fs from 'fs';
 
 export async function registerRoutes(app: Express): Promise<void> {
+  // 간이 로그인 페이지 제공
+  app.get('/quick-login', (req, res) => {
+    res.sendFile(path.resolve(process.cwd(), 'client/login.html'));
+  });
+  
+  // 간이 회원가입 페이지 제공
+  app.get('/quick-register', (req, res) => {
+    res.sendFile(path.resolve(process.cwd(), 'client/register.html'));
+  });
   // 정적 HTML 페이지 라우트
   const publicPath = path.resolve(process.cwd(), 'public');
   
