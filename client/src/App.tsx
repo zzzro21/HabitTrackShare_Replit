@@ -16,6 +16,7 @@ import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
 import MorningPage from "@/pages/MorningPage";
 import LoginPage from "@/pages/LoginPage";
+import JourneyVisualization from "@/pages/JourneyVisualization";
 
 // 인증 상태 확인을 위한 Hook
 function useAuth() {
@@ -110,6 +111,7 @@ function Router() {
       <Route path="/friends">{() => <FriendsPage />}</Route>
       <Route path="/ranking">{() => <RankingPage />}</Route>
       <Route path="/insights">{() => <InsightsPage />}</Route>
+      <Route path="/journey">{() => <JourneyVisualization />}</Route>
       <Route path="/settings">{() => <SettingsPage />}</Route>
       <Route path="/notes">{() => <NotePage />}</Route>
       <Route>{() => <NotFound />}</Route>
