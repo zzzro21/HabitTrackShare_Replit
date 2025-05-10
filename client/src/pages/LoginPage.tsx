@@ -114,13 +114,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-100 to-blue-100 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-10 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-100 to-blue-100 dark:bg-gradient-to-r dark:from-gray-900 dark:to-gray-800 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 rounded-xl bg-white dark:bg-gray-800 p-10 shadow-lg">
         <div className="text-center">
-          <h1 className="text-3xl font-extrabold text-gray-900">
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">
             {isLogin ? '로그인' : '회원가입'}
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
             {isLogin ? '습관 트래커에 오신 것을 환영합니다!' : '새 계정을 만들어보세요!'}
           </p>
         </div>
@@ -142,14 +142,14 @@ export default function LoginPage() {
           <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)} className="mt-8 space-y-6">
             <div className="space-y-4 rounded-md shadow-sm">
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   아이디
                 </label>
                 <input
                   id="username"
                   type="text"
                   {...loginForm.register('username')}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 placeholder-gray-400 dark:placeholder-gray-300 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="아이디를 입력하세요"
                 />
                 {loginForm.formState.errors.username && (
@@ -158,14 +158,14 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   비밀번호
                 </label>
                 <input
                   id="password"
                   type="password"
                   {...loginForm.register('password')}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 placeholder-gray-400 dark:placeholder-gray-300 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="비밀번호를 입력하세요"
                 />
                 {loginForm.formState.errors.password && (
@@ -284,7 +284,7 @@ export default function LoginPage() {
         <div className="mt-4 flex items-center justify-center">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            className="text-sm font-medium text-indigo-600 dark:text-blue-400 hover:text-indigo-500 dark:hover:text-blue-300"
           >
             {isLogin ? '새 계정 만들기' : '이미 계정이 있으신가요? 로그인하기'}
           </button>
