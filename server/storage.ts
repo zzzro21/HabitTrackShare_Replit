@@ -5,6 +5,7 @@ import {
   habitNotes,
   dailyFeedbacks,
   habitInsights,
+  inviteCodes,
   type User, 
   type InsertUser, 
   type Habit, 
@@ -17,6 +18,8 @@ import {
   type InsertDailyFeedback,
   type HabitInsight,
   type InsertHabitInsight,
+  type InviteCode,
+  type InsertInviteCode,
   predefinedHabits
 } from "@shared/schema";
 
@@ -51,6 +54,12 @@ export interface IStorage {
   getUserHabitInsight(userId: number): Promise<HabitInsight | undefined>;
   createOrUpdateHabitInsight(insight: InsertHabitInsight): Promise<HabitInsight>;
   
+  // Invite code methods
+  createInviteCode(code: InsertInviteCode): Promise<InviteCode>;
+  getInviteCodeByCode(code: string): Promise<InviteCode | undefined>;
+  useInviteCode(code: string, userId: number): Promise<boolean>;
+  getUserInviteCodes(userId: number): Promise<InviteCode[]>;
+  
   // Initialize predefined data
   initializePredefinedData(): Promise<void>;
 }
@@ -71,6 +80,9 @@ export class MemStorage implements IStorage {
   private habitInsights: Map<number, HabitInsight>;
   private habitInsightIdCounter: number;
 
+  private inviteCodes: InviteCode[];
+  private inviteCodeIdCounter: number;
+
   constructor() {
     this.users = new Map();
     this.habits = new Map();
@@ -78,12 +90,14 @@ export class MemStorage implements IStorage {
     this.habitNotes = [];
     this.dailyFeedbacks = [];
     this.habitInsights = new Map();
+    this.inviteCodes = [];
     this.userIdCounter = 1;
     this.habitIdCounter = 1;
     this.habitEntryIdCounter = 1;
     this.habitNoteIdCounter = 1;
     this.dailyFeedbackIdCounter = 1;
     this.habitInsightIdCounter = 1;
+    this.inviteCodeIdCounter = 1;
     
     // Skip data initialization in constructor - we'll do this after server starts
     // This allows the server to start and listen quickly
@@ -102,7 +116,12 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userIdCounter++;
-    const user: User = { ...insertUser, id };
+    // Ensure googleApiKey is never undefined
+    const user: User = { 
+      ...insertUser, 
+      id,
+      googleApiKey: insertUser.googleApiKey ?? null 
+    };
     this.users.set(id, user);
     return user;
   }
@@ -264,6 +283,60 @@ export class MemStorage implements IStorage {
     return insight;
   }
 
+  // Invite code methods
+  async createInviteCode(insertCode: InsertInviteCode): Promise<InviteCode> {
+    const id = this.inviteCodeIdCounter++;
+    
+    const inviteCode: InviteCode = {
+      ...insertCode,
+      id,
+      isUsed: false,
+      usedBy: null,
+      createdAt: new Date(),
+      expiresAt: insertCode.expiresAt || null
+    };
+    
+    this.inviteCodes.push(inviteCode);
+    return inviteCode;
+  }
+  
+  async getInviteCodeByCode(code: string): Promise<InviteCode | undefined> {
+    return this.inviteCodes.find(inviteCode => inviteCode.code === code);
+  }
+  
+  async useInviteCode(code: string, userId: number): Promise<boolean> {
+    const inviteCodeIndex = this.inviteCodes.findIndex(inviteCode => inviteCode.code === code);
+    
+    if (inviteCodeIndex === -1) {
+      return false; // 코드가 존재하지 않음
+    }
+    
+    const inviteCode = this.inviteCodes[inviteCodeIndex];
+    
+    // 이미 사용된 코드인지 확인
+    if (inviteCode.isUsed) {
+      return false;
+    }
+    
+    // 만료 날짜가 지났는지 확인
+    if (inviteCode.expiresAt && new Date(inviteCode.expiresAt) < new Date()) {
+      return false;
+    }
+    
+    // 코드 사용 처리
+    this.inviteCodes[inviteCodeIndex] = {
+      ...inviteCode,
+      isUsed: true,
+      usedBy: userId
+    };
+    
+    return true;
+  }
+  
+  async getUserInviteCodes(userId: number): Promise<InviteCode[]> {
+    return this.inviteCodes.filter(inviteCode => inviteCode.createdBy === userId);
+  }
+
   // Initialize predefined data
   async initializePredefinedData(): Promise<void> {
     // Create 8 demo users if they don't exist
@@ -275,7 +348,9 @@ export class MemStorage implements IStorage {
           name: `사용자${i}`,
           avatar: "👤",
           username: `user${i}`,
-          password: defaultPassword
+          password: defaultPassword,
+          email: `user${i}@example.com`,
+          googleApiKey: null
         });
       }
     }
