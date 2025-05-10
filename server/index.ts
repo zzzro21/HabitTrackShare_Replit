@@ -13,7 +13,9 @@ async function startServer() {
   try {
     // Express 앱 생성
     const app = express();
-    const port = process.env.PORT || 5000;
+    // Replit 워크플로우 설정
+    // 포트는 반드시 환경 변수에서 먼저 확인하고, 없으면 기본값 사용
+    const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
     
     // 필수 미들웨어만 먼저 등록
     app.use(express.json());
@@ -27,7 +29,7 @@ async function startServer() {
     // HTTP 서버 생성
     const server = createServer(app);
     
-    // 서버 시작 - 포트 오픈을 최우선
+    // 서버 시작 - 포트와 호스트 지정
     server.listen(port, () => {
       log(`Server started on port ${port}`);
       
