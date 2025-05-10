@@ -24,8 +24,6 @@ const registerSchema = z.object({
     .min(6, '비밀번호는 6자 이상이어야 합니다.'),
   confirmPassword: z.string()
     .min(6, '비밀번호는 6자 이상이어야 합니다.'),
-  inviteCode: z.string()
-    .min(6, '초대 코드는 6자 이상이어야 합니다.'),
   avatar: z.string()
     .default('/default-avatar.png'),
 }).refine(data => data.password === data.confirmPassword, {
@@ -60,92 +58,55 @@ export default function LoginPage() {
       email: '',
       password: '',
       confirmPassword: '',
-      inviteCode: '',
       avatar: `/avatars/avatar${Math.floor(Math.random() * 8) + 1}.png`,
     }
   });
 
-  // 클라이언트 측에서만 처리하는 로그인 함수
+  // 로그인 제출 처리
   const handleLoginSubmit = async (data: LoginForm) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      console.log('로그인 시도:', data.username);
+      const response = await apiRequest<{
+        success: boolean;
+        message: string;
+        user?: any;
+      }>('POST', '/api/auth/login', data);
       
-      // 모든 계정에 대해 password123을 사용하는 간단한 로그인 처리 (개발 전용)
-      if (data.password === 'password123') {
-        // 사용자 정보 설정
-        const userId = data.username === 'admin' ? 1 : 
-                      data.username.startsWith('user') ? parseInt(data.username.replace('user', '')) || 2 : 
-                      Math.floor(Math.random() * 100) + 10;
-                      
-        // 로컬 스토리지에 로그인 상태 저장
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('userId', userId.toString());
-        localStorage.setItem('loginTime', new Date().toISOString());
-        
-        console.log(`${data.username}님, 로그인 성공!`);
-        
-        // 0.5초 후 홈 화면으로 이동 (시각적 피드백을 위한 지연)
-        setTimeout(() => {
-          setLocation('/home');
-        }, 500);
-        
-        return;
+      if (response.success) {
+        setLocation('/');
+      } else {
+        setError(response.message || '로그인에 실패했습니다.');
       }
-      
-      // 비밀번호가 틀린 경우
-      setError('아이디 또는 비밀번호가 올바르지 않습니다.');
-      console.log('로그인 실패: 잘못된 비밀번호');
     } catch (err: any) {
-      console.error('로그인 오류:', err);
       setError(err.message || '로그인 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 클라이언트 측에서만 처리하는 회원가입 함수
+  // 회원가입 제출 처리
   const handleRegisterSubmit = async (data: RegisterForm) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      console.log('회원가입 시도:', data.username);
+      // confirmPassword는 서버로 보내지 않음
+      const { confirmPassword, ...registerData } = data;
       
-      // 초대코드 확인 (모든 WELCOME으로 시작하는 코드 허용)
-      if (!data.inviteCode.startsWith('WELCOME')) {
-        setError('유효하지 않은 초대 코드입니다. WELCOME으로 시작하는 코드를 입력하세요.');
-        setIsLoading(false);
-        return;
+      const response = await apiRequest<{
+        success: boolean;
+        message: string;
+        user?: any;
+      }>('POST', '/api/auth/register', registerData);
+      
+      if (response.success) {
+        setLocation('/');
+      } else {
+        setError(response.message || '회원가입에 실패했습니다.');
       }
-      
-      // 비밀번호 확인
-      if (data.password !== data.confirmPassword) {
-        setError('비밀번호가 일치하지 않습니다.');
-        setIsLoading(false);
-        return;
-      }
-      
-      // 회원가입 성공 처리 - 클라이언트 측에서만 처리
-      const userId = Math.floor(Math.random() * 1000) + 100;
-      
-      // 로컬 스토리지에 회원 정보 저장
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('username', data.username);
-      localStorage.setItem('userId', userId.toString());
-      localStorage.setItem('userFullName', data.name);
-      localStorage.setItem('registrationTime', new Date().toISOString());
-      
-      console.log('회원가입 성공:', data.username);
-      
-      // 성공 메시지 표시 및 홈으로 이동
-      alert('회원가입이 완료되었습니다!');
-      setLocation('/home');
     } catch (err: any) {
-      console.error('회원가입 오류:', err);
       setError(err.message || '회원가입 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
@@ -304,22 +265,6 @@ export default function LoginPage() {
                 />
                 {registerForm.formState.errors.confirmPassword && (
                   <p className="mt-1 text-xs text-red-600">{registerForm.formState.errors.confirmPassword.message}</p>
-                )}
-              </div>
-              
-              <div>
-                <label htmlFor="invite-code" className="block text-sm font-medium text-gray-700">
-                  초대 코드
-                </label>
-                <input
-                  id="invite-code"
-                  type="text"
-                  {...registerForm.register('inviteCode')}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  placeholder="초대 코드를 입력하세요"
-                />
-                {registerForm.formState.errors.inviteCode && (
-                  <p className="mt-1 text-xs text-red-600">{registerForm.formState.errors.inviteCode.message}</p>
                 )}
               </div>
             </div>
