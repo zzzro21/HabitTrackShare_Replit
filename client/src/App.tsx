@@ -43,8 +43,11 @@ function ProtectedRoute({ component: Component, ...rest }: { component: React.Co
   }
   
   if (!isAuthenticated) {
-    setLocation('/login');
-    return null;
+    // 즉시 리다이렉트하되, 타임아웃을 추가하여 모바일에서도 확실히 작동하도록 함
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 100);
+    return <div className="flex h-screen items-center justify-center">로그인 페이지로 이동 중...</div>;
   }
   
   return <Component {...rest} />;
@@ -52,14 +55,21 @@ function ProtectedRoute({ component: Component, ...rest }: { component: React.Co
 
 // APP 라우터 구성
 function Router() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  // 처음 로딩시 로딩 화면 표시
+  if (isLoading) {
+    return <div className="flex h-screen items-center justify-center">앱 로딩 중...</div>;
+  }
   
   return (
     <Switch>
       <Route path="/login">
         {isAuthenticated ? (() => { 
-          window.location.href = '/';
-          return null;
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 100);
+          return <div className="flex h-screen items-center justify-center">홈 화면으로 이동 중...</div>;
         })() : <LoginPage />}
       </Route>
       <Route path="/" component={(props) => <ProtectedRoute component={Home} {...props} />} />
