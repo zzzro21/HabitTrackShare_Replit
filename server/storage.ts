@@ -26,9 +26,9 @@ import {
 // Storage interface with required CRUD methods
 export interface IStorage {
   // User methods
-  getUser(id: string): Promise<User | undefined>;
-  getUserByEmail(email: string): Promise<User | undefined>;
-  upsertUser(user: InsertUser): Promise<User>;
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
   getAllUsers(): Promise<User[]>;
   
   // Habit methods
