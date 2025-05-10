@@ -5,6 +5,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 import { testDatabaseConnection } from "./db";
 import { setupSession } from "./session";
+import { createInitialData } from "./init-data";
 
 // 빠른 서버 시작을 위한 간소화된 초기화 프로세스
 // 최대한 빠르게 포트를 열어 워크플로우가 서버를 감지할 수 있도록 함
@@ -27,7 +28,7 @@ async function startServer() {
     const server = createServer(app);
     
     // 서버 시작 - 포트 오픈을 최우선
-    server.listen(port, "0.0.0.0", () => {
+    server.listen(port, () => {
       log(`Server started on port ${port}`);
       
       // 서버가 시작된 후 나머지 초기화 작업 비동기 수행
@@ -77,6 +78,10 @@ async function startServer() {
           
           // 미리 정의된 데이터 초기화
           await storage.initializePredefinedData();
+          
+          // 기본 관리자 계정과 초대 코드 생성
+          await createInitialData();
+          
           log('Predefined data initialized');
           
           // 라우트 등록
