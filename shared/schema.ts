@@ -2,35 +2,23 @@ import { pgTable, text, serial, integer, boolean, json, timestamp, varchar } fro
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Session storage table.
-// (IMPORTANT) This table is mandatory for Replit Auth, don't drop it.
-export const sessions = pgTable(
-  "sessions",
-  {
-    sid: varchar("sid").primaryKey(),
-    sess: json("sess").notNull(),
-    expire: timestamp("expire").notNull(),
-  },
-);
-
-// User storage table.
-// (IMPORTANT) This table is mandatory for Replit Auth, don't drop it.
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().notNull(),
-  email: varchar("email").unique(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  profileImageUrl: varchar("profile_image_url"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  avatar: text("avatar").notNull(),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  email: text("email").notNull().unique(),
+  googleApiKey: text("google_api_key"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
-  id: true,
+  name: true,
+  avatar: true,
+  username: true,
+  password: true,
   email: true,
-  firstName: true,
-  lastName: true,
-  profileImageUrl: true,
+  googleApiKey: true,
 });
 
 export const loginSchema = z.object({
