@@ -1,11 +1,10 @@
+import React from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { queryClient, apiRequest } from "./lib/queryClient";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { HabitProvider } from "@/lib/HabitContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { HabitProvider } from "@/lib/HabitContext";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import FriendsPage from "@/pages/FriendsPage";
@@ -78,12 +77,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <HabitProvider>
-            <Router />
-          </HabitProvider>
-        </TooltipProvider>
+        <HabitProvider>
+          <Router />
+        </HabitProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
