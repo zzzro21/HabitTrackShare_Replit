@@ -1,20 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import TabNavigation from '@/components/TabNavigation';
 import { ApiKeyManager } from '@/components/ApiKeyManager';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 const SettingsPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [newName, setNewName] = useState('');
-  const [isEditingName, setIsEditingName] = useState(false);
-  const nameInputRef = useRef<HTMLInputElement>(null);
 
   // 사용자 정보 가져오기
   const { data: userData, isLoading } = useQuery({
@@ -24,24 +19,6 @@ const SettingsPage: React.FC = () => {
   });
 
   const user = userData?.success ? userData.user : null;
-  
-  // 이름 수정 뮤테이션
-  const updateNameMutation = useMutation({
-    mutationFn: (name: string) => 
-      apiRequest('POST', '/api/auth/update-name', { name }),
-    onSuccess: () => {
-      setMessage({ type: 'success', text: '이름이 성공적으로 변경되었습니다.' });
-      setIsEditingName(false);
-      // 사용자 정보 리프레시
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
-    },
-    onError: (error: any) => {
-      setMessage({ 
-        type: 'error', 
-        text: error.message || '이름 변경 중 오류가 발생했습니다.' 
-      });
-    }
-  });
 
   // 로그아웃 처리
   const handleLogout = async () => {
@@ -108,66 +85,9 @@ const SettingsPage: React.FC = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="flex-1">
-                    {isEditingName ? (
-                      <div className="flex flex-col space-y-2">
-                        <Input 
-                          ref={nameInputRef}
-                          type="text" 
-                          value={newName} 
-                          onChange={(e) => setNewName(e.target.value)}
-                          placeholder="새 이름을 입력하세요"
-                          className="text-sm"
-                          autoFocus
-                        />
-                        <div className="flex space-x-2">
-                          <Button 
-                            size="sm" 
-                            variant="default"
-                            onClick={() => {
-                              if (newName.trim().length >= 2) {
-                                updateNameMutation.mutate(newName);
-                              } else {
-                                setMessage({ type: 'error', text: '이름은 2자 이상이어야 합니다.' });
-                              }
-                            }}
-                            disabled={updateNameMutation.isPending}
-                          >
-                            {updateNameMutation.isPending ? '저장 중...' : '저장'}
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => {
-                              setIsEditingName(false);
-                              setNewName('');
-                              setMessage(null);
-                            }}
-                          >
-                            취소
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="font-medium flex items-center">
-                          {user.name}
-                          <button 
-                            onClick={() => {
-                              setIsEditingName(true);
-                              setNewName(user.name);
-                              setMessage(null);
-                              // Focus the input after render
-                              setTimeout(() => nameInputRef.current?.focus(), 0);
-                            }}
-                            className="ml-2 text-blue-500 text-xs"
-                          >
-                            수정
-                          </button>
-                        </div>
-                        <div className="text-sm text-gray-500">{user.email || user.username}</div>
-                      </>
-                    )}
+                  <div>
+                    <div className="font-medium">{user.name}</div>
+                    <div className="text-sm text-gray-500">{user.email || user.username}</div>
                   </div>
                 </div>
               </div>
