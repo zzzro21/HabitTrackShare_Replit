@@ -23,6 +23,8 @@ function useAuth() {
     queryFn: () => apiRequest('/api/auth/me'),
     retry: false,
     staleTime: 5 * 60 * 1000, // 5분
+    refetchOnWindowFocus: false, // 창 포커스 시 다시 요청하지 않음
+    refetchInterval: false, // 주기적으로 다시 요청하지 않음
   });
   
   return {
@@ -36,20 +38,36 @@ function useAuth() {
 // 인증이 필요한 라우트를 위한 컴포넌트
 function ProtectedRoute({ component: Component, ...rest }: { component: React.ComponentType<any>; path?: string }) {
   const { isAuthenticated, isLoading } = useAuth();
-  const [, setLocation] = useLocation();
   
+  // 아직 로딩 중이면 로딩 인디케이터 표시
   if (isLoading) {
-    return <div className="flex h-screen items-center justify-center">로딩 중...</div>;
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent mx-auto"></div>
+          <p className="text-gray-700 dark:text-gray-300">로딩 중...</p>
+        </div>
+      </div>
+    );
   }
   
+  // 인증되지 않았으면 로그인 페이지로 강제 이동
   if (!isAuthenticated) {
-    // 즉시 리다이렉트하되, 타임아웃을 추가하여 모바일에서도 확실히 작동하도록 함
-    setTimeout(() => {
-      window.location.href = '/login';
-    }, 100);
-    return <div className="flex h-screen items-center justify-center">로그인 페이지로 이동 중...</div>;
+    // 즉시 해당 위치로 이동
+    window.location.replace('/login');
+    
+    // 리다이렉트 중 표시할 UI
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent mx-auto"></div>
+          <p className="text-gray-700 dark:text-gray-300">로그인 페이지로 이동 중...</p>
+        </div>
+      </div>
+    );
   }
   
+  // 인증되었으면 요청된 컴포넌트 렌더링
   return <Component {...rest} />;
 }
 
@@ -59,17 +77,30 @@ function Router() {
   
   // 처음 로딩시 로딩 화면 표시
   if (isLoading) {
-    return <div className="flex h-screen items-center justify-center">앱 로딩 중...</div>;
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent mx-auto"></div>
+          <p className="text-gray-700 dark:text-gray-300">앱 로딩 중...</p>
+        </div>
+      </div>
+    );
   }
   
   return (
     <Switch>
       <Route path="/login">
         {isAuthenticated ? (() => { 
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 100);
-          return <div className="flex h-screen items-center justify-center">홈 화면으로 이동 중...</div>;
+          // 이미 인증되었다면 홈으로 리다이렉트
+          window.location.replace('/');
+          return (
+            <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
+              <div className="text-center">
+                <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent mx-auto"></div>
+                <p className="text-gray-700 dark:text-gray-300">홈 화면으로 이동 중...</p>
+              </div>
+            </div>
+          );
         })() : <LoginPage />}
       </Route>
       <Route path="/" component={(props) => <ProtectedRoute component={Home} {...props} />} />
