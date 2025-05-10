@@ -12,7 +12,7 @@ async function startServer() {
   try {
     // Express 앱 생성
     const app = express();
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 5000;
     
     // 필수 미들웨어만 먼저 등록
     app.use(express.json());
