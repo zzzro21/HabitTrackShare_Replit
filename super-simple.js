@@ -1,43 +1,54 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
-// ES 모듈에서 __dirname 얻기
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// 서버 생성
-const app = express();
-const port = process.env.PORT || 5000;
-const host = '0.0.0.0';
-
-// 정적 파일 제공
-app.use(express.static('public'));
-app.use(express.static('.'));
-
-// 기본 경로
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// 헬스체크 경로
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
-});
-
-// 모든 경로를 index.html로 라우팅 (SPA 스타일)
-app.get('*', (req, res) => {
-  // API 요청이면 404 반환
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ error: 'API 경로를 찾을 수 없습니다.' });
+const server = http.createServer((req, res) => {
+  console.log(`요청 처리: ${req.url}`);
+  
+  // 기본 경로로 리다이렉트
+  let filePath = './no-auth-app.html';
+  
+  if (req.url !== '/') {
+    // 요청 URL에 해당하는 파일 경로 설정
+    filePath = '.' + req.url;
   }
   
-  // 그 외에는 index.html 제공
-  res.sendFile(path.join(__dirname, 'index.html'));
+  // 파일 확장자에 따른 Content-Type 설정
+  const extname = String(path.extname(filePath)).toLowerCase();
+  const contentType = {
+    '.html': 'text/html',
+    '.js': 'text/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+  }[extname] || 'application/octet-stream';
+
+  // 파일 읽기
+  fs.readFile(filePath, (error, content) => {
+    if (error) {
+      if (error.code === 'ENOENT') {
+        // 파일이 존재하지 않는 경우, 404 페이지 제공
+        fs.readFile('./no-auth-app.html', (err, data) => {
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(data, 'utf-8');
+        });
+      } else {
+        // 서버 오류
+        res.writeHead(500);
+        res.end(`서버 오류: ${error.code}`);
+      }
+    } else {
+      // 파일 내용 제공
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content, 'utf-8');
+    }
+  });
 });
 
-// 서버 시작
-app.listen(port, host, () => {
-  console.log(`초간단 서버가 http://${host}:${port}에서 실행 중입니다.`);
-  console.log(`다음 URL로 접속해보세요: http://localhost:${port}/`);
+const port = process.env.PORT || 3000;
+server.listen(port, '0.0.0.0', () => {
+  console.log(`서버가 포트 ${port}에서 실행 중입니다.`);
 });

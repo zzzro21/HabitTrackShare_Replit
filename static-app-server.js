@@ -1,4 +1,3 @@
-// 정적 Express 서버 (Node.js)
 const express = require('express');
 const path = require('path');
 
