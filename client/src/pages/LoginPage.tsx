@@ -24,6 +24,8 @@ const registerSchema = z.object({
     .min(6, '비밀번호는 6자 이상이어야 합니다.'),
   confirmPassword: z.string()
     .min(6, '비밀번호는 6자 이상이어야 합니다.'),
+  inviteCode: z.string()
+    .min(6, '초대 코드는 6자 이상이어야 합니다.'),
   avatar: z.string()
     .default('/default-avatar.png'),
 }).refine(data => data.password === data.confirmPassword, {
@@ -58,6 +60,7 @@ export default function LoginPage() {
       email: '',
       password: '',
       confirmPassword: '',
+      inviteCode: '',
       avatar: `/avatars/avatar${Math.floor(Math.random() * 8) + 1}.png`,
     }
   });
@@ -265,6 +268,22 @@ export default function LoginPage() {
                 />
                 {registerForm.formState.errors.confirmPassword && (
                   <p className="mt-1 text-xs text-red-600">{registerForm.formState.errors.confirmPassword.message}</p>
+                )}
+              </div>
+              
+              <div>
+                <label htmlFor="invite-code" className="block text-sm font-medium text-gray-700">
+                  초대 코드
+                </label>
+                <input
+                  id="invite-code"
+                  type="text"
+                  {...registerForm.register('inviteCode')}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  placeholder="초대 코드를 입력하세요"
+                />
+                {registerForm.formState.errors.inviteCode && (
+                  <p className="mt-1 text-xs text-red-600">{registerForm.formState.errors.inviteCode.message}</p>
                 )}
               </div>
             </div>
