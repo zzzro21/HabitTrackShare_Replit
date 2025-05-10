@@ -71,28 +71,36 @@ export default function LoginPage() {
       setIsLoading(true);
       setError(null);
       
-      // 간소화된 로그인 처리 - 로컬 검증
-      if (data.username === 'admin' && data.password === 'password123') {
-        // 관리자 로그인 성공
+      // 기본 계정으로 로그인 처리 (개발 및 테스트용)
+      if ((data.username.startsWith('user') || data.username === 'admin') && 
+          data.password === 'password123') {
+        
+        console.log('개발 계정으로 로그인 시도:', data.username);
+        
+        // 로컬 스토리지에 로그인 상태 저장
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', data.username);
+        
+        // 홈 화면으로 이동
         setLocation('/home');
         return;
       }
       
-      if ((data.username.startsWith('user') || data.username === 'admin') && data.password === 'password123') {
-        // 사용자 로그인 성공
-        setLocation('/home');
-        return;
-      }
-      
-      // 서버 로그인 시도
+      // 서버 로그인 시도 (디버깅 로그 추가)
       try {
+        console.log('서버 로그인 요청 시작:', data.username);
+        
         const response = await apiRequest<{
           success: boolean;
           message: string;
           user?: any;
         }>('POST', '/api/auth/login', data);
         
+        console.log('서버 응답:', response);
+        
         if (response.success) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('username', data.username);
           setLocation('/home');
           return;
         } else {
