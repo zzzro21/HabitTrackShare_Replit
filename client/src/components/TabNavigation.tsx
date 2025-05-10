@@ -1,15 +1,21 @@
 import React from 'react';
 import { useLocation } from 'wouter';
+import { ThemeToggle } from './ThemeToggle';
 
 const TabNavigation: React.FC = () => {
   const [location] = useLocation();
 
   return (
-    <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200 p-2 max-w-md mx-auto">
+    <nav className="fixed bottom-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-2 max-w-md mx-auto">
+      <div className="relative">
+        <div className="absolute right-3 -top-14">
+          <ThemeToggle />
+        </div>
+      </div>
       <div className="flex justify-around items-center">
         <a 
           href="/" 
-          className={`flex flex-col items-center ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center ${location === '/' ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -19,7 +25,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/friends" 
-          className={`flex flex-col items-center ${location === '/friends' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center ${location === '/friends' ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -32,7 +38,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/ranking" 
-          className={`flex flex-col items-center ${location === '/ranking' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center ${location === '/ranking' ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -42,7 +48,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/insights" 
-          className={`flex flex-col items-center ${location === '/insights' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center ${location === '/insights' ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -53,7 +59,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/notes" 
-          className={`flex flex-col items-center ${location === '/notes' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center ${location === '/notes' ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -64,7 +70,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/settings" 
-          className={`flex flex-col items-center ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center ${location === '/settings' ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
