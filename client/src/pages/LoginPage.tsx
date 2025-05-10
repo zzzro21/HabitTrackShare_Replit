@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useLocation } from 'wouter';
-import { apiRequest } from '@/lib/queryClient';
+import { useSimpleAuth } from '@/hooks/useSimpleAuth';
 
 // 폼 스키마 정의
 const loginSchema = z.object({
@@ -38,9 +38,15 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [, setLocation] = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isAuthenticated, error, isLoading } = useSimpleAuth();
+  
+  // 이미 로그인되어 있으면 홈으로 리다이렉트
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLocation('/home');
+    }
+  }, [isAuthenticated, setLocation]);
 
   // 로그인 폼
   const loginForm = useForm<LoginForm>({
@@ -68,64 +74,35 @@ export default function LoginPage() {
   // 클라이언트 측에서만 처리하는 로그인 함수
   const handleLoginSubmit = async (data: LoginForm) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      
       console.log('로그인 시도:', data.username);
       
-      // 모든 계정에 대해 password123을 사용하는 간단한 로그인 처리 (개발 전용)
-      if (data.password === 'password123') {
-        // 사용자 정보 설정
-        const userId = data.username === 'admin' ? 1 : 
-                      data.username.startsWith('user') ? parseInt(data.username.replace('user', '')) || 2 : 
-                      Math.floor(Math.random() * 100) + 10;
-                      
-        // 로컬 스토리지에 로그인 상태 저장
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('userId', userId.toString());
-        localStorage.setItem('loginTime', new Date().toISOString());
-        
-        console.log(`${data.username}님, 로그인 성공!`);
-        
-        // 0.5초 후 홈 화면으로 이동 (시각적 피드백을 위한 지연)
-        setTimeout(() => {
-          setLocation('/home');
-        }, 500);
-        
-        return;
-      }
+      // useSimpleAuth 훅의 login 함수 사용
+      const success = await login(data.username, data.password);
       
-      // 비밀번호가 틀린 경우
-      setError('아이디 또는 비밀번호가 올바르지 않습니다.');
-      console.log('로그인 실패: 잘못된 비밀번호');
+      console.log(success ? `${data.username}님, 로그인 성공!` : '로그인 실패');
+      
+      if (success) {
+        // 이미 useEffect에서 리다이렉트 처리
+      }
     } catch (err: any) {
       console.error('로그인 오류:', err);
-      setError(err.message || '로그인 중 오류가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
   // 클라이언트 측에서만 처리하는 회원가입 함수
   const handleRegisterSubmit = async (data: RegisterForm) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      
       console.log('회원가입 시도:', data.username);
       
       // 초대코드 확인 (모든 WELCOME으로 시작하는 코드 허용)
       if (!data.inviteCode.startsWith('WELCOME')) {
-        setError('유효하지 않은 초대 코드입니다. WELCOME으로 시작하는 코드를 입력하세요.');
-        setIsLoading(false);
+        alert('유효하지 않은 초대 코드입니다. WELCOME으로 시작하는 코드를 입력하세요.');
         return;
       }
       
       // 비밀번호 확인
       if (data.password !== data.confirmPassword) {
-        setError('비밀번호가 일치하지 않습니다.');
-        setIsLoading(false);
+        alert('비밀번호가 일치하지 않습니다.');
         return;
       }
       
@@ -146,9 +123,7 @@ export default function LoginPage() {
       setLocation('/home');
     } catch (err: any) {
       console.error('회원가입 오류:', err);
-      setError(err.message || '회원가입 중 오류가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
+      alert(err.message || '회원가입 중 오류가 발생했습니다.');
     }
   };
 

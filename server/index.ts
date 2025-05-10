@@ -14,8 +14,10 @@ async function startServer() {
     // Express 앱 생성
     const app = express();
     // Replit 워크플로우는 포트 5000을 기본으로 감지합니다
-    // 반드시 이 값을 사용해야 워크플로우가 제대로 동작합니다
-    const port = 5000;
+    // 환경 변수에서 포트를 가져오거나 기본값 5000 사용
+    const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
+    // 반드시 0.0.0.0에 바인딩하여 외부 접근을 허용합니다
+    const host = '0.0.0.0';
     
     // 필수 미들웨어만 먼저 등록
     app.use(express.json());
