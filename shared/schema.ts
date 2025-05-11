@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, json, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, json, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -8,8 +8,6 @@ export const users = pgTable("users", {
   avatar: text("avatar").notNull(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  email: text("email").notNull().unique(),
-  googleApiKey: text("google_api_key"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -17,13 +15,6 @@ export const insertUserSchema = createInsertSchema(users).pick({
   avatar: true,
   username: true,
   password: true,
-  email: true,
-  googleApiKey: true,
-});
-
-export const loginSchema = z.object({
-  username: z.string().min(3, { message: "아이디는 최소 3자 이상이어야 합니다." }),
-  password: z.string().min(6, { message: "비밀번호는 최소 6자 이상이어야 합니다." }),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -121,35 +112,6 @@ export const insertHabitInsightSchema = createInsertSchema(habitInsights).pick({
 
 export type InsertHabitInsight = z.infer<typeof insertHabitInsightSchema>;
 export type HabitInsight = typeof habitInsights.$inferSelect;
-
-// 초대 코드 테이블
-export const inviteCodes = pgTable("invite_codes", {
-  id: serial("id").primaryKey(),
-  code: varchar("code", { length: 20 }).notNull().unique(),
-  createdBy: integer("created_by").notNull().references(() => users.id),
-  isUsed: boolean("is_used").notNull().default(false),
-  usedBy: integer("used_by").references(() => users.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  expiresAt: timestamp("expires_at"),
-});
-
-export const insertInviteCodeSchema = createInsertSchema(inviteCodes).pick({
-  code: true,
-  createdBy: true,
-  expiresAt: true,
-});
-
-export type InsertInviteCode = z.infer<typeof insertInviteCodeSchema>;
-export type InviteCode = typeof inviteCodes.$inferSelect;
-
-// 회원가입 시 초대코드 필수
-export const registerSchema = z.object({
-  username: z.string().min(3, { message: "아이디는 최소 3자 이상이어야 합니다." }),
-  password: z.string().min(6, { message: "비밀번호는 최소 6자 이상이어야 합니다." }),
-  email: z.string().email({ message: "유효한 이메일 주소를 입력해 주세요." }),
-  name: z.string().min(2, { message: "이름은 최소 2자 이상이어야 합니다." }),
-  inviteCode: z.string().min(6, { message: "유효한 초대 코드를 입력해 주세요." }),
-});
 
 export const predefinedHabits = [
   {

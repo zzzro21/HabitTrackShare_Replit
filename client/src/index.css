@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 모자이크 효과를 위한 애니메이션 */
-@keyframes mosaic {
-  0% {
-    opacity: 1;
-    filter: blur(0);
-  }
-  50% {
-    opacity: 0.7;
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 0;
-    filter: blur(8px);
-  }
-}
-
-.animate-mosaic {
-  animation: mosaic 1s ease forwards;
-  transition: all 1s;
-}
-
 @layer components {
   /* 버튼 간격 및 크기 조정 */
   .habit-option-group {
@@ -96,18 +75,7 @@
     @apply border-border;
   }
 
-  html {
-    /* Add smooth transition for theme changes */
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  /* Add smooth transitions for common elements */
-  button, a, input, textarea, select, div, span, p, h1, h2, h3, h4, h5, h6 {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
 }
