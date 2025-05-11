@@ -8,10 +8,25 @@ import {
   insertDailyFeedbackSchema, 
   insertHabitInsightSchema, 
   insertUserSchema, 
-  loginSchema,
-  registerSchema,
-  insertInviteCodeSchema
+  loginSchema
 } from "@shared/schema";
+
+// 회원가입 스키마 정의
+const registerSchema = z.object({
+  username: z.string().min(3, { message: "아이디는 최소 3자 이상이어야 합니다." }),
+  password: z.string().min(6, { message: "비밀번호는 최소 6자 이상이어야 합니다." }),
+  email: z.string().email({ message: "유효한 이메일 주소를 입력해 주세요." }),
+  name: z.string().min(2, { message: "이름은 최소 2자 이상이어야 합니다." }),
+  inviteCode: z.string().min(6, { message: "유효한 초대 코드를 입력해 주세요." }),
+});
+
+// 초대 코드 스키마 정의
+const insertInviteCodeSchema = z.object({
+  code: z.string(),
+  createdBy: z.number(),
+  expiresAt: z.date().optional()
+});
+
 import { authenticateUser, getCurrentUser, hashPassword, verifyPassword } from "./auth";
 import { db } from "./db";
 import { users } from "../shared/schema";
@@ -141,18 +156,25 @@ export async function registerRoutes(app: Express): Promise<void> {
     try {
       const { username, password } = loginSchema.parse(req.body);
       
-      // 사용자 조회
+      console.log(`로그인 시도: 사용자명=${username}`);
+      
+      // 사용자 조회 - 데이터베이스에서 직접 조회
       const [user] = await db.select().from(users).where(eq(users.username, username));
       
       if (!user) {
+        console.log(`로그인 실패: 사용자를 찾을 수 없음 - ${username}`);
         return res.status(401).json({ 
           success: false,
           message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
         });
       }
       
+      console.log(`사용자 조회 성공: id=${user.id}, 이름=${user.name}`);
+      
       // 비밀번호 검증
       const isValidPassword = await verifyPassword(password, user.password);
+      console.log(`비밀번호 검증 결과: ${isValidPassword ? '성공' : '실패'}`);
+      
       if (!isValidPassword) {
         return res.status(401).json({ 
           success: false,

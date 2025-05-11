@@ -13,7 +13,15 @@ export async function hashPassword(password: string): Promise<string> {
 
 // 비밀번호 검증 함수
 export async function verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
-  return bcrypt.compare(plainPassword, hashedPassword);
+  try {
+    console.log(`비밀번호 검증 시도 - 해시길이: ${hashedPassword.length}`);
+    const result = await bcrypt.compare(plainPassword, hashedPassword);
+    console.log(`비밀번호 비교 결과: ${result}`);
+    return result;
+  } catch (error) {
+    console.error('비밀번호 검증 오류:', error);
+    return false;
+  }
 }
 
 // 인증 미들웨어
@@ -31,8 +39,11 @@ export function authenticateUser(req: Request, res: Response, next: NextFunction
 export async function getCurrentUser(req: Request) {
   const userId = req.session.userId;
   if (!userId) {
+    console.log("현재 로그인된 사용자 없음: 세션에 userId 없음");
     return null;
   }
+
+  console.log("현재 로그인된 사용자 ID 조회 시도:", userId);
 
   try {
     const [user] = await db
@@ -46,6 +57,12 @@ export async function getCurrentUser(req: Request) {
       })
       .from(users)
       .where(eq(users.id, userId));
+
+    if (user) {
+      console.log("사용자 정보 조회 성공:", user.username, user.id);
+    } else {
+      console.log("DB에서 사용자 정보를 찾을 수 없음:", userId);
+    }
 
     return user || null;
   } catch (error) {
