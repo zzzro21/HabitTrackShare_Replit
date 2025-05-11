@@ -2,39 +2,10 @@ import OpenAI from 'openai';
 import { User, Habit, HabitEntry, HabitNote } from '@shared/schema';
 import { IStorage } from './storage';
 
-// OpenAI 클라이언트 초기화를 안전하게 처리
-let openai: OpenAI | null = null;
-let openaiInitializing = false;
-
-// API 키가 존재하는 경우에만 클라이언트 초기화 - lazy initialization
-function getOpenAIClient(): OpenAI | null {
-  if (openai) return openai;
-  
-  // If we're already trying to initialize, don't try again
-  if (openaiInitializing) return null;
-  
-  openaiInitializing = true;
-  
-  try {
-    if (process.env.OPENAI_API_KEY) {
-      openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
-      });
-      console.log("OpenAI client initialized successfully");
-    } else {
-      console.log("OpenAI API Key not found. AI features will be disabled.");
-    }
-  } catch (error) {
-    console.error("Failed to initialize OpenAI client:", error);
-  } finally {
-    openaiInitializing = false;
-  }
-  
-  return openai;
-}
-
-// We'll initialize on demand instead of automatically
-// This ensures the server starts as quickly as possible
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const MODEL = "gpt-4o";
@@ -107,20 +78,8 @@ export async function generateHabitInsights(
       };
     });
 
-    // Default insights if OpenAI is not available
-    let insights = {
-      summary: "OpenAI API가 구성되지 않았습니다. 기본 인사이트를 제공합니다.",
-      strengths: ["습관 기록을 꾸준히 하고 있습니다.", "목표를 향해 진행 중입니다.", "습관 형성에 관심을 가지고 있습니다."],
-      improvementAreas: ["더 많은 데이터 기록이 필요합니다.", "일부 습관에 더 집중할 수 있습니다."],
-      recommendations: ["매일 습관 기록을 작성하세요.", "동료와 함께 습관을 공유하세요.", "작은 목표부터 시작하세요.", "성취를 축하하는 시간을 가지세요.", "실패해도 다시 시작하세요."]
-    };
-    
-    // Get OpenAI client and use it if available
-    const openaiClient = getOpenAIClient();
-    if (openaiClient) {
-      try {
-        // Generate AI insights
-        const prompt = `
+    // Generate AI insights
+    const prompt = `
 You are an expert habit coach analyzing habit data for ${user.name}. 
 Please analyze the user's habit data and provide personalized insights and recommendations.
 
@@ -146,26 +105,19 @@ Format your response as JSON with the following structure:
 }
 `;
 
-        const response = await openaiClient.chat.completions.create({
-          model: MODEL,
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.7,
-          response_format: { type: "json_object" }
-        });
+    const response = await openai.chat.completions.create({
+      model: MODEL,
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.7,
+      response_format: { type: "json_object" }
+    });
 
-        const content = response.choices[0].message.content;
-        if (content) {
-          insights = JSON.parse(content);
-        } else {
-          console.log("No content received from OpenAI, using default insights");
-        }
-      } catch (error) {
-        console.error("Error during OpenAI API call:", error);
-        console.log("Using default insights due to API error");
-      }
-    } else {
-      console.log("OpenAI client not available, using default insights");
+    const content = response.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
     }
+    
+    const insights = JSON.parse(content);
     
     return {
       userId,
