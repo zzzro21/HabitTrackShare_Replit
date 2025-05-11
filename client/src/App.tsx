@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { queryClient, apiRequest } from "./lib/queryClient";
+import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,25 +16,8 @@ import InsightsPage from "@/pages/InsightsPage";
 import MorningPage from "@/pages/MorningPage";
 import LoginPage from "@/pages/LoginPage";
 import JourneyVisualization from "@/pages/JourneyVisualization";
-
-// 인증 상태 확인을 위한 Hook
-function useAuth() {
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ['/api/auth/me'],
-    queryFn: () => apiRequest('/api/auth/me'),
-    retry: false,
-    staleTime: 5 * 60 * 1000, // 5분
-    refetchOnWindowFocus: false, // 창 포커스 시 다시 요청하지 않음
-    refetchInterval: false, // 주기적으로 다시 요청하지 않음
-  });
-  
-  return {
-    user: user?.success ? user.user : null,
-    isLoading,
-    isAuthenticated: user?.success === true,
-    error
-  };
-}
+import IntroPage from "@/pages/IntroPage";
+import { useAuth } from "@/hooks/useAuth";
 
 // 인증이 필요한 라우트를 위한 컴포넌트
 function ProtectedRoute({ component: Component, ...rest }: { component: React.ComponentType<any>; path?: string }) {
@@ -106,7 +88,7 @@ function Router() {
         })() : <LoginPage />}
       </Route>
       <Route path="/home">{() => <ProtectedRoute component={Home} />}</Route>
-      <Route path="/">{() => <LoginPage />}</Route>
+      <Route path="/">{() => <IntroPage />}</Route>
       <Route path="/morning">{() => <ProtectedRoute component={MorningPage} />}</Route>
       <Route path="/friends">{() => <ProtectedRoute component={FriendsPage} />}</Route>
       <Route path="/ranking">{() => <ProtectedRoute component={RankingPage} />}</Route>

@@ -1,187 +1,283 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import WeatherIcon from '@/components/WeatherIcon';
 
-// 날씨 아이콘 컴포넌트 (간단한 일러스트로 구현)
-const WeatherIcon: React.FC<{ type: string }> = ({ type }) => {
-  const icons = {
-    sunny: (
-      <div className="text-yellow-400">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/>
-          <line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/>
-          <line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-      </div>
-    ),
-    cloudy: (
-      <div className="text-gray-400">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
-        </svg>
-      </div>
-    ),
-    rainy: (
-      <div className="text-blue-400">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
-          <path d="M16 14v6"/>
-          <path d="M8 14v6"/>
-          <path d="M12 16v6"/>
-        </svg>
-      </div>
-    ),
-    snowy: (
-      <div className="text-gray-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
-          <path d="M8 15h.01"/>
-          <path d="M8 19h.01"/>
-          <path d="M12 17h.01"/>
-          <path d="M12 21h.01"/>
-          <path d="M16 15h.01"/>
-          <path d="M16 19h.01"/>
-        </svg>
-      </div>
-    ),
-  };
-
-  return icons[type as keyof typeof icons] || icons.sunny;
-};
-
-// 명언 데이터 (실제로는 API나 DB에서 가져올 수 있음)
-const quotes = [
-  "하루를 시작하는 가장 좋은 방법은 어제 해결하지 못한 일을 생각하는 것이 아니라, 오늘 할 수 있는 일에 감사하는 것입니다.",
-  "오늘 하루가 당신의 인생에서 가장 중요한 날이라고 생각하세요.",
-  "가장 큰 영광은 한 번도 실패하지 않음이 아니라, 실패할 때마다 다시 일어서는 데에 있다. - 공자",
-  "당신의 시간은 제한되어 있습니다. 다른 사람의 삶을 사느라 시간을 낭비하지 마세요. - 스티브 잡스",
-  "노력 없이 얻을 수 있는 것은 아무것도 없습니다. 꿈을 이루기 위해 오늘도 한 걸음씩 나아가세요.",
-  "불가능이란 단지 아직 해보지 않은 것일 뿐입니다.",
-  "당신이 상상할 수 있다면, 당신은 그것을 이룰 수 있습니다. - 월트 디즈니",
-  "삶이 있는 한 희망은 있다. - 키케로",
-  "성공한 사람이 되려고 노력하기보다 가치있는 사람이 되려고 노력하라. - 알버트 아인슈타인",
-  "오늘의 나는 어제 결정한 선택의 결과이고 내일의 나는 오늘 내가 선택한 결과다.",
+// 명언 데이터
+const morningQuotes = [
+  "오늘 하루도 힘차게 시작하세요. 긍정적인 마음가짐이 행복의 시작입니다.",
+  "작은 변화가 큰 성장을 이끕니다. 오늘 하루도 발전하는 하루가 되길 바랍니다.",
+  "당신이 변화시킬 수 있는 건 오직 자신뿐입니다. 오늘도 한걸음 더 나아가세요.",
+  "습관은 인생을 만들고, 당신은 습관을 만듭니다. 좋은 습관을 가꾸세요.",
+  "성공한 사람이 되려고 노력하기보다 가치 있는 사람이 되려고 노력하세요.",
+  "인생에서 가장 큰 영광은 결코 넘어지지 않는 것이 아니라 넘어질 때마다 다시 일어서는 데에 있습니다.",
+  "어제와 똑같이 살면서 다른 미래를 기대하는 것은 어리석은 일입니다.",
+  "당신의 하루 하루가 당신의 인생을 만들어갑니다. 후회 없는 하루를 보내세요.",
+  "좋은 성과는 잘 다듬어진 습관에서 나옵니다. 꾸준함이 당신을 성공으로 이끌 것입니다.",
+  "당신이 생각하는 대로 당신은 그렇게 됩니다. 긍정적인 생각으로 하루를 시작하세요."
 ];
 
 const MorningPage: React.FC = () => {
-  const [quote, setQuote] = useState<string>("");
-  const [currentTime, setCurrentTime] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-  const [temperature, setTemperature] = useState<string>("23°C");
-  const [weatherType, setWeatherType] = useState<string>("sunny");
   const [, setLocation] = useLocation();
-
-  // 명언 랜덤 선택
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [weather, setWeather] = useState({ temp: 18, condition: 'sunny' as 'sunny' | 'cloudy' | 'rainy' | 'snowy' });
+  const [dailyQuote, setDailyQuote] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [isQuoteRead, setIsQuoteRead] = useState(false);
+  const [showMicPrompt, setShowMicPrompt] = useState(false);
+  const micRef = useRef<HTMLButtonElement>(null);
+  
+  // 현재 시간 업데이트
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    setQuote(quotes[randomIndex]);
-  }, []);
-
-  // 현재 시간과 날짜 업데이트
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // 1분마다 업데이트
     
-    const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }));
-      setDate(now.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' }));
+    return () => clearInterval(timer);
+  }, []);
+  
+  // 앱의 "오늘" 날짜 계산 (오전 6시 기준)
+  const getAppDay = () => {
+    const now = new Date();
+    const today = new Date();
+    
+    // 현재 시간이 오전 6시 이전이면, 어제 날짜로 계산
+    if (now.getHours() < 6) {
+      today.setDate(today.getDate() - 1);
+    }
+    
+    return today.toDateString();
+  };
+  
+  // 오늘의 명언 가져오기
+  useEffect(() => {
+    const getTodaysQuote = () => {
+      // 앱의 "오늘" (오전 6시 기준)
+      const appDay = getAppDay();
+      
+      // 로컬 스토리지에서 오늘의 명언과 날짜 가져오기
+      const savedQuote = localStorage.getItem('morningQuote');
+      const savedDate = localStorage.getItem('morningQuoteDate');
+      
+      // 저장된 명언이 있고 오늘 날짜와 같다면 그대로 사용
+      if (savedQuote && savedDate === appDay) {
+        setDailyQuote(savedQuote);
+      } else {
+        // 새로운 랜덤 명언 선택
+        const randomIndex = Math.floor(Math.random() * morningQuotes.length);
+        const newQuote = morningQuotes[randomIndex];
+        
+        // 로컬 스토리지에 저장
+        localStorage.setItem('morningQuote', newQuote);
+        localStorage.setItem('morningQuoteDate', appDay);
+        
+        setDailyQuote(newQuote);
+      }
     };
     
-    updateTime();
-    const interval = setInterval(updateTime, 60000);
-    
-    return () => clearInterval(interval);
+    getTodaysQuote();
   }, []);
-
-  const goToMainPage = () => {
-    setLocation('/');
+  
+  // 이 페이지가 오늘 이미 완료되었는지 확인
+  useEffect(() => {
+    const checkIfCompleted = () => {
+      const appDay = getAppDay(); // 앱의 "오늘" (오전 6시 기준)
+      const completedDate = localStorage.getItem('morningCompletedDate');
+      
+      // 오늘 이미 완료했다면 완료 상태로 표시
+      if (completedDate === appDay) {
+        setIsQuoteRead(true);
+      } else {
+        // 3초 후에 마이크 프롬프트 표시
+        const timer = setTimeout(() => {
+          setShowMicPrompt(true);
+        }, 3000);
+        
+        return () => clearTimeout(timer);
+      }
+    };
+    
+    checkIfCompleted();
+  }, []);
+  
+  // 마이크 녹음 시작
+  const startRecording = () => {
+    setIsRecording(true);
+    
+    // 실제 음성 인식 구현 (SpeechRecognition API 사용)
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ko-KR';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      
+      recognition.onstart = () => {
+        console.log('음성 인식 시작');
+      };
+      
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('인식된 텍스트:', transcript);
+        
+        // 간단한 검증: 최소 몇 글자 이상 말했는지 확인
+        if (transcript.length > 10) {
+          completeQuoteReading();
+        } else {
+          setIsRecording(false);
+          alert('명언을 완전히 읽어주세요.');
+        }
+      };
+      
+      recognition.onerror = (event: any) => {
+        console.error('음성 인식 오류:', event.error);
+        setIsRecording(false);
+      };
+      
+      recognition.onend = () => {
+        console.log('음성 인식 종료');
+        setIsRecording(false);
+      };
+      
+      recognition.start();
+    } else {
+      // SpeechRecognition을 지원하지 않는 브라우저 처리
+      alert('이 브라우저는 음성 인식을 지원하지 않습니다. 버튼을 눌러 계속 진행하세요.');
+      
+      // 개발 테스트를 위해 3초 후 인식 완료로 처리
+      setTimeout(() => {
+        completeQuoteReading();
+      }, 3000);
+    }
   };
-
+  
+  // 명언 읽기 완료 처리
+  const completeQuoteReading = () => {
+    setIsQuoteRead(true);
+    setIsRecording(false);
+    
+    // 오늘 완료했음을 저장 (앱의 "오늘" 기준)
+    localStorage.setItem('morningCompletedDate', getAppDay());
+    
+    // 성공 애니메이션 후 홈으로 이동
+    setTimeout(() => {
+      setLocation('/home');
+    }, 3000);
+  };
+  
+  // 완료 후 다른 페이지로 이동
+  const navigateToHome = () => {
+    setLocation('/home');
+  };
+  
+  // 사용자 프로필 이미지
+  const userProfileImage = '/images/woman-laptop.jpg';
+  
   return (
-    <div className="flex flex-col min-h-screen p-6 bg-gradient-to-b from-pink-50 via-indigo-50 to-white">
-      {/* 상단 날씨 및 시간 정보 */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <div className="text-2xl font-bold">{currentTime}</div>
-          <div className="text-gray-500">{date}</div>
+    <div className="relative min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-teal-50">
+      {/* 날씨 및 시간 정보 */}
+      <div className="absolute top-0 left-0 right-0 z-10 p-5 flex justify-between items-center">
+        <div className="flex items-center space-x-2 bg-white/80 p-2 px-4 rounded-full shadow-sm">
+          <WeatherIcon condition={weather.condition} />
+          <span className="text-lg font-semibold">{weather.temp}°C</span>
         </div>
-        <div className="flex items-center gap-2">
-          <WeatherIcon type={weatherType} />
-          <span className="text-xl font-medium">{temperature}</span>
+        
+        <div className="bg-white/80 p-2 px-4 rounded-full shadow-sm">
+          <span className="text-lg font-semibold">
+            {format(currentTime, 'a h:mm', { locale: ko })}
+          </span>
         </div>
       </div>
       
-      {/* 사용자 이미지 */}
-      <div className="mx-auto mb-8 w-full max-w-xs">
-        <div className="relative">
-          <div className="aspect-square rounded-full overflow-hidden border-4 border-white shadow-lg">
-            <img 
-              src="https://via.placeholder.com/300x300.png?text=Profile" 
-              alt="Morning Profile"
-              className="w-full h-full object-cover"
-            />
-          </div>
+      {/* 배경 이미지 */}
+      <div className="flex-grow flex flex-col items-center">
+        <div className="relative w-full h-screen max-h-[70vh] overflow-hidden">
+          <img 
+            src={userProfileImage} 
+            alt="Morning inspiration" 
+            className="w-full h-full object-cover"
+          />
           
-          {/* 행동 버튼 (이미지에서 본 디자인 요소) */}
-          <div className="absolute top-5 right-0 flex items-center bg-white rounded-full px-3 py-1.5 shadow-md">
-            <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            </div>
-            <span className="text-sm font-medium">명상하기</span>
-          </div>
-          
-          {/* 행동 버튼 (이미지에서 본 또 다른 요소) */}
-          <div className="absolute bottom-5 left-0 flex items-center bg-white rounded-full px-3 py-1.5 shadow-md">
-            <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 11l-3 -3 3 -3" />
-                <path d="M21 11l3 -3 -3 -3" />
-                <path d="M12 14l0 7" />
-                <path d="M8 14l8 0" />
-                <path d="M9 3l3 3 3 -3" />
-              </svg>
-            </div>
-            <span className="text-sm font-medium">메시지</span>
-          </div>
+          {/* 이미지 그라데이션 오버레이 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-blue-50/90"></div>
         </div>
       </div>
       
-      {/* 명언 카드 */}
-      <Card className="p-6 mb-8 text-center shadow-lg border-0 bg-white/90 backdrop-blur-sm rounded-3xl">
-        <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">오늘의 명언</h2>
-        <p className="text-lg mb-6 leading-relaxed">{quote}</p>
-      </Card>
-      
-      {/* 시작 버튼 */}
-      <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-center">
-          <span className="block">습관을</span>
-          <div className="flex justify-center items-center gap-2 my-1">
-            <span className="bg-orange-500 text-white px-2 py-1 rounded">단 몇초 만에</span>
-            <span>기록하기</span>
-          </div>
-        </h1>
-        
-        <p className="text-center text-gray-600 mb-4">
-          "단 몇 번의 터치만으로 오늘의 습관을 기록하고<br />
-          당신의 성장을 직접 확인하세요!"
-        </p>
-        
-        <Button 
-          className="w-full py-6 text-lg rounded-full bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 border-0 shadow-lg transition-all hover:shadow-xl" 
-          onClick={goToMainPage}
-        >
-          시작하기
-        </Button>
+      {/* 명언 섹션 */}
+      <div className="relative -mt-32 pb-20 px-6 flex flex-col items-center">
+        <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">오늘의 명언</h2>
+          
+          <p className="text-lg text-gray-700 italic mb-6">
+            "{dailyQuote}"
+          </p>
+          
+          {showMicPrompt && !isQuoteRead && (
+            <div className="flex flex-col items-center">
+              <button
+                ref={micRef}
+                onClick={startRecording}
+                disabled={isRecording}
+                className={`w-16 h-16 rounded-full flex items-center justify-center shadow-md transition ${
+                  isRecording 
+                    ? 'bg-red-500 animate-pulse' 
+                    : 'bg-blue-500 hover:bg-blue-600'
+                }`}
+              >
+                <svg 
+                  className="w-8 h-8 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" 
+                  />
+                </svg>
+              </button>
+              
+              <p className="mt-4 text-sm text-gray-600 text-center">
+                {isRecording 
+                  ? '듣고 있어요...' 
+                  : '마이크를 누르고 명언을 소리내어 읽어주세요.'}
+              </p>
+            </div>
+          )}
+          
+          {isQuoteRead && (
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                <svg 
+                  className="w-8 h-8 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M5 13l4 4L19 7" 
+                  />
+                </svg>
+              </div>
+              <p className="mt-4 text-green-600 font-medium">
+                완료! 오늘 하루도 힘차게 시작하세요.
+              </p>
+              
+              <button
+                onClick={navigateToHome}
+                className="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-full"
+              >
+                앱 사용하기
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
