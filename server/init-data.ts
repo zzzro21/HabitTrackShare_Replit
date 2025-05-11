@@ -6,8 +6,11 @@ import { hashPassword } from "./auth";
  * 기본 사용자와 초대 코드를 생성하는 스크립트
  */
 export async function createInitialData() {
+  console.log("초기 데이터 생성 시작...");
+  
   // 기본 사용자 생성 (admin)
   const hashedPassword = await hashPassword("password123");
+  console.log("관리자 비밀번호 해시 생성 완료:", hashedPassword.substring(0, 10) + "...");
   
   let adminUser;
   try {
@@ -21,9 +24,16 @@ export async function createInitialData() {
         avatar: "👤",
         googleApiKey: null
       });
-      console.log("관리자 계정 생성 완료:", adminUser.username);
+      console.log("관리자 계정 생성 완료:", adminUser.username, "ID:", adminUser.id);
+      
+      // 생성된 계정 확인 (디버깅용)
+      const checkAdmin = await storage.getUserByUsername("admin");
+      if (checkAdmin) {
+        console.log("생성된 관리자 계정 확인:", checkAdmin.id, checkAdmin.name);
+        console.log("비밀번호 해시:", checkAdmin.password.substring(0, 10) + "...");
+      }
     } else {
-      console.log("관리자 계정이 이미 존재합니다:", adminUser.username);
+      console.log("관리자 계정이 이미 존재합니다:", adminUser.username, "ID:", adminUser.id);
     }
   } catch (error) {
     console.error("관리자 계정 생성 오류:", error);
