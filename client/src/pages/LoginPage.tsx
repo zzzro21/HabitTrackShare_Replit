@@ -78,7 +78,7 @@ export default function LoginPage() {
       }>('POST', '/api/auth/login', data);
       
       if (response.success) {
-        setLocation('/');
+        setLocation('/home');
       } else {
         setError(response.message || '로그인에 실패했습니다.');
       }
@@ -105,7 +105,7 @@ export default function LoginPage() {
       }>('POST', '/api/auth/register', registerData);
       
       if (response.success) {
-        setLocation('/');
+        setLocation('/home');
       } else {
         setError(response.message || '회원가입에 실패했습니다.');
       }
