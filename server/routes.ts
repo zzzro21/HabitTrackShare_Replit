@@ -214,8 +214,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(notes);
   });
   
-  // Get a specific habit note (인증 필요)
-  app.get("/api/users/:userId/habits/:habitId/notes/:day", isAuthenticated, async (req, res) => {
+  // Get a specific habit note (인증 불필요)
+  app.get("/api/users/:userId/habits/:habitId/notes/:day", async (req, res) => {
     const userId = parseInt(req.params.userId);
     const habitId = parseInt(req.params.habitId);
     const day = parseInt(req.params.day);
