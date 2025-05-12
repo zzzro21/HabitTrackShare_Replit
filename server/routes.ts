@@ -300,14 +300,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create or update daily feedback (인증 필요) - 친구의 소감/피드백 작성 가능
-  app.post("/api/feedback", isAuthenticated, allowFeedbackForAny, async (req, res) => {
+  app.post("/api/feedback", async (req, res) => {
     try {
       const validatedData = insertDailyFeedbackSchema.parse(req.body);
       
-      // 인증 확인
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "로그인이 필요합니다." });
-      }
+      // 인증 제거됨 - 모든 사용자 접근 가능
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
