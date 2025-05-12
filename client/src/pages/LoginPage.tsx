@@ -13,12 +13,22 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
+    if (!username) {
+      setError('사용자 이름을 입력해주세요.');
+      return;
+    }
+
     try {
-      await login(username, password);
+      const defaultPassword = "password123";
+      await login(username, defaultPassword);
       setLocation('/'); // 로그인 성공 시 홈 페이지로 이동
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login error:', err);
-      setError('로그인에 실패했습니다. 사용자 이름과 비밀번호를 확인해주세요.');
+      if (err?.message) {
+        setError(`로그인에 실패했습니다: ${err.message}`);
+      } else {
+        setError('로그인에 실패했습니다. 사용자 이름을 확인해주세요.');
+      }
     }
   };
 
@@ -49,20 +59,12 @@ export default function LoginPage() {
             />
           </div>
           
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              비밀번호
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
-              placeholder="비밀번호 입력"
-            />
-          </div>
+          <input
+            id="password"
+            type="hidden"
+            value={password || "password123"}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           
           <button
             type="submit"
