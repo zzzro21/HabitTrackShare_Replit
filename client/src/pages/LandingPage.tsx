@@ -155,29 +155,30 @@ const LandingPage: React.FC = () => {
 
   return (
     <div 
-      className="flex flex-col bg-white relative overflow-hidden px-0 font-sans mx-auto"
+      className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto"
       style={{ 
         maxWidth: '1080px', 
         minHeight: '100vh',
         height: 'auto',
-        aspectRatio: '1080 / 2340'
+        aspectRatio: '1080 / 2340',
+        background: 'linear-gradient(180deg, #1a6985 0%, #38a3a5 15%, #57cc99 30%, #80ffdb 45%, #c8b6ff 65%, #e0aaff 80%, #ffc6ff 100%)'
       }}
     >
       {/* Status Bar (모바일 디바이스 스타일) */}
-      <div className="relative z-10 w-full bg-gray-100 px-8 py-4 flex justify-between items-center">
-        <div className="text-black font-semibold text-lg">9:41</div>
+      <div className="relative z-10 w-full bg-transparent px-8 py-4 flex justify-between items-center">
+        <div className="text-white font-semibold text-lg drop-shadow-md">9:41</div>
         <div className="flex items-center space-x-3">
-          <div className="w-5 h-5">
+          <div className="w-5 h-5 text-white drop-shadow-md">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 10a6 6 0 00-12 0v4M5 18h14a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
             </svg>
           </div>
-          <div className="w-5 h-5">
+          <div className="w-5 h-5 text-white drop-shadow-md">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M1 5h22M1 12h22M1 19h22" />
             </svg>
           </div>
-          <div className="w-8 h-3.5 bg-black rounded-sm"></div>
+          <div className="w-8 h-3.5 bg-white rounded-sm"></div>
         </div>
       </div>
 
