@@ -43,10 +43,10 @@ const LandingPage: React.FC = () => {
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-pink-50 to-white"></div>
 
       {/* 메인 콘텐츠 */}
-      <div className="relative flex flex-col items-center px-8 pt-6 pb-16 z-10 flex-grow">
-        {/* 원형 이미지 컨테이너 */}
-        <div className={`w-full aspect-square max-w-[320px] rounded-full overflow-hidden relative mt-4 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-          <div className="w-full h-full rounded-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl">
+      <div className="relative flex flex-col items-center px-6 pt-4 pb-16 z-10 flex-grow">
+        {/* 타원형 이미지 컨테이너 */}
+        <div className={`w-full max-w-[340px] relative mt-2 mb-6 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl" style={{ height: '440px', borderRadius: '50% / 65%' }}>
             <img
               src="https://images.unsplash.com/photo-1596079890744-c1a0462d0975?auto=format&fit=crop&q=80"
               alt="여성이 노트북을 사용하는 모습"
@@ -54,7 +54,7 @@ const LandingPage: React.FC = () => {
             />
 
             {/* 메시지 버블 - 좌측 */}
-            <div className={`absolute left-0 bottom-1/3 bg-white rounded-full shadow-md flex items-center p-1.5 px-3 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
+            <div className={`absolute left-0 bottom-2/5 bg-white rounded-full shadow-md flex items-center p-1.5 px-3 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
               <div className="bg-purple-500 rounded-full w-7 h-7 flex items-center justify-center mr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998L10 2 2.003 5.884z" />
@@ -64,7 +64,7 @@ const LandingPage: React.FC = () => {
             </div>
             
             {/* 명상 버블 - 우측 */}
-            <div className={`absolute right-2 top-1/3 bg-white rounded-full shadow-md flex items-center p-1.5 px-3 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
+            <div className={`absolute right-0 top-1/4 bg-white rounded-full shadow-md flex items-center p-1.5 px-3 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
               <div className="bg-orange-400 rounded-full w-7 h-7 flex items-center justify-center mr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clipRule="evenodd" />
@@ -77,8 +77,9 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-4">
-          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            Create Reminders<br />in <span className="inline-block bg-orange-400 px-2 py-0.5 text-white rounded-md">Seconds</span>
+          <h1 className={`text-3xl font-bold leading-tight transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            Little actions, <span className="inline-block bg-orange-400 px-2 py-0.5 text-white rounded-md">Big results</span>.<br />
+            Set it, Do it, Repeat.
           </h1>
 
           <div className="flex items-center mt-6 justify-center">
