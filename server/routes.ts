@@ -4,10 +4,20 @@ import { storage } from "./storage";
 import { generateHabitInsights } from "./ai";
 import { z } from "zod";
 import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
+import { sessionMiddleware, login, logout, getCurrentUser, checkAuthStatus, isAuthenticated } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // 세션 미들웨어 설정
+  app.use(sessionMiddleware);
+  
   // Initialize predefined data
   await storage.initializePredefinedData();
+  
+  // 인증 관련 라우트
+  app.post("/api/auth/login", login);
+  app.post("/api/auth/logout", logout);
+  app.get("/api/auth/user", getCurrentUser);
+  app.get("/api/auth/status", checkAuthStatus);
 
   // Get all users
   app.get("/api/users", async (req, res) => {
@@ -36,11 +46,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(habits);
   });
 
-  // Get all habit entries for a user
-  app.get("/api/users/:userId/entries", async (req, res) => {
+  // Get all habit entries for a user (인증 필요)
+  app.get("/api/users/:userId/entries", isAuthenticated, async (req, res) => {
     const userId = parseInt(req.params.userId);
     if (isNaN(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
+    }
+    
+    // 자신의 데이터만 접근 가능하도록 제한
+    if (userId !== req.session.userId) {
+      return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
 
     const entries = await storage.getUserHabitEntries(userId);
