@@ -129,9 +129,49 @@ export default function LoginPage() {
           <p className="text-gray-600 mb-2">
             계정 아이디: <span className="font-medium">user1</span>부터 <span className="font-medium">user8</span>까지 이용 가능합니다.
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-4">
             (기본 비밀번호: <span className="font-medium">password123</span>)
           </p>
+          
+          <div className="border-t pt-4">
+            <p className="text-sm font-medium mb-3">빠른 로그인 (배포 환경용)</p>
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { id: 'user1', name: '곽완신', avatar: '👨‍💼' },
+                { id: 'user2', name: '유은옥', avatar: '👩‍💼' },
+                { id: 'user3', name: '이경희', avatar: '👨‍🦱' },
+                { id: 'user4', name: '임용녀', avatar: '👩‍🦰' },
+                { id: 'user5', name: '박혜경', avatar: '👱‍♀️' },
+                { id: 'zzzro', name: '김유나', avatar: '👩‍🦳' },
+                { id: 'user7', name: '최지혜', avatar: '👩‍🦱' },
+                { id: 'user8', name: '김미희', avatar: '👧' }
+              ].map(user => (
+                <button
+                  key={user.id}
+                  onClick={() => {
+                    // 로컬 스토리지에 사용자 정보 저장
+                    const userData = {
+                      id: ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8'].indexOf(user.id === 'zzzro' ? 'user6' : user.id) + 1,
+                      name: user.name,
+                      username: user.id,
+                      avatar: user.avatar
+                    };
+                    
+                    localStorage.setItem('userAuth', JSON.stringify({
+                      isLoggedIn: true,
+                      user: userData
+                    }));
+                    
+                    window.location.href = '/';
+                  }}
+                  className="flex flex-col items-center bg-blue-50 hover:bg-blue-100 p-2 rounded transition-colors"
+                >
+                  <span className="text-xl">{user.avatar}</span>
+                  <span className="text-xs mt-1 truncate w-full text-center">{user.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
