@@ -164,9 +164,10 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
       });
     } catch (error) {
-      if (error.response?.status === 401) {
+      const err = error as { response?: { status: number } };
+      if (err?.response?.status === 401) {
         console.info('로그인이 필요합니다');
-      } else if (error.response?.status === 403) {
+      } else if (err?.response?.status === 403) {
         console.info('다른 사용자의 데이터를 수정할 권한이 없습니다');
       } else {
         console.error('Error updating habit entry:', error);
