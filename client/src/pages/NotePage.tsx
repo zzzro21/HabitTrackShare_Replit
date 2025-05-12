@@ -643,25 +643,25 @@ const NotePage: React.FC = () => {
               </div>
 
               {/* 소감/피드백 */}
-              <div className="border rounded-lg overflow-hidden">
-                <div className="bg-gray-100 px-3 py-1.5 text-sm font-medium">
-                  소감/피드백
+              <div className={`border rounded-lg overflow-hidden ${!isOwnData ? 'border-blue-500 border-2' : ''}`}>
+                <div className={`${isOwnData ? 'bg-gray-100' : 'bg-blue-100'} px-3 py-1.5 text-sm font-medium`}>
+                  {isOwnData ? '소감/피드백' : '👉 친구에게 소감/피드백 작성 가능!'}
                 </div>
-                <div className="p-2">
+                <div className={`p-2 ${!isOwnData ? 'bg-blue-50' : ''}`}>
                   <div className="flex">
                     <textarea 
                       ref={feedbackTextAreaRef}
                       value={feedback || ''}
                       onChange={(e) => setFeedback(e.target.value)}
                       placeholder={isOwnData ? "오늘의 활동에 대한 소감을 작성하세요..." : "친구에게 응원과 피드백을 남겨보세요..."}
-                      className="flex-grow border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
+                      className={`flex-grow border ${!isOwnData ? 'border-blue-300' : 'border-gray-300'} min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none`}
                     />
                     <button
                       onClick={handleSaveFeedback}
                       disabled={isSubmitting}
-                      className={`ml-2 self-start ${isOwnData ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-blue-500 hover:bg-blue-600 text-white'} font-medium py-1.5 px-2 rounded text-xs h-8`}
+                      className={`ml-2 self-start ${isOwnData ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-blue-500 hover:bg-blue-600 text-white'} font-medium py-1.5 px-3 rounded text-xs h-8`}
                     >
-                      {isOwnData ? "저장" : "피드백 남기기"}
+                      {isOwnData ? "저장" : "친구에게 피드백 남기기"}
                     </button>
                   </div>
                 </div>
@@ -670,18 +670,19 @@ const NotePage: React.FC = () => {
           )}
           
           <div className="mt-6">
-            <button
-              onClick={handleSaveAllNotes}
-              disabled={isSubmitting || isFetching}
-              className={`w-full ${isOwnData ? 'bg-primary hover:bg-primary/90' : 'bg-blue-500 hover:bg-blue-600'} text-white font-medium py-2 px-4 rounded-md`}
-            >
-              {isSubmitting 
-                ? "저장 중..." 
-                : isOwnData 
-                  ? "오늘도 해냈다! 💪" 
-                  : "친구에게 응원 피드백 남기기 🙌"
-              }
-            </button>
+            {isOwnData ? (
+              <button
+                onClick={handleSaveAllNotes}
+                disabled={isSubmitting || isFetching}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-md"
+              >
+                {isSubmitting ? "저장 중..." : "오늘도 해냈다! 💪"}
+              </button>
+            ) : (
+              <div className="text-center text-gray-500 text-sm italic">
+                친구의 데이터는 위 소감/피드백 영역에서 저장 버튼을 이용해 피드백만 작성할 수 있습니다.
+              </div>
+            )}
           </div>
         </div>
       </main>
