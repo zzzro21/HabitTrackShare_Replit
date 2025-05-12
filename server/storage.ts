@@ -28,6 +28,7 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserPassword(userId: number, newPassword: string): Promise<boolean>;
   getAllUsers(): Promise<User[]>;
   
   // Habit methods
@@ -82,6 +83,19 @@ export class DatabaseStorage implements IStorage {
 
   async getAllUsers(): Promise<User[]> {
     return await db.select().from(users);
+  }
+  
+  async updateUserPassword(userId: number, newPassword: string): Promise<boolean> {
+    try {
+      await db
+        .update(users)
+        .set({ password: newPassword })
+        .where(eq(users.id, userId));
+      return true;
+    } catch (error) {
+      console.error("비밀번호 업데이트 오류:", error as Error);
+      return false;
+    }
   }
 
   // Habit methods

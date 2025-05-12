@@ -29,6 +29,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/logout", logout);
   app.get("/api/auth/user", getCurrentUser);
   app.get("/api/auth/status", checkAuthStatus);
+  
+  // 비밀번호 변경 API
+  app.post("/api/auth/change-password", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.session as any).userId;
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ success: false, message: "현재 비밀번호와 새 비밀번호를 모두 입력해주세요." });
+      }
+      
+      // 현재 사용자 정보 확인
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "사용자를 찾을 수 없습니다." });
+      }
+      
+      // 현재 비밀번호 확인
+      if (user.password !== currentPassword) {
+        return res.status(401).json({ success: false, message: "현재 비밀번호가 일치하지 않습니다." });
+      }
+      
+      // 비밀번호 변경
+      const success = await storage.updateUserPassword(userId, newPassword);
+      
+      if (success) {
+        return res.status(200).json({ success: true, message: "비밀번호가 성공적으로 변경되었습니다." });
+      } else {
+        return res.status(500).json({ success: false, message: "비밀번호 변경 중 오류가 발생했습니다." });
+      }
+    } catch (error) {
+      console.error("비밀번호 변경 오류:", error);
+      return res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
+    }
+  });
 
   // Get all users
   app.get("/api/users", async (req, res) => {
