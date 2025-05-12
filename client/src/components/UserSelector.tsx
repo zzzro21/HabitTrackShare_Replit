@@ -3,7 +3,7 @@ import { useHabit } from '@/lib/HabitContext';
 import { useAuth } from '@/hooks/useAuth';
 
 const UserSelector: React.FC = () => {
-  const { users, activeUser, isLoading } = useHabit();
+  const { users, activeUser, setActiveUser, isLoading } = useHabit();
   const { user: authUser } = useAuth();
 
   if (isLoading) {
@@ -30,11 +30,22 @@ const UserSelector: React.FC = () => {
 
   return (
     <div className="mb-3">
-      <h2 className="text-sm font-medium text-gray-700 mb-1">현재 사용자</h2>
-      <div className="flex items-center px-3 py-1.5 rounded-md bg-blue-50 text-blue-700">
-        <span className="mr-1.5 text-xl">{currentUser.avatar}</span>
-        <span className="font-medium">{currentUser.name}</span>
-        <span className="ml-1.5 text-xs text-blue-500">({currentUser.username})</span>
+      <h2 className="text-sm font-medium text-gray-700 mb-1">사용자 선택</h2>
+      <div className="flex flex-wrap gap-1.5">
+        {users.map(user => (
+          <button
+            key={user.id}
+            onClick={() => setActiveUser(user.id)}
+            className={`flex items-center px-2 py-1 rounded-full text-xs border transition-colors ${
+              user.id === activeUser
+                ? 'bg-blue-50 border-blue-300 text-blue-700 font-medium'
+                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <span className="mr-1">{user.avatar}</span>
+            {user.name}
+          </button>
+        ))}
       </div>
     </div>
   );
