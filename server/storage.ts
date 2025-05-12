@@ -323,15 +323,19 @@ export class DatabaseStorage implements IStorage {
             .from(users)
             .where(eq(users.username, demoUser.username));
             
-          if (existingUser && existingUser.name !== demoUser.name) {
-            await db
-              .update(users)
-              .set({ 
-                name: demoUser.name,
-                avatar: demoUser.avatar
-              })
-              .where(eq(users.username, demoUser.username));
-            console.log(`사용자 '${demoUser.username}'의 이름이 '${demoUser.name}'로 업데이트되었습니다.`);
+          if (existingUser) {
+            // 이름이나 아바타가 변경되었을 때만 업데이트
+            if (existingUser.name !== demoUser.name || existingUser.avatar !== demoUser.avatar) {
+              await db
+                .update(users)
+                .set({ 
+                  name: demoUser.name,
+                  avatar: demoUser.avatar
+                })
+                .where(eq(users.username, demoUser.username));
+              console.log(`사용자 '${demoUser.username}'(${demoUser.name})의 정보가 업데이트되었습니다. 아바타: ${demoUser.avatar}`);
+            }
+          }
           }
         }
       }
