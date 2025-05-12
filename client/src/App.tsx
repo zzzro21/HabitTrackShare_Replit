@@ -44,13 +44,20 @@ function Router() {
 function NavBar() {
   const [user, setUser] = useState<{ id: number; name: string; username: string; avatar: string } | null>(null);
   
-  // 사용자 정보 불러오기
+  // 사용자 정보 불러오기 - 항상 최신 데이터로 초기화
   useEffect(() => {
     try {
-      const currentUser = getCurrentUser(); // noauth.ts에서 가져오기
-      setUser(currentUser);
+      // 로컬 스토리지 기존 데이터 삭제
+      localStorage.removeItem('userAuth');
+      
+      // 강제로 새 데이터 생성
+      import('./noauth').then(({ setupNoAuth }) => {
+        const defaultUser = setupNoAuth();
+        setUser(defaultUser);
+        console.log('사용자 정보 초기화:', defaultUser.name);
+      });
     } catch (err) {
-      console.error('사용자 정보 가져오기 오류:', err);
+      console.error('사용자 정보 초기화 오류:', err);
     }
   }, []);
   
