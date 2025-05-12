@@ -142,8 +142,7 @@ const LandingPage: React.FC = () => {
 
   // 습관 트래커로 이동
   const handleBeginClick = () => {
-    // 직접 URL 변경 방식으로 이동 
-    window.location.href = '/home';
+    navigate('/home'); // 홈 페이지 경로로 이동
   };
   
   // 프로필 이미지 선택 함수

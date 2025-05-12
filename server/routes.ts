@@ -7,6 +7,9 @@ import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchem
 import { sessionMiddleware, login, logout, getCurrentUser, checkAuthStatus, isAuthenticated, onlySelfModify, allowFeedbackForAny } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // 세션 미들웨어 및 쿠키 설정
+  app.use(sessionMiddleware);
+  
   // 모든 응답에 CORS 헤더 추가
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
@@ -14,15 +17,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.header('Access-Control-Allow-Credentials', 'true');
     next();
-  });
-  
-  // SPA 라우팅을 위한 처리: 클라이언트 라우트에 대한 모든 GET 요청을 index.html로 리다이렉트
-  app.get(['/home', '/friends', '/ranking', '/insights', '/settings', '/notes'], (req, res, next) => {
-    if (req.accepts('html')) {
-      res.sendFile('index.html', { root: './client/dist' });
-    } else {
-      next();
-    }
   });
   
   // Initialize predefined data
@@ -39,19 +33,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // 기본 사용자 정보 제공 (인증 없이)
-  app.get("/api/auth/user", (req, res) => {
-    res.json({
-      id: 6,
-      name: '김유나',
-      username: 'zzzro',
-      avatar: '👩‍🦳'
-    });
-  });
-  
-  app.get("/api/auth/status", (req, res) => {
-    res.json({ isAuthenticated: true });
-  });
+  // 인증 관련 라우트
+  app.post("/api/auth/login", login);
+  app.post("/api/auth/logout", logout);
+  app.get("/api/auth/user", getCurrentUser);
+  app.get("/api/auth/status", checkAuthStatus);
   
   // 비밀번호 변경 API
   app.post("/api/auth/change-password", isAuthenticated, async (req, res) => {
