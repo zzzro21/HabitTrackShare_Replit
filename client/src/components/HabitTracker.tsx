@@ -21,8 +21,12 @@ const HabitTracker: React.FC = () => {
   };
 
   // Handle change in habit value
-  const handleValueChange = (habitId: number, day: number, value: number) => {
-    updateHabitEntry(habitId, day, value);
+  const handleValueChange = async (habitId: number, day: number, value: number) => {
+    try {
+      await updateHabitEntry(habitId, day, value);
+    } catch (error) {
+      console.error("습관 업데이트 중 오류 발생:", error);
+    }
   };
 
   if (isLoading) {

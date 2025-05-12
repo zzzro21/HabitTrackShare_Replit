@@ -1,40 +1,40 @@
 import React from 'react';
 import { useHabit } from '@/lib/HabitContext';
+import { useAuth } from '@/hooks/useAuth';
 
 const UserSelector: React.FC = () => {
-  const { users, activeUser, setActiveUser, isLoading } = useHabit();
+  const { users, activeUser, isLoading } = useHabit();
+  const { user: authUser } = useAuth();
 
   if (isLoading) {
     return (
       <div className="mb-3">
-        <h2 className="text-sm font-medium text-gray-700 mb-1">사용자 선택</h2>
+        <h2 className="text-sm font-medium text-gray-700 mb-1">현재 사용자</h2>
         <div className="flex flex-wrap gap-1">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-7 w-16 bg-gray-200 animate-pulse rounded-full"></div>
-          ))}
+          <div className="h-7 w-24 bg-gray-200 animate-pulse rounded-full"></div>
         </div>
+      </div>
+    );
+  }
+
+  // 로그인한 사용자 정보 가져오기
+  const currentUser = users.find(u => u.id === activeUser);
+
+  if (!currentUser) {
+    return (
+      <div className="mb-3 px-2 py-1 bg-yellow-50 text-yellow-700 rounded">
+        로그인이 필요합니다
       </div>
     );
   }
 
   return (
     <div className="mb-3">
-      <h2 className="text-sm font-medium text-gray-700 mb-1">사용자 선택</h2>
-      <div className="flex flex-wrap gap-1.5">
-        {users.map((user) => (
-          <button
-            key={user.id}
-            onClick={() => setActiveUser(user.id)}
-            className={`flex items-center px-2 py-0.5 rounded-full text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:ring-opacity-50 transition-colors ${
-              activeUser === user.id
-                ? 'bg-primary text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            <span className="mr-0.5 text-sm">{user.avatar}</span>
-            <span className="truncate max-w-[3.5rem]">{user.name}</span>
-          </button>
-        ))}
+      <h2 className="text-sm font-medium text-gray-700 mb-1">현재 사용자</h2>
+      <div className="flex items-center px-3 py-1.5 rounded-md bg-blue-50 text-blue-700">
+        <span className="mr-1.5 text-xl">{currentUser.avatar}</span>
+        <span className="font-medium">{currentUser.name}</span>
+        <span className="ml-1.5 text-xs text-blue-500">({currentUser.username})</span>
       </div>
     </div>
   );
