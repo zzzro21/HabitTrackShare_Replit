@@ -635,7 +635,8 @@ const NotePage: React.FC = () => {
                       value={notes[5] || ''}
                       onChange={(e) => handleNoteChange(5, e.target.value)}
                       placeholder="전달한 제품과 소비자 관리 내용을 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
+                      className={`w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none ${!isOwnData ? 'bg-gray-50' : ''}`}
+                      readOnly={!isOwnData}
                     />
                   </div>
                 </div>
@@ -652,15 +653,15 @@ const NotePage: React.FC = () => {
                       ref={feedbackTextAreaRef}
                       value={feedback || ''}
                       onChange={(e) => setFeedback(e.target.value)}
-                      placeholder="오늘의 활동에 대한 소감이나 피드백을 작성하세요..."
+                      placeholder={isOwnData ? "오늘의 활동에 대한 소감을 작성하세요..." : "친구에게 응원과 피드백을 남겨보세요..."}
                       className="flex-grow border border-gray-300 min-h-[60px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
                     />
                     <button
                       onClick={handleSaveFeedback}
                       disabled={isSubmitting}
-                      className="ml-2 self-start bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-1.5 px-2 rounded text-xs h-8"
+                      className={`ml-2 self-start ${isOwnData ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-blue-500 hover:bg-blue-600 text-white'} font-medium py-1.5 px-2 rounded text-xs h-8`}
                     >
-                      저장
+                      {isOwnData ? "저장" : "피드백 남기기"}
                     </button>
                   </div>
                 </div>
@@ -672,9 +673,14 @@ const NotePage: React.FC = () => {
             <button
               onClick={handleSaveAllNotes}
               disabled={isSubmitting || isFetching}
-              className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-md"
+              className={`w-full ${isOwnData ? 'bg-primary hover:bg-primary/90' : 'bg-blue-500 hover:bg-blue-600'} text-white font-medium py-2 px-4 rounded-md`}
             >
-              {isSubmitting ? "저장 중..." : "오늘도 해냈다! 💪"}
+              {isSubmitting 
+                ? "저장 중..." 
+                : isOwnData 
+                  ? "오늘도 해냈다! 💪" 
+                  : "친구에게 응원 피드백 남기기 🙌"
+              }
             </button>
           </div>
         </div>
