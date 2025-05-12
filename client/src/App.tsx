@@ -14,6 +14,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
 import LoginPage from "@/pages/LoginPage";
+import DirectLoginPage from "@/pages/DirectLoginPage";
 
 // 인증이 필요한 라우트를 보호하는 컴포넌트
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -43,6 +44,7 @@ function Router() {
     <Switch>
       {/* 공개 라우트 */}
       <Route path="/login" component={LoginPage} />
+      <Route path="/direct-login" component={DirectLoginPage} />
       
       {/* 보호된 라우트 */}
       <Route path="/">
