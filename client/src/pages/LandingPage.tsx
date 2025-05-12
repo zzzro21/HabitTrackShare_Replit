@@ -75,7 +75,7 @@ const LandingPage: React.FC = () => {
             </div>
             
             {/* AI 비서 버블 - 우측 */}
-            <div className={`absolute right-0 top-1/4 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
+            <div className={`absolute -right-12 top-1/4 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
               <div className="bg-orange-400 rounded-full w-10 h-10 flex items-center justify-center mr-3">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
