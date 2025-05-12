@@ -122,8 +122,8 @@ const LandingPage: React.FC = () => {
     // 실제 배포 시에는 날짜 기반 랜덤 선택으로 복원할 것
     // setQuote(motivationalQuotes[quoteIndex]);
     
-    // 긴 문장 예시
-    setQuote("포기는 항상 실패보다 더 쉽습니다. 그러나 더 어려운 길을 선택하세요. 그것이 성공으로 가는 길입니다.");
+    // 긴 문장 예시 - 각 문장 끝에 줄바꿈 추가
+    setQuote("포기는 항상 실패보다 더 쉽습니다.\n그러나 더 어려운 길을 선택하세요.\n그것이 성공으로 가는 길입니다.");
 
     return () => clearTimeout(timer);
   }, []);
@@ -223,7 +223,7 @@ const LandingPage: React.FC = () => {
                 </svg>
               </span>
             </div>
-            <p className={`text-gray-700 text-2xl text-center max-w-md mx-auto transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300`}>
+            <p className={`text-gray-700 text-2xl text-center max-w-md mx-auto transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`}>
               "{quote}"
             </p>
           </div>
