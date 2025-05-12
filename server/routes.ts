@@ -202,7 +202,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== 6) {
+    if (userId !== req.session.userId) {
       return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
@@ -225,7 +225,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== 6) {
+    if (userId !== req.session.userId) {
       return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
@@ -242,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create or update a habit note (인증 필요 + 자신의 데이터만 수정 가능)
-  app.post("/api/notes", async (req, res) => {
+  app.post("/api/notes", isAuthenticated, onlySelfModify, async (req, res) => {
     try {
       const validatedData = insertHabitNoteSchema.parse(req.body);
       
@@ -283,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== 6) {
+    if (userId !== req.session.userId) {
       return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
@@ -300,11 +300,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create or update daily feedback (인증 필요) - 친구의 소감/피드백 작성 가능
-  app.post("/api/feedback", async (req, res) => {
+  app.post("/api/feedback", isAuthenticated, allowFeedbackForAny, async (req, res) => {
     try {
       const validatedData = insertDailyFeedbackSchema.parse(req.body);
       
-      // 인증 제거됨 - 모든 사용자 접근 가능
+      // 인증 확인
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "로그인이 필요합니다." });
+      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
@@ -338,7 +341,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // 자신의 데이터만 접근 가능하도록 제한
-      if (userId !== 6) {
+      if (userId !== req.session.userId) {
         return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 인사이트만 볼 수 있습니다." });
       }
       
