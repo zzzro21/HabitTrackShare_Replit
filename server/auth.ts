@@ -22,8 +22,8 @@ export const sessionMiddleware = session({
   cookie: {
     maxAge: COOKIE_MAX_AGE, 
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // 배포 환경에서만 secure 쿠키 사용
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' // 배포 환경에서 sameSite none 설정
+    secure: false, // secure 쿠키 비활성화
+    sameSite: 'lax' // sameSite lax 사용
   }
 });
 
@@ -56,9 +56,11 @@ export async function login(req: Request, res: Response) {
     req.session.username = user.username;
     req.session.name = user.name;
     
-    // CORS 이슈를 방지하기 위해 헤더 설정
+    // 응답 헤더 설정
     res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
     res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     
     // 민감한 정보를 제외한 사용자 정보 반환
     const userData = {
