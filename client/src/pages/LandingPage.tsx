@@ -317,12 +317,14 @@ const LandingPage: React.FC = () => {
 
         {/* 하단 버튼 영역 */}
         <div className="w-full mt-auto">
-          <button
-            onClick={handleBeginClick}
-            className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-8 rounded-full text-3xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
-          >
-            Let's Begin
-          </button>
+          <div className="flex justify-center">
+            <button
+              onClick={handleBeginClick}
+              className={`w-3/4 max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-8 rounded-full text-3xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
+            >
+              Let's Begin
+            </button>
+          </div>
           
           {/* 홈 인디케이터 (iOS 스타일) */}
           <div className="w-full flex justify-center mt-8">
