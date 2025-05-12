@@ -314,6 +314,12 @@ const NotePage: React.FC = () => {
 
   // 뒤로가기 핸들러
   const handleBack = () => {
+    // 점검표 페이지로 돌아가기
+    setLocation('/home');
+  };
+
+  // 메인으로 돌아가기 핸들러
+  const handleBackToMain = () => {
     setLocation('/');
   };
 
@@ -325,12 +331,22 @@ const NotePage: React.FC = () => {
             <button 
               onClick={handleBack}
               className="p-1 mr-2 rounded-full text-gray-500 hover:bg-gray-100"
+              title="점검표로 돌아가기"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <h1 className="text-lg font-bold flex-1 text-center">습관 일지</h1>
+            <button 
+              onClick={handleBackToMain}
+              className="p-1 ml-2 rounded-full text-gray-500 hover:bg-gray-100"
+              title="메인으로 돌아가기"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+            </button>
           </div>
         </header>
         
@@ -356,12 +372,22 @@ const NotePage: React.FC = () => {
           <button 
             onClick={handleBack}
             className="p-1 mr-2 rounded-full text-gray-500 hover:bg-gray-100"
+            title="점검표로 돌아가기"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <h1 className="text-lg font-bold flex-1 text-center">습관 일지</h1>
+          <button 
+            onClick={handleBackToMain}
+            className="p-1 ml-2 rounded-full text-gray-500 hover:bg-gray-100"
+            title="메인으로 돌아가기"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+          </button>
         </div>
       </header>
       
