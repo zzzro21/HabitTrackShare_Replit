@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,21 +13,17 @@ import RankingPage from "@/pages/RankingPage";
 import SettingsPage from "@/pages/SettingsPage";
 import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
+import LandingPage from "@/pages/LandingPage";
 
 // 라우터 컴포넌트 - 모든 페이지는 로그인 없이 바로 접근 가능
 function Router() {
   return (
     <Switch>
-      {/* 로그인 페이지 접근 시 홈으로 리디렉션 */}
-      <Route path="/login">
-        {() => {
-          window.location.href = '/';
-          return <div>리디렉션 중...</div>;
-        }}
-      </Route>
+      {/* 메인 경로에 랜딩 페이지 표시 */}
+      <Route path="/" component={LandingPage} />
       
-      {/* 모든 페이지는 로그인 없이 바로 접근 가능 */}
-      <Route path="/" component={Home} />
+      {/* 습관 트래커 페이지들 */}
+      <Route path="/home" component={Home} />
       <Route path="/friends" component={FriendsPage} />
       <Route path="/ranking" component={RankingPage} />
       <Route path="/insights" component={InsightsPage} />
@@ -102,11 +98,15 @@ function NavBar() {
 }
 
 function App() {
+  const [location] = useLocation();
+  const isLandingPage = location === '/';
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <NavBar />
+        {/* 랜딩 페이지에서는 네비게이션 바를 표시하지 않음 */}
+        {!isLandingPage && <NavBar />}
         <HabitProvider>
           <Router />
         </HabitProvider>
