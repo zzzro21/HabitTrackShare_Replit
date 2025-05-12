@@ -102,53 +102,53 @@
   /* 사용 가능한 한글 폰트 클래스 */
   .font-noto {
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-nanum {
     font-family: 'Nanum Gothic', sans-serif;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-blackhan {
     font-family: 'Black Han Sans', sans-serif;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-songmyung {
     font-family: 'Song Myung', serif;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-gothic {
     font-family: 'Gothic A1', sans-serif;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   /* 한글 필기체 폰트 */
   .font-pen {
     font-family: 'Nanum Pen Script', cursive;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-gamja {
     font-family: 'Gamja Flower', cursive;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-poorstory {
     font-family: 'Poor Story', cursive;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-gaegu {
     font-family: 'Gaegu', cursive;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
 
   .font-singleday {
     font-family: 'Single Day', cursive;
-    font-size: 130%; /* 30% 더 크게 */
+    font-size: 140%; /* 40% 더 크게 */
   }
   
   /* 영문 모던 폰트 */
