@@ -73,28 +73,43 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Load users, habits, and auth status on mount
+  // Load users, habits, and get user from noauth
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         setIsLoading(true);
         
-        // Fetch auth status first to know who's logged in
-        const authResponse = await fetch('/api/auth/status');
-        const authData = await authResponse.json();
+        // 로컬 스토리지/noauth에서 사용자 정보 가져오기
+        let localUser;
+        try {
+          // noauth 모듈에서 현재 사용자 가져오기
+          const { getCurrentUser } = await import('../noauth');
+          localUser = getCurrentUser();
+          
+          if (localUser && localUser.id) {
+            console.log('사용자 정보 로드:', localUser.name);
+            setCurrentUserId(localUser.id);
+            setActiveUser(localUser.id);
+          }
+        } catch (e) {
+          console.error('사용자 정보 액세스 오류:', e);
+        }
         
         // Fetch users
         const usersResponse = await fetch('/api/users');
         const usersData = await usersResponse.json();
         setUsers(usersData);
         
-        // Set active user to the logged in user
-        if (authData.isAuthenticated && authData.user) {
-          setActiveUser(authData.user.id);
-          setCurrentUserId(authData.user.id);
-        } else if (usersData.length > 0 && activeUser === 0) {
-          // Fallback if not authenticated (this might not work due to auth requirements)
-          setActiveUser(usersData[0].id);
+        // Set user if not set from local storage
+        if (!localUser && usersData.length > 0) {
+          // 기본 사용자로 김철수 (ID: 6) 사용
+          const defaultUser = usersData.find(u => u.id === 6) || usersData[0];
+          setActiveUser(defaultUser.id);
+          setCurrentUserId(defaultUser.id);
+          
+          // noauth 설정 업데이트
+          const { setupNoAuth } = await import('../noauth');
+          setupNoAuth();
         }
         
         // Fetch habits
@@ -109,12 +124,12 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         
         setHabits(habitsWithScoring);
         
-        // Fetch entries for active user (will only work if authenticated)
-        if (authData.isAuthenticated && authData.user) {
-          await fetchEntriesForUser(authData.user.id);
+        // 활성 사용자의 기록 가져오기
+        if (localUser) {
+          await fetchEntriesForUser(localUser.id);
         }
       } catch (error) {
-        console.error('Error fetching initial data:', error);
+        console.error('데이터 로드 오류:', error);
       } finally {
         setIsLoading(false);
       }
@@ -135,28 +150,18 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       setIsLoading(true);
       
-      // 인증 상태 확인
-      const authResponse = await fetch('/api/auth/status');
-      const authData = await authResponse.json();
+      // 모든 사용자 데이터에 접근 가능 - 인증 우회
+      const entriesResponse = await fetch(`/api/users/${userId}/entries`);
       
-      if (authData.isAuthenticated && authData.user) {
-        // 자신의 데이터는 접근 가능
-        const entriesResponse = await fetch(`/api/users/${authData.user.id}/entries`);
-        
-        if (entriesResponse.ok) {
-          const entriesData = await entriesResponse.json();
-          setHabitEntries(entriesData);
-        } else {
-          console.info('자신의 데이터만 볼 수 있습니다.');
-          // 다른 사용자의 데이터는 볼 수 없지만, UI 선택은 가능하게 함
-          setHabitEntries([]);
-        }
+      if (entriesResponse.ok) {
+        const entriesData = await entriesResponse.json();
+        setHabitEntries(entriesData);
       } else {
-        console.info('로그인이 필요합니다.');
+        console.info('데이터 로드 오류: 서버에서 사용자 데이터를 가져올 수 없습니다.');
         setHabitEntries([]);
       }
     } catch (error) {
-      console.error(`Error fetching entries for user ${userId}:`, error);
+      console.error(`사용자 ${userId}의 데이터 로드 오류:`, error);
       setHabitEntries([]);
     } finally {
       setIsLoading(false);
