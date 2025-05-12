@@ -21,21 +21,18 @@ function ProtectedRoute({ component: Component }: { component: React.ComponentTy
   const { isAuthenticated, isLoading } = useAuth();
   const [, setLocation] = useLocation();
   
-  // 로컬 스토리지에서 인증 정보 확인
-  const localAuth = localStorage.getItem('userAuth');
-  const isLocallyAuthenticated = localAuth ? JSON.parse(localAuth).isLoggedIn : false;
-
   // 로딩 중일 때는 아무것도 표시하지 않음
-  if (isLoading && !isLocallyAuthenticated) {
+  if (isLoading) {
     return <div className="flex justify-center items-center h-screen">로딩 중...</div>;
   }
 
-  // 세션 인증이나 로컬 스토리지 인증 중 하나라도 성공한 경우
-  if (isAuthenticated || isLocallyAuthenticated) {
+  // 인증된 경우 컴포넌트 렌더링
+  if (isAuthenticated) {
     return <Component />;
   }
   
   // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+  console.log("인증 실패: 로그인 페이지로 리다이렉트");
   return <Redirect to="/login" />;
 }
 

@@ -42,6 +42,13 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       const response = await apiRequest<{ message: string; user: AuthUser }>('POST', '/api/auth/login', credentials);
+      // 로그인 성공 시 로컬 스토리지에 인증 정보 저장
+      if (response && response.user) {
+        localStorage.setItem('userAuth', JSON.stringify({
+          isLoggedIn: true,
+          user: response.user
+        }));
+      }
       return response;
     },
     onSuccess: () => {
@@ -105,9 +112,13 @@ export function useAuth() {
     }
   }, [isLoading]);
 
+  // 실제 인증 상태는 서버 세션과 로컬 스토리지 둘 중 하나라도 인증된 상태이면 인증됨
+  const effectiveIsAuthenticated = isAuthenticated || isLocallyAuthenticated;
+  const effectiveUser = user || localUser;
+  
   return {
-    isAuthenticated,
-    user,
+    isAuthenticated: effectiveIsAuthenticated,
+    user: effectiveUser,
     login,
     logout,
     isLoading: isLoading || loginMutation.isPending || logoutMutation.isPending,
