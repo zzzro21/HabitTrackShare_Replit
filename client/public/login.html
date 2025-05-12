@@ -3,129 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>습관트래커 바로 로그인</title>
+  <title>모바일 긴급 로그인</title>
   <style>
     body {
-      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-      background-color: #f5f7fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      padding: 20px;
+      background-color: #f7f7f7;
+      color: #333;
     }
     .container {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      width: 90%;
       max-width: 500px;
-      text-align: center;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     h1 {
-      color: #3b82f6;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2563eb;
+    }
+    .info-box {
+      background-color: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
       margin-bottom: 20px;
     }
-    p {
-      color: #4b5563;
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
-    .buttons {
+    .users-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-    .button {
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 12px 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      text-decoration: none;
+    .user-button {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 15px;
+      background-color: #e6f7ff;
+      border: 1px solid #91d5ff;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .button:hover {
-      background-color: #2563eb;
+    .user-button:hover {
+      background-color: #bae7ff;
     }
     .avatar {
-      font-size: 18px;
-      margin-right: 8px;
+      font-size: 30px;
+      margin-bottom: 5px;
+    }
+    .name {
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+    .username {
+      font-size: 12px;
+      color: #666;
     }
     .note {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 30px;
-    }
-    .footer {
-      margin-top: 40px;
-      font-size: 12px;
-      color: #9ca3af;
+      background-color: #fff8e1;
+      border: 1px solid #ffd54f;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>습관트래커 바로 로그인</h1>
-    <p>아래 버튼을 클릭하여 특정 사용자로 바로 로그인할 수 있습니다.<br />서버와의 인증 없이도 로컬 인증 방식으로 앱에 접근합니다.</p>
+    <h1>모바일 긴급 로그인</h1>
     
-    <div class="buttons">
-      <a href="javascript:autoLogin('user1')" class="button"><span class="avatar">👨‍💼</span> 곽완신</a>
-      <a href="javascript:autoLogin('user2')" class="button"><span class="avatar">👩‍💼</span> 유은옥</a>
-      <a href="javascript:autoLogin('user3')" class="button"><span class="avatar">👨‍🦱</span> 이경희</a>
-      <a href="javascript:autoLogin('user4')" class="button"><span class="avatar">👩‍🦰</span> 임용녀</a>
-      <a href="javascript:autoLogin('user5')" class="button"><span class="avatar">👱‍♀️</span> 박혜경</a>
-      <a href="javascript:autoLogin('zzzro')" class="button"><span class="avatar">👩‍🦳</span> 김유나</a>
-      <a href="javascript:autoLogin('user7')" class="button"><span class="avatar">👩‍🦱</span> 최지혜</a>
-      <a href="javascript:autoLogin('user8')" class="button"><span class="avatar">👧</span> 김미희</a>
+    <div class="info-box">
+      <p>모바일 환경에서 로그인 문제가 있을 때 사용하는 긴급 로그인 페이지입니다.</p>
+      <p id="cookie-status"></p>
     </div>
     
-    <p class="note">* 이 방식은 세션 인증 문제를 우회하기 위한 임시 해결책입니다.<br />
-    서버 세션이 정상 작동하면 일반 로그인 방식을 이용해주세요.</p>
+    <h2>사용자 선택</h2>
     
-    <div class="footer">
-      © 2025 습관트래커 | 모든 권리 보유
+    <div class="users-grid" id="users-grid">
+      <!-- 사용자 버튼들이 여기에 동적으로 생성됩니다 -->
+    </div>
+    
+    <div class="note">
+      <p><strong>참고:</strong> 이 로그인 방식은 일반 로그인이 작동하지 않을 때만 사용하세요.</p>
     </div>
   </div>
 
   <script>
-    // 자동 로그인 함수
-    function autoLogin(username) {
-      // 사용자 정보 매핑
-      const userMap = {
-        'user1': { id: 1, name: '곽완신', username: 'user1', avatar: '👨‍💼' },
-        'user2': { id: 2, name: '유은옥', username: 'user2', avatar: '👩‍💼' },
-        'user3': { id: 3, name: '이경희', username: 'user3', avatar: '👨‍🦱' },
-        'user4': { id: 4, name: '임용녀', username: 'user4', avatar: '👩‍🦰' },
-        'user5': { id: 5, name: '박혜경', username: 'user5', avatar: '👱‍♀️' },
-        'user6': { id: 6, name: '김유나', username: 'user6', avatar: '👩‍🦳' },
-        'user7': { id: 7, name: '최지혜', username: 'user7', avatar: '👩‍🦱' },
-        'user8': { id: 8, name: '김미희', username: 'user8', avatar: '👧' },
-        'zzzro': { id: 6, name: '김유나', username: 'zzzro', avatar: '👩‍🦳' }
-      };
-
-      // 사용자 정보가 있으면 로컬 스토리지에 저장
-      if (userMap[username]) {
-        localStorage.setItem('userAuth', JSON.stringify({
+    // 쿠키 확인
+    document.getElementById('cookie-status').innerText = 
+      `쿠키 사용 가능: ${navigator.cookieEnabled ? '예' : '아니오'}`;
+    
+    // 사용자 데이터
+    const users = [
+      { id: 1, name: '곽완신', username: 'user1', avatar: '👨‍💼' },
+      { id: 2, name: '마정수', username: 'user2', avatar: '👩‍💼' },
+      { id: 3, name: '조갑석', username: 'user3', avatar: '👨‍🦱' },
+      { id: 4, name: '이경희', username: 'user4', avatar: '👩‍🦰' },
+      { id: 5, name: '박경희', username: 'user5', avatar: '👱‍♀️' },
+      { id: 6, name: '김철수', username: 'user6', avatar: '👩‍🦳' },
+      { id: 7, name: '최지혜', username: 'user7', avatar: '👩‍🦱' },
+      { id: 8, name: '김미희', username: 'user8', avatar: '👧' }
+    ];
+    
+    // 사용자 버튼 생성
+    const usersGrid = document.getElementById('users-grid');
+    
+    users.forEach(user => {
+      const button = document.createElement('button');
+      button.className = 'user-button';
+      
+      const avatar = document.createElement('span');
+      avatar.className = 'avatar';
+      avatar.textContent = user.avatar;
+      
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = user.name;
+      
+      const username = document.createElement('span');
+      username.className = 'username';
+      username.textContent = user.username;
+      
+      button.appendChild(avatar);
+      button.appendChild(name);
+      button.appendChild(username);
+      
+      button.addEventListener('click', () => handleLogin(user));
+      
+      usersGrid.appendChild(button);
+    });
+    
+    // 로그인 처리 함수
+    function handleLogin(user) {
+      try {
+        const authData = {
           isLoggedIn: true,
-          user: userMap[username]
-        }));
+          user: user
+        };
         
-        alert(`${userMap[username].name} 사용자로 로그인됩니다.`);
+        // 로컬 스토리지와 세션 스토리지 모두 저장
+        localStorage.setItem('userAuth', JSON.stringify(authData));
+        sessionStorage.setItem('userAuth', JSON.stringify(authData));
         
-        // 메인 페이지로 이동
+        alert(`${user.name}님으로 로그인합니다.`);
+        
+        // 홈으로 이동
         window.location.href = '/';
-      } else {
-        alert('잘못된 사용자입니다.');
+      } catch (error) {
+        console.error('로그인 오류:', error);
+        alert('로그인 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
       }
     }
   </script>
