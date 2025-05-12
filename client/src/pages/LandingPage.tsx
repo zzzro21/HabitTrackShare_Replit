@@ -210,7 +210,7 @@ const LandingPage: React.FC = () => {
             Set it, Do it, Repeat."
           </h1>
 
-          <div className="flex items-center mt-4 justify-center relative">
+          <div className="flex items-center mt-12 justify-center relative">
             <span className={`text-red-500 mr-3 absolute -top-2 left-28 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-200`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
