@@ -122,10 +122,19 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       setIsLoading(true);
       const entriesResponse = await fetch(`/api/users/${userId}/entries`);
+      
+      // 401 또는 403 상태 코드인 경우 빈 배열 사용
+      if (entriesResponse.status === 401 || entriesResponse.status === 403) {
+        console.info('로그인이 필요하거나 접근 권한이 없습니다.');
+        setHabitEntries([]);
+        return;
+      }
+      
       const entriesData = await entriesResponse.json();
-      setHabitEntries(entriesData);
+      setHabitEntries(Array.isArray(entriesData) ? entriesData : []);
     } catch (error) {
       console.error(`Error fetching entries for user ${userId}:`, error);
+      setHabitEntries([]);
     } finally {
       setIsLoading(false);
     }
@@ -133,14 +142,12 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const updateHabitEntry = async (habitId: number, day: number, value: number) => {
     try {
-      const response = await apiRequest('POST', '/api/entries', {
+      const response = await apiRequest<HabitEntry>('POST', '/api/entries', {
         userId: activeUser,
         habitId,
         day,
         value
       });
-      
-      const updatedEntry = await response.json();
       
       // Update local state with the new entry
       setHabitEntries(prev => {
@@ -150,14 +157,20 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         
         if (existingIndex >= 0) {
           const updated = [...prev];
-          updated[existingIndex] = updatedEntry;
+          updated[existingIndex] = response;
           return updated;
         } else {
-          return [...prev, updatedEntry];
+          return [...prev, response];
         }
       });
     } catch (error) {
-      console.error('Error updating habit entry:', error);
+      if (error.response?.status === 401) {
+        console.info('로그인이 필요합니다');
+      } else if (error.response?.status === 403) {
+        console.info('다른 사용자의 데이터를 수정할 권한이 없습니다');
+      } else {
+        console.error('Error updating habit entry:', error);
+      }
     }
   };
 

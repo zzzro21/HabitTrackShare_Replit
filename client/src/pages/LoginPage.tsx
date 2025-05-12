@@ -62,7 +62,6 @@ export default function LoginPage() {
               required
               placeholder="비밀번호 입력"
             />
-            <p className="text-xs text-gray-500 mt-1">기본 비밀번호: password123</p>
           </div>
           
           <button
@@ -76,59 +75,13 @@ export default function LoginPage() {
           </button>
         </form>
         
-        <div className="mt-4">
-          <h2 className="text-lg font-medium mb-2">사용 가능한 계정:</h2>
-          <table className="min-w-full">
-            <thead>
-              <tr>
-                <th className="text-left py-2">ID</th>
-                <th className="text-left py-2">이름</th>
-                <th className="text-left py-2">사용자 이름</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="py-1">1</td>
-                <td className="py-1">곽완신</td>
-                <td className="py-1">user1</td>
-              </tr>
-              <tr>
-                <td className="py-1">2</td>
-                <td className="py-1">유은옥</td>
-                <td className="py-1">user2</td>
-              </tr>
-              <tr>
-                <td className="py-1">3</td>
-                <td className="py-1">이경희</td>
-                <td className="py-1">user3</td>
-              </tr>
-              <tr>
-                <td className="py-1">4</td>
-                <td className="py-1">임용녀</td>
-                <td className="py-1">user4</td>
-              </tr>
-              <tr>
-                <td className="py-1">5</td>
-                <td className="py-1">박혜경</td>
-                <td className="py-1">user5</td>
-              </tr>
-              <tr>
-                <td className="py-1">6</td>
-                <td className="py-1">김유나</td>
-                <td className="py-1">user6</td>
-              </tr>
-              <tr>
-                <td className="py-1">7</td>
-                <td className="py-1">최지혜</td>
-                <td className="py-1">user7</td>
-              </tr>
-              <tr>
-                <td className="py-1">8</td>
-                <td className="py-1">김미희</td>
-                <td className="py-1">user8</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 mb-2">
+            계정 아이디: <span className="font-medium">user1</span>부터 <span className="font-medium">user8</span>까지 이용 가능합니다.
+          </p>
+          <p className="text-gray-600">
+            (비밀번호는 모든 계정 동일)
+          </p>
         </div>
       </div>
     </div>
