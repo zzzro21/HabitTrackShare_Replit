@@ -298,7 +298,7 @@ export class DatabaseStorage implements IStorage {
         { id: 4, name: '임용녀', avatar: '👩‍🦰', username: 'user4', email: 'user4@example.com' },
         { id: 5, name: '박혜경', avatar: '👱‍♀️', username: 'user5', email: 'user5@example.com' },
         { id: 6, name: '김유나', avatar: '👩‍🦳', username: 'user6', email: 'user6@example.com' },
-        { id: 7, name: '최지혜', avatar: '👨‍🦲', username: 'user7', email: 'user7@example.com' },
+        { id: 7, name: '최지혜', avatar: '👩‍🦱', username: 'user7', email: 'user7@example.com' },
         { id: 8, name: '김미희', avatar: '👧', username: 'user8', email: 'user8@example.com' }
       ];
       
