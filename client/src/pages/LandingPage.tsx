@@ -1,5 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'wouter';
+
+// 사용자가 선택할 수 있는 이미지 목록
+const profileImages = [
+  "https://images.unsplash.com/photo-1596079890744-c1a0462d0975?auto=format&fit=crop&q=80", // 기본 이미지
+  "/attached_assets/KakaoTalk_20250509_131525036.jpg",
+  "/attached_assets/KakaoTalk_20250511_022622360_03.jpg",
+  "/attached_assets/sample.jpg",
+  "/attached_assets/스크린샷 2025-05-09 170854.png",
+  "/attached_assets/스크린샷 2025-05-09 182446.png"
+];
 
 // 동기부여 문장 배열 (한국어)
 const motivationalQuotes = [
@@ -108,6 +118,8 @@ const LandingPage: React.FC = () => {
   const [, navigate] = useLocation();
   const [showAnimation, setShowAnimation] = useState(false);
   const [quote, setQuote] = useState("");
+  const [selectedImage, setSelectedImage] = useState(profileImages[0]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // FHD+ 해상도(1080x2340)에 맞는 비율 계산
   const aspectRatio = 2340 / 1080;
@@ -132,6 +144,14 @@ const LandingPage: React.FC = () => {
   const handleBeginClick = () => {
     navigate('/home'); // 홈 페이지 경로로 이동
   };
+  
+  // 프로필 이미지 선택 함수
+  const handleChangeProfileImage = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+  
+  // 갤러리 이미지 선택 모달 표시
+  const [showGallery, setShowGallery] = useState(false);
 
   return (
     <div 
@@ -168,12 +188,76 @@ const LandingPage: React.FC = () => {
       <div className="relative flex flex-col items-center px-8 pt-6 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
         <div className={`w-full max-w-[304px] relative mt-12 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl" style={{ height: '384px', borderRadius: '100% / 69%' }}>
+          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl relative" style={{ height: '384px', borderRadius: '100% / 69%' }}>
             <img
-              src="https://images.unsplash.com/photo-1596079890744-c1a0462d0975?auto=format&fit=crop&q=80"
-              alt="여성이 노트북을 사용하는 모습"
+              src={selectedImage}
+              alt="프로필 이미지"
               className="w-full h-full object-cover"
             />
+            <input 
+              type="file" 
+              accept="image/*" 
+              ref={fileInputRef}
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  const file = e.target.files[0];
+                  const imageUrl = URL.createObjectURL(file);
+                  setSelectedImage(imageUrl);
+                }
+              }}
+            />
+            <div className="absolute bottom-3 right-3 flex gap-2">
+              <button 
+                className="bg-white p-2 rounded-full shadow-lg z-10 opacity-70 hover:opacity-100 transition-opacity"
+                onClick={() => setShowGallery(!showGallery)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </button>
+              <button 
+                className="bg-white p-2 rounded-full shadow-lg z-10 opacity-70 hover:opacity-100 transition-opacity"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18 2l4 4-10 10H8v-4L18 2z"></path>
+                </svg>
+              </button>
+            </div>
+            
+            {/* 갤러리 모달 */}
+            {showGallery && (
+              <div className="absolute inset-0 bg-black/70 z-20 flex items-center justify-center">
+                <div className="bg-white rounded-lg p-4 w-[90%] max-h-[90%] overflow-y-auto">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">갤러리에서 선택</h3>
+                    <button onClick={() => setShowGallery(false)} className="text-gray-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {profileImages.map((img, index) => (
+                      <div 
+                        key={index} 
+                        className={`aspect-square overflow-hidden rounded-lg cursor-pointer border-2 ${selectedImage === img ? 'border-blue-500' : 'border-transparent'}`}
+                        onClick={() => {
+                          handleChangeProfileImage(img);
+                          setShowGallery(false);
+                        }}
+                      >
+                        <img src={img} alt={`갤러리 이미지 ${index+1}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Vibes 버블 - 좌측 */}
             <div className={`absolute -left-12 top-2/3 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
