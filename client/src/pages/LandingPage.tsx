@@ -118,13 +118,12 @@ const LandingPage: React.FC = () => {
       setShowAnimation(true);
     }, 100);
 
-    // 하루에 한 번만 바뀌도록 날짜 기반으로 문장 선택
-    const today = new Date();
-    const startOfYear = new Date(today.getFullYear(), 0, 0);
-    const diff = today.getTime() - startOfYear.getTime();
-    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const quoteIndex = dayOfYear % motivationalQuotes.length;
-    setQuote(motivationalQuotes[quoteIndex]);
+    // 긴 문장 예시를 보여주기 위해 임시로 특정 긴 문장 선택
+    // 실제 배포 시에는 날짜 기반 랜덤 선택으로 복원할 것
+    // setQuote(motivationalQuotes[quoteIndex]);
+    
+    // 긴 문장 예시
+    setQuote("포기는 항상 실패보다 더 쉽습니다. 그러나 더 어려운 길을 선택하세요. 그것이 성공으로 가는 길입니다.");
 
     return () => clearTimeout(timer);
   }, []);
