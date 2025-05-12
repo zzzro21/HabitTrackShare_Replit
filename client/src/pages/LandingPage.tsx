@@ -167,7 +167,7 @@ const LandingPage: React.FC = () => {
       <div className="absolute top-0 left-0 w-full h-full"></div>
 
       {/* 메인 콘텐츠 */}
-      <div className="relative flex flex-col items-center px-8 pt-4 pb-24 z-10 flex-grow">
+      <div className="relative flex flex-col items-center px-8 pt-10 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
         <div className={`w-full max-w-[260px] relative mt-0 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
