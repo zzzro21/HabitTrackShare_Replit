@@ -160,7 +160,7 @@ const LandingPage: React.FC = () => {
         maxWidth: '1080px', 
         minHeight: '80vh',
         height: 'auto',
-        aspectRatio: '1080 / 1800'
+        aspectRatio: '19.3 / 9'
       }}
     >
       {/* 배경 */}
