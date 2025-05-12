@@ -8,6 +8,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// CORS 및 세션 설정
+app.use(cors({
+  origin: true, // 모든 출처 허용
+  credentials: true, // 인증 정보 허용
+  exposedHeaders: ['set-cookie']
+}));
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
