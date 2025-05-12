@@ -60,19 +60,13 @@ export function useAuth() {
 
   // 로그인 함수
   const login = async (username: string, password: string) => {
-    const result = await loginMutation.mutateAsync({ username, password });
-    
-    // 로그인이 성공했으면 로컬 스토리지에 사용자 정보 임시 저장
-    if (result && result.user) {
-      localStorage.setItem('userAuth', JSON.stringify({
-        isLoggedIn: true,
-        user: result.user
-      }));
+    try {
+      const result = await loginMutation.mutateAsync({ username, password });
+      return result;
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      throw error;
     }
-    
-    // 로그인 성공 후 강제 페이지 새로고침
-    window.location.href = '/';
-    return result;
   };
 
   // 로그아웃 함수
