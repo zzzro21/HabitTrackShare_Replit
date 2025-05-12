@@ -290,6 +290,40 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }))
       .sort((a, b) => b.totalScore - a.totalScore);
   };
+  
+  // 사용자 데이터를 수정할 수 있는지 확인 (자신의 데이터만)
+  const canModifyUserData = (userId: number): boolean => {
+    return currentUserId === userId;
+  };
+  
+  // 데일리 피드백 업데이트 (친구에게도 작성 가능)
+  const updateDailyFeedback = async (userId: number, day: number, feedback: string) => {
+    try {
+      // 인증 상태 확인
+      const authResponse = await fetch('/api/auth/status');
+      const authData = await authResponse.json();
+      
+      if (!authData.isAuthenticated) {
+        console.info('로그인이 필요합니다');
+        return;
+      }
+      
+      const response = await apiRequest('POST', '/api/feedback', {
+        userId,
+        day,
+        feedback
+      });
+      
+      return response;
+    } catch (error) {
+      const err = error as { response?: { status: number } };
+      if (err?.response?.status === 401) {
+        console.info('로그인이 필요합니다');
+      } else {
+        console.error('Error updating daily feedback:', error);
+      }
+    }
+  };
 
   return (
     <HabitContext.Provider
@@ -299,9 +333,11 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         habitEntries,
         activeUser,
         activeWeek,
+        currentUserId,
         setActiveUser,
         setActiveWeek,
         updateHabitEntry,
+        updateDailyFeedback,
         isLoading,
         calculateCompletionRate,
         calculateWeekScores,
@@ -309,7 +345,8 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         calculateGrandTotal,
         calculateCompletedHabits,
         calculateUserRank,
-        getRankings
+        getRankings,
+        canModifyUserData
       }}
     >
       {children}
