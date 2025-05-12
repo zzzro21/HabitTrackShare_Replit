@@ -143,24 +143,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(habits);
   });
 
-  // Get all habit entries for a user (인증 필요)
-  app.get("/api/users/:userId/entries", isAuthenticated, async (req, res) => {
+  // Get all habit entries for a user (인증 없이 접근 가능)
+  app.get("/api/users/:userId/entries", async (req, res) => {
     const userId = parseInt(req.params.userId);
     if (isNaN(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
     
-    // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== req.session.userId) {
-      return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
-    }
-
+    // 모든 사용자 데이터에 접근 가능
     const entries = await storage.getUserHabitEntries(userId);
     res.json(entries);
   });
 
-  // Create or update a habit entry (인증 필요 + 자신의 데이터만 수정 가능)
-  app.post("/api/entries", isAuthenticated, onlySelfModify, async (req, res) => {
+  // Create or update a habit entry (인증 불필요)
+  app.post("/api/entries", async (req, res) => {
     try {
       const validatedData = insertHabitEntrySchema.parse(req.body);
       
@@ -196,8 +192,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get habit notes for a user on a specific day (인증 필요)
-  app.get("/api/users/:userId/notes/:day", isAuthenticated, async (req, res) => {
+  // Get habit notes for a user on a specific day (인증 불필요)
+  app.get("/api/users/:userId/notes/:day", async (req, res) => {
     const userId = parseInt(req.params.userId);
     const day = parseInt(req.params.day);
     
