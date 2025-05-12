@@ -307,6 +307,7 @@ export class DatabaseStorage implements IStorage {
       
       for (const demoUser of demoUsers) {
         if (!existingUsernames.includes(demoUser.username)) {
+          // 새 사용자 생성
           await this.createUser({
             name: demoUser.name,
             avatar: demoUser.avatar,
@@ -315,6 +316,23 @@ export class DatabaseStorage implements IStorage {
             email: demoUser.email
           });
           console.log(`사용자 '${demoUser.name}'가 생성되었습니다.`);
+        } else {
+          // 기존 사용자 이름 업데이트
+          const [existingUser] = await db
+            .select()
+            .from(users)
+            .where(eq(users.username, demoUser.username));
+            
+          if (existingUser && existingUser.name !== demoUser.name) {
+            await db
+              .update(users)
+              .set({ 
+                name: demoUser.name,
+                avatar: demoUser.avatar
+              })
+              .where(eq(users.username, demoUser.username));
+            console.log(`사용자 '${demoUser.username}'의 이름이 '${demoUser.name}'로 업데이트되었습니다.`);
+          }
         }
       }
       
