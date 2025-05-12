@@ -256,8 +256,10 @@ export class DatabaseStorage implements IStorage {
     const insights = await db
       .select()
       .from(habitInsights)
-      .where(eq(habitInsights.userId, userId))
-      .orderBy(habitInsights.date, "desc");
+      .where(eq(habitInsights.userId, userId));
+    
+    // 날짜 기준으로 정렬 (최신순)
+    insights.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     return insights.length > 0 ? insights[0] : undefined;
   }
@@ -285,26 +287,35 @@ export class DatabaseStorage implements IStorage {
       // 기존 사용자가 있는지 확인
       const existingUsers = await this.getAllUsers();
       
-      // 8명의 데모 사용자 생성 (아직 없다면)
-      if (existingUsers.length === 0) {
-        const defaultPassword = "password123"; // 실제 앱에서는 해시 처리
-        
-        for (let i = 1; i <= 8; i++) {
+      // 기존 사용자 목록
+      const existingUsernames = existingUsers.map(user => user.username);
+      
+      // 8명의 사용자 정의 (아바타와 함께)
+      const demoUsers = [
+        { id: 1, name: '사용자1', avatar: '👤', username: 'user1', email: 'user1@example.com' },
+        { id: 2, name: '사용자2', avatar: '👩', username: 'user2', email: 'user2@example.com' },
+        { id: 3, name: '사용자3', avatar: '👨', username: 'user3', email: 'user3@example.com' },
+        { id: 4, name: '사용자4', avatar: '👦', username: 'user4', email: 'user4@example.com' },
+        { id: 5, name: '사용자5', avatar: '👧', username: 'user5', email: 'user5@example.com' },
+        { id: 6, name: '사용자6', avatar: '👵', username: 'user6', email: 'user6@example.com' },
+        { id: 7, name: '사용자7', avatar: '👴', username: 'user7', email: 'user7@example.com' },
+        { id: 8, name: '사용자8', avatar: '🧓', username: 'user8', email: 'user8@example.com' }
+      ];
+      
+      // 누락된 사용자 생성
+      const defaultPassword = "password123"; // 실제 앱에서는 해시 처리
+      
+      for (const demoUser of demoUsers) {
+        if (!existingUsernames.includes(demoUser.username)) {
           await this.createUser({
-            name: `사용자${i}`,
-            avatar: i === 1 ? "👤" : 
-                   i === 2 ? "👩" : 
-                   i === 3 ? "👨" : 
-                   i === 4 ? "👦" : 
-                   i === 5 ? "👧" : 
-                   i === 6 ? "👵" : 
-                   i === 7 ? "👴" : "🧓",
-            username: `user${i}`,
-            password: defaultPassword
+            name: demoUser.name,
+            avatar: demoUser.avatar,
+            username: demoUser.username,
+            password: defaultPassword,
+            email: demoUser.email
           });
+          console.log(`사용자 '${demoUser.name}'가 생성되었습니다.`);
         }
-        
-        console.log("8명의 데모 사용자가 생성되었습니다.");
       }
       
       // 기존 습관이 있는지 확인
@@ -322,6 +333,13 @@ export class DatabaseStorage implements IStorage {
         
         console.log("사전 정의된 습관이 생성되었습니다.");
       }
+      
+      // 데이터베이스에 저장된 사용자와 습관 수를 확인하고 출력
+      const allUsers = await this.getAllUsers();
+      const allHabits = await this.getAllHabits();
+      
+      console.log(`데이터베이스 초기화 완료: ${allUsers.length}명의 사용자와 ${allHabits.length}개의 습관이 설정되었습니다.`);
+      
     } catch (error) {
       console.error("초기 데이터 설정 중 오류 발생:", error);
     }
