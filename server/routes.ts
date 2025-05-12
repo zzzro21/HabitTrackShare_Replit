@@ -7,8 +7,17 @@ import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchem
 import { sessionMiddleware, login, logout, getCurrentUser, checkAuthStatus, isAuthenticated, onlySelfModify, allowFeedbackForAny } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // 세션 미들웨어 설정
+  // 세션 미들웨어 및 쿠키 설정
   app.use(sessionMiddleware);
+  
+  // 모든 응답에 CORS 헤더 추가
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+  });
   
   // Initialize predefined data
   await storage.initializePredefinedData();

@@ -23,7 +23,7 @@ export const sessionMiddleware = session({
     maxAge: COOKIE_MAX_AGE, 
     httpOnly: true,
     secure: false, // 배포 환경에서도 HTTP 사용 허용
-    sameSite: 'none'
+    sameSite: 'lax'
   }
 });
 
