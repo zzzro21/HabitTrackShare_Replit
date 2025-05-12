@@ -75,18 +75,29 @@ function NavBar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   
+  // 로컬 스토리지에서 인증 정보 확인
+  const localAuth = localStorage.getItem('userAuth');
+  const localUser = localAuth ? JSON.parse(localAuth).user : null;
+  const isLocallyAuthenticated = !!localUser;
+  
+  // 실제 표시할 사용자 정보 (세션 또는 로컬 스토리지)
+  const displayUser = user || localUser;
+  
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
       await logout();
     } catch (error) {
       console.error('로그아웃 실패:', error);
+      // 세션 로그아웃에 실패해도 로컬 스토리지는 정리
+      localStorage.removeItem('userAuth');
+      window.location.href = '/login';
     } finally {
       setIsLoggingOut(false);
     }
   };
   
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isLocallyAuthenticated) {
     return null;
   }
   
@@ -96,10 +107,10 @@ function NavBar() {
         <span className="text-xl font-semibold">습관 트래커</span>
       </div>
       <div className="flex items-center gap-4">
-        {user && (
+        {displayUser && (
           <div className="flex items-center gap-2">
-            <span className="text-sm">{user.name} 님</span>
-            <span className="text-2xl">{user.avatar}</span>
+            <span className="text-sm">{displayUser.name} 님</span>
+            <span className="text-2xl">{displayUser.avatar}</span>
           </div>
         )}
         <button
