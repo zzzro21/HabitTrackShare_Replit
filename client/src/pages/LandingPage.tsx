@@ -74,14 +74,17 @@ const LandingPage: React.FC = () => {
               <span className="text-base font-medium">Message</span>
             </div>
             
-            {/* 명상 버블 - 우측 */}
+            {/* AI 비서 버블 - 우측 */}
             <div className={`absolute right-0 top-1/4 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
               <div className="bg-orange-400 rounded-full w-10 h-10 flex items-center justify-center mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16z" clipRule="evenodd" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                  <line x1="12" y1="19" x2="12" y2="23" />
+                  <line x1="8" y1="23" x2="16" y2="23" />
                 </svg>
               </div>
-              <span className="text-base font-medium">Meditate</span>
+              <span className="text-base font-medium">Mori</span>
             </div>
           </div>
         </div>
