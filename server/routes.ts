@@ -62,10 +62,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(entries);
   });
 
-  // Create or update a habit entry
-  app.post("/api/entries", async (req, res) => {
+  // Create or update a habit entry (인증 필요)
+  app.post("/api/entries", isAuthenticated, async (req, res) => {
     try {
       const validatedData = insertHabitEntrySchema.parse(req.body);
+      
+      // 자신의 데이터만 수정 가능하도록 제한
+      if (validatedData.userId !== req.session.userId) {
+        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다." });
+      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
@@ -99,13 +104,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get habit notes for a user on a specific day
-  app.get("/api/users/:userId/notes/:day", async (req, res) => {
+  // Get habit notes for a user on a specific day (인증 필요)
+  app.get("/api/users/:userId/notes/:day", isAuthenticated, async (req, res) => {
     const userId = parseInt(req.params.userId);
     const day = parseInt(req.params.day);
     
     if (isNaN(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
+    }
+    
+    // 자신의 데이터만 접근 가능하도록 제한
+    if (userId !== req.session.userId) {
+      return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
     if (isNaN(day) || day < 0 || day > 55) {
@@ -116,14 +126,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(notes);
   });
   
-  // Get a specific habit note
-  app.get("/api/users/:userId/habits/:habitId/notes/:day", async (req, res) => {
+  // Get a specific habit note (인증 필요)
+  app.get("/api/users/:userId/habits/:habitId/notes/:day", isAuthenticated, async (req, res) => {
     const userId = parseInt(req.params.userId);
     const habitId = parseInt(req.params.habitId);
     const day = parseInt(req.params.day);
     
     if (isNaN(userId) || isNaN(habitId) || isNaN(day)) {
       return res.status(400).json({ message: "Invalid parameters" });
+    }
+    
+    // 자신의 데이터만 접근 가능하도록 제한
+    if (userId !== req.session.userId) {
+      return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
     if (day < 0 || day > 55) {
@@ -138,10 +153,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(note);
   });
   
-  // Create or update a habit note
-  app.post("/api/notes", async (req, res) => {
+  // Create or update a habit note (인증 필요)
+  app.post("/api/notes", isAuthenticated, async (req, res) => {
     try {
       const validatedData = insertHabitNoteSchema.parse(req.body);
+      
+      // 자신의 데이터만 수정 가능하도록 제한
+      if (validatedData.userId !== req.session.userId) {
+        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다." });
+      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
@@ -170,13 +190,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get daily feedback for a user on a specific day
-  app.get("/api/users/:userId/feedback/:day", async (req, res) => {
+  // Get daily feedback for a user on a specific day (인증 필요)
+  app.get("/api/users/:userId/feedback/:day", isAuthenticated, async (req, res) => {
     const userId = parseInt(req.params.userId);
     const day = parseInt(req.params.day);
     
     if (isNaN(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
+    }
+    
+    // 자신의 데이터만 접근 가능하도록 제한
+    if (userId !== req.session.userId) {
+      return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
     if (isNaN(day) || day < 0 || day > 55) {
@@ -191,10 +216,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(feedback);
   });
   
-  // Create or update daily feedback
-  app.post("/api/feedback", async (req, res) => {
+  // Create or update daily feedback (인증 필요)
+  app.post("/api/feedback", isAuthenticated, async (req, res) => {
     try {
       const validatedData = insertDailyFeedbackSchema.parse(req.body);
+      
+      // 자신의 데이터만 수정 가능하도록 제한
+      if (validatedData.userId !== req.session.userId) {
+        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다." });
+      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
@@ -217,13 +247,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get habit insights for a user
-  app.get("/api/users/:userId/insights", async (req, res) => {
+  // Get habit insights for a user (인증 필요)
+  app.get("/api/users/:userId/insights", isAuthenticated, async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
       
       if (isNaN(userId)) {
         return res.status(400).json({ message: "Invalid user ID" });
+      }
+      
+      // 자신의 데이터만 접근 가능하도록 제한
+      if (userId !== req.session.userId) {
+        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 인사이트만 볼 수 있습니다." });
       }
       
       // Check if the user exists
@@ -255,10 +290,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Manually create habit insights (mostly for testing)
-  app.post("/api/insights", async (req, res) => {
+  // Manually create habit insights (mostly for testing) (인증 필요)
+  app.post("/api/insights", isAuthenticated, async (req, res) => {
     try {
       const validatedData = insertHabitInsightSchema.parse(req.body);
+      
+      // 자신의 데이터만 수정 가능하도록 제한
+      if (validatedData.userId !== req.session.userId) {
+        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 인사이트만 생성할 수 있습니다." });
+      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
