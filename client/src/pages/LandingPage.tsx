@@ -65,7 +65,7 @@ const LandingPage: React.FC = () => {
             />
 
             {/* 메시지 버블 - 좌측 */}
-            <div className={`absolute -left-12 top-3/4 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
+            <div className={`absolute -left-12 top-2/3 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
               <div className="bg-purple-500 rounded-full w-10 h-10 flex items-center justify-center mr-3">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998L10 2 2.003 5.884z" />
