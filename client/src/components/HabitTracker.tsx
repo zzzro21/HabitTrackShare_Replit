@@ -62,6 +62,35 @@ const HabitTracker: React.FC = () => {
     }
   };
 
+  // 습관 상태 표시용 컴포넌트 - 자신의 데이터면 선택박스, 아니면 텍스트만 표시
+  const HabitValueCell = ({ habitId, day, value, habitScoreType }: { habitId: number, day: number, value: number, habitScoreType: string }) => {
+    let bgColor = 'bg-white';
+    if (value === 1) bgColor = 'bg-blue-50';
+    if (value === 2) bgColor = 'bg-green-100';
+    
+    // 자신의 데이터인 경우 수정 가능한 셀렉트 박스 표시
+    if (canModifyUserData(activeUser)) {
+      return (
+        <select
+          value={value}
+          onChange={(e) => handleValueChange(habitId, day, parseInt(e.target.value))}
+          className={`w-full text-xs py-1 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
+        >
+          <option value="0">-</option>
+          <option value="1">△</option>
+          {habitScoreType !== 'binary' && <option value="2">○</option>}
+        </select>
+      );
+    } 
+    
+    // 다른 사용자의 데이터인 경우 읽기 전용 표시
+    return (
+      <div className={`w-full h-full py-1 text-center ${bgColor}`}>
+        {value === 0 ? '-' : value === 1 ? '△' : '○'}
+      </div>
+    );
+  };
+
   return (
     <div className="mb-5">
       <div className="flex justify-between items-center mb-2">
@@ -105,21 +134,14 @@ const HabitTracker: React.FC = () => {
                   const day = startDay + i;
                   const value = getValue(habit.id, day);
                   
-                  let bgColor = 'bg-white';
-                  if (value === 1) bgColor = 'bg-blue-50';
-                  if (value === 2) bgColor = 'bg-green-100';
-                  
                   return (
                     <td key={i} className="border p-0 text-center">
-                      <select
-                        value={value}
-                        onChange={(e) => handleValueChange(habit.id, day, parseInt(e.target.value))}
-                        className={`w-full text-xs py-1 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
-                      >
-                        <option value="0">-</option>
-                        <option value="1">△</option>
-                        {habit.scoreType !== 'binary' && <option value="2">○</option>}
-                      </select>
+                      <HabitValueCell 
+                        habitId={habit.id} 
+                        day={day} 
+                        value={value} 
+                        habitScoreType={habit.scoreType} 
+                      />
                     </td>
                   );
                 })}
@@ -148,21 +170,14 @@ const HabitTracker: React.FC = () => {
                   const day = startDay + i + 7;
                   const value = getValue(habit.id, day);
                   
-                  let bgColor = 'bg-white';
-                  if (value === 1) bgColor = 'bg-blue-50';
-                  if (value === 2) bgColor = 'bg-green-100';
-                  
                   return (
                     <td key={i} className="border p-0 text-center">
-                      <select
-                        value={value}
-                        onChange={(e) => handleValueChange(habit.id, day, parseInt(e.target.value))}
-                        className={`w-full text-xs py-1 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
-                      >
-                        <option value="0">-</option>
-                        <option value="1">△</option>
-                        {habit.scoreType !== 'binary' && <option value="2">○</option>}
-                      </select>
+                      <HabitValueCell 
+                        habitId={habit.id} 
+                        day={day} 
+                        value={value} 
+                        habitScoreType={habit.scoreType} 
+                      />
                     </td>
                   );
                 })}
