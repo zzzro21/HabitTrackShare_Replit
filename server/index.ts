@@ -9,8 +9,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // CORS 및 세션 설정
+const allowedOrigins = [
+  'http://localhost:5000',
+  'https://localhost:5000', 
+  'https://successme.replit.app',
+  /\.replit\.app$/
+];
+
 app.use(cors({
-  origin: true, // 모든 출처 허용
+  origin: function(origin, callback) {
+    // 요청 출처가 허용 목록에 있는지 확인
+    if (!origin || allowedOrigins.some(allowed => 
+        typeof allowed === 'string' 
+          ? allowed === origin 
+          : allowed.test(origin))) {
+      callback(null, true);
+    } else {
+      console.log(`CORS blocked: ${origin}`);
+      callback(null, true); // 개발 중에는 모든 출처 허용
+    }
+  },
   credentials: true, // 인증 정보 허용
   exposedHeaders: ['set-cookie']
 }));
