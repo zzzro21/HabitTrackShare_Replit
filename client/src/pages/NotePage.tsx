@@ -417,7 +417,8 @@ const NotePage: React.FC = () => {
                         name="book-score" 
                         className="mr-1.5"
                         checked={habitEntries[1] === 1}
-                        onChange={() => handleHabitEntryUpdate(1, 1)} 
+                        onChange={() => handleHabitEntryUpdate(1, 1)}
+                        disabled={!isOwnData} 
                       />
                       <label htmlFor="book-half" className="text-xs">30분 미만 (0.5점)</label>
                     </div>
@@ -428,7 +429,8 @@ const NotePage: React.FC = () => {
                         name="book-score" 
                         className="mr-1.5"
                         checked={habitEntries[1] === 2}
-                        onChange={() => handleHabitEntryUpdate(1, 2)} 
+                        onChange={() => handleHabitEntryUpdate(1, 2)}
+                        disabled={!isOwnData}
                       />
                       <label htmlFor="book-full" className="text-xs">30분 이상 (1점)</label>
                     </div>
@@ -439,7 +441,8 @@ const NotePage: React.FC = () => {
                       value={notes[1] || ''}
                       onChange={(e) => handleNoteChange(1, e.target.value)}
                       placeholder="읽은 책의 제목과 내용, 느낀점 등을 작성하세요..."
-                      className="w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none"
+                      className={`w-full border border-gray-300 min-h-[40px] py-1.5 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent resize-none ${!isOwnData ? 'bg-gray-50' : ''}`}
+                      readOnly={!isOwnData}
                     />
                   </div>
                 </div>
@@ -596,7 +599,8 @@ const NotePage: React.FC = () => {
                         name="delivery-score" 
                         className="mr-1.5"
                         checked={habitEntries[5] === 0}
-                        onChange={() => handleHabitEntryUpdate(5, 0)} 
+                        onChange={() => handleHabitEntryUpdate(5, 0)}
+                        disabled={!isOwnData}
                       />
                       <label htmlFor="delivery-none" className="text-xs">미완료 (0점)</label>
                     </div>
@@ -607,7 +611,8 @@ const NotePage: React.FC = () => {
                         name="delivery-score" 
                         className="mr-1.5"
                         checked={habitEntries[5] === 1}
-                        onChange={() => handleHabitEntryUpdate(5, 1)} 
+                        onChange={() => handleHabitEntryUpdate(5, 1)}
+                        disabled={!isOwnData}
                       />
                       <label htmlFor="delivery-explain" className="text-xs">설명 및 추천 (1점)</label>
                     </div>
@@ -618,7 +623,8 @@ const NotePage: React.FC = () => {
                         name="delivery-score" 
                         className="mr-1.5"
                         checked={habitEntries[5] === 2}
-                        onChange={() => handleHabitEntryUpdate(5, 2)} 
+                        onChange={() => handleHabitEntryUpdate(5, 2)}
+                        disabled={!isOwnData}
                       />
                       <label htmlFor="delivery-full" className="text-xs">전달 및 추천 (2점)</label>
                     </div>
