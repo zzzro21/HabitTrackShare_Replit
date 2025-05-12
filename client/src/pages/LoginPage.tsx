@@ -142,8 +142,8 @@ export default function LoginPage() {
           </p>
           
           <div className="border-t pt-4">
-            <p className="text-sm font-medium mb-3">빠른 로그인 (배포 환경용)</p>
-            <div className="grid grid-cols-4 gap-2">
+            <p className="text-lg font-bold text-center mb-3">✨ 빠른 로그인 ✨</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
                 { id: 'user1', name: '곽완신', avatar: '👨‍💼' },
                 { id: 'user2', name: '마정수', avatar: '👩‍💼' },
@@ -172,10 +172,10 @@ export default function LoginPage() {
                     
                     window.location.href = '/';
                   }}
-                  className="flex flex-col items-center bg-blue-50 hover:bg-blue-100 p-2 rounded transition-colors"
+                  className="flex flex-col items-center bg-blue-50 hover:bg-blue-100 p-3 rounded-lg transition-colors shadow-sm hover:shadow-md border border-blue-200"
                 >
-                  <span className="text-xl">{user.avatar}</span>
-                  <span className="text-xs mt-1 truncate w-full text-center">{user.name}</span>
+                  <span className="text-2xl mb-1">{user.avatar}</span>
+                  <span className="text-sm font-medium truncate w-full text-center">{user.name}</span>
                 </button>
               ))}
             </div>
