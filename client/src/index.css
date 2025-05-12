@@ -1,3 +1,15 @@
+/* 구글 폰트 - 한글 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Song+Myung&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poor+Story&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Single+Day&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -76,6 +88,49 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply antialiased bg-background text-foreground;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* 사용 가능한 한글 폰트 클래스 */
+  .font-noto {
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .font-nanum {
+    font-family: 'Nanum Gothic', sans-serif;
+  }
+
+  .font-blackhan {
+    font-family: 'Black Han Sans', sans-serif;
+  }
+
+  .font-songmyung {
+    font-family: 'Song Myung', serif;
+  }
+
+  .font-gothic {
+    font-family: 'Gothic A1', sans-serif;
+  }
+
+  /* 한글 필기체 폰트 */
+  .font-pen {
+    font-family: 'Nanum Pen Script', cursive;
+  }
+
+  .font-gamja {
+    font-family: 'Gamja Flower', cursive;
+  }
+
+  .font-poorstory {
+    font-family: 'Poor Story', cursive;
+  }
+
+  .font-gaegu {
+    font-family: 'Gaegu', cursive;
+  }
+
+  .font-singleday {
+    font-family: 'Single Day', cursive;
   }
 }
