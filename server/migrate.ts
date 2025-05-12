@@ -15,6 +15,7 @@ async function main() {
       DROP TABLE IF EXISTS habit_entries;
       DROP TABLE IF EXISTS habits;
       DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS session;
     `);
     
     console.log("새로운 스키마로 테이블 생성 중...");
@@ -72,6 +73,13 @@ async function main() {
         recommendations TEXT[] NOT NULL,
         date TIMESTAMP NOT NULL
       );
+      
+      CREATE TABLE IF NOT EXISTS session (
+        sid VARCHAR NOT NULL PRIMARY KEY,
+        sess JSON NOT NULL,
+        expire TIMESTAMP(6) NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS IDX_session_expire ON session (expire);
     `);
     
     console.log("데이터베이스 마이그레이션 완료!");
