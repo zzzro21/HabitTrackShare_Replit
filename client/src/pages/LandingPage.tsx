@@ -169,7 +169,7 @@ const LandingPage: React.FC = () => {
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-12 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[304px] relative mt-16 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className={`w-full max-w-[260px] relative mt-16 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
           <div className={`absolute -left-12 top-[60%] bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
             <div className="bg-purple-500 rounded-full w-10 h-10 flex items-center justify-center mr-3">
