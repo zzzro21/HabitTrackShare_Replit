@@ -7,6 +7,7 @@ export type AuthUser = {
   name: string;
   username: string;
   avatar: string;
+  hasChangedUsername?: boolean;
 };
 
 export type LoginCredentials = {

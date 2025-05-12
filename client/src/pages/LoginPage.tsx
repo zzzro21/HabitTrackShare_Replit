@@ -22,10 +22,8 @@ export default function LoginPage() {
       const result = await login(username, password);
       console.log("로그인 성공:", result);
       
-      // 약간의 지연 후 홈으로 이동
-      setTimeout(() => {
-        setLocation('/');
-      }, 100);
+      // 강제로 페이지 새로고침
+      window.location.href = '/';
     } catch (err: any) {
       console.error('Login error:', err);
       if (err?.message) {
