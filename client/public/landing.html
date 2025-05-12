@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>습관트래커 로그인</title>
+  <style>
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background-color: #f5f7fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    h1 {
+      color: #3b82f6;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #4b5563;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .button:hover {
+      background-color: #2563eb;
+    }
+    .avatar {
+      font-size: 18px;
+      margin-right: 8px;
+    }
+    .note {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 30px;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>습관트래커 바로 로그인</h1>
+    <p>아래 버튼을 클릭하여 특정 사용자로 바로 로그인할 수 있습니다.<br />서버와의 인증 없이도 로컬 인증 방식으로 앱에 접근합니다.</p>
+    
+    <div class="buttons">
+      <a href="/direct-login?user=user1" class="button"><span class="avatar">👨‍💼</span> 곽완신</a>
+      <a href="/direct-login?user=user2" class="button"><span class="avatar">👩‍💼</span> 유은옥</a>
+      <a href="/direct-login?user=user3" class="button"><span class="avatar">👨‍🦱</span> 이경희</a>
+      <a href="/direct-login?user=user4" class="button"><span class="avatar">👩‍🦰</span> 임용녀</a>
+      <a href="/direct-login?user=user5" class="button"><span class="avatar">👱‍♀️</span> 박혜경</a>
+      <a href="/direct-login?user=zzzro" class="button"><span class="avatar">👩‍🦳</span> 김유나</a>
+      <a href="/direct-login?user=user7" class="button"><span class="avatar">👩‍🦱</span> 최지혜</a>
+      <a href="/direct-login?user=user8" class="button"><span class="avatar">👧</span> 김미희</a>
+    </div>
+    
+    <p class="note">* 이 방식은 세션 인증 문제를 우회하기 위한 임시 해결책입니다.<br />
+    서버 세션이 정상 작동하면 일반 로그인 방식을 이용해주세요.</p>
+    
+    <div class="footer">
+      © 2025 습관트래커 | 모든 권리 보유
+    </div>
+  </div>
+</body>
+</html>
