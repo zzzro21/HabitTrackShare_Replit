@@ -242,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create or update a habit note (인증 필요 + 자신의 데이터만 수정 가능)
-  app.post("/api/notes", isAuthenticated, onlySelfModify, async (req, res) => {
+  app.post("/api/notes", async (req, res) => {
     try {
       const validatedData = insertHabitNoteSchema.parse(req.body);
       
