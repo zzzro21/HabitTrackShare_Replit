@@ -216,7 +216,7 @@ const LandingPage: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
-            <p className={`text-gray-700 text-2xl text-center max-w-md mx-auto transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`}>
+            <p className={`text-gray-700 text-2xl text-center max-w-md mx-auto transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '2.2rem' }}>
               "{quote}"
             </p>
             <span className={`text-gray-800 ml-3 absolute right-20 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-400`}>
