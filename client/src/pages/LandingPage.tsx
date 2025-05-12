@@ -188,6 +188,31 @@ const LandingPage: React.FC = () => {
       <div className="relative flex flex-col items-center px-8 pt-6 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
         <div className={`w-full max-w-[304px] relative mt-12 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+          {/* Vibes 버블 - 좌측 */}
+          <div className={`absolute -left-12 top-[60%] bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
+            <div className="bg-purple-500 rounded-full w-10 h-10 flex items-center justify-center mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+            </div>
+            <span className="text-base font-medium">Vibes</span>
+          </div>
+          
+          {/* AI 비서 버블 - 우측 */}
+          <div className={`absolute -right-12 top-[30%] bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
+            <div className="bg-orange-400 rounded-full w-10 h-10 flex items-center justify-center mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <line x1="12" y1="19" x2="12" y2="23" />
+                <line x1="8" y1="23" x2="16" y2="23" />
+              </svg>
+            </div>
+            <span className="text-base font-medium">Mori</span>
+          </div>
           <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl relative" style={{ height: '384px', borderRadius: '100% / 69%' }}>
             <img
               src={selectedImage}
@@ -259,31 +284,7 @@ const LandingPage: React.FC = () => {
               </div>
             )}
 
-            {/* Vibes 버블 - 좌측 */}
-            <div className={`absolute -left-12 top-2/3 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
-              <div className="bg-purple-500 rounded-full w-10 h-10 flex items-center justify-center mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                  <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                  <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                </svg>
-              </div>
-              <span className="text-base font-medium">Vibes</span>
-            </div>
-            
-            {/* AI 비서 버블 - 우측 */}
-            <div className={`absolute -right-12 top-1/4 bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
-              <div className="bg-orange-400 rounded-full w-10 h-10 flex items-center justify-center mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                  <line x1="12" y1="19" x2="12" y2="23" />
-                  <line x1="8" y1="23" x2="16" y2="23" />
-                </svg>
-              </div>
-              <span className="text-base font-medium">Mori</span>
-            </div>
+
           </div>
         </div>
 
