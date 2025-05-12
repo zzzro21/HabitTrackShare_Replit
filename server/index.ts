@@ -10,10 +10,22 @@ app.use(express.urlencoded({ extended: false }));
 
 // CORS 및 세션 설정
 app.use(cors({
-  origin: true, // 모든 출처 허용
+  origin: ['https://successme.replit.app', 'https://replit.app', 'http://localhost:5000', 'http://localhost:3000'],
   credentials: true, // 인증 정보 허용
   exposedHeaders: ['set-cookie']
 }));
+
+// 세션 쿠키 문제 디버깅 로그
+app.use((req, res, next) => {
+  const oldSetHeader = res.setHeader;
+  res.setHeader = function(key, val) {
+    if (key === 'Set-Cookie') {
+      console.log('Setting cookie header:', val);
+    }
+    return oldSetHeader.apply(this, arguments as any);
+  };
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
