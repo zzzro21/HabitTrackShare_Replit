@@ -4,10 +4,10 @@ import { useLocation } from 'wouter';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('password123');
   const [error, setError] = useState('');
   const { login, isLoading } = useAuth();
   const [, setLocation] = useLocation();
-  const defaultPassword = "password123";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ export default function LoginPage() {
     }
 
     try {
-      await login(username, defaultPassword);
+      await login(username, password);
       setLocation('/'); // 로그인 성공 시 홈 페이지로 이동
     } catch (err: any) {
       console.error('Login error:', err);
@@ -54,7 +54,21 @@ export default function LoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
-              placeholder="사용자 이름 입력 (예: user1)"
+              placeholder="사용자 이름 입력 (예: user1, user6)"
+            />
+          </div>
+          
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              비밀번호
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
             />
           </div>
           
@@ -74,7 +88,7 @@ export default function LoginPage() {
             계정 아이디: <span className="font-medium">user1</span>부터 <span className="font-medium">user8</span>까지 이용 가능합니다.
           </p>
           <p className="text-gray-600">
-            (비밀번호는 모든 계정 동일)
+            (기본 비밀번호: <span className="font-medium">password123</span>)
           </p>
         </div>
       </div>
