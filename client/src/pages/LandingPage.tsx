@@ -167,7 +167,7 @@ const LandingPage: React.FC = () => {
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[304px] relative mt-8 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className={`w-full max-w-[304px] relative mt-12 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl" style={{ height: '384px', borderRadius: '100% / 69%' }}>
             <img
               src="https://images.unsplash.com/photo-1596079890744-c1a0462d0975?auto=format&fit=crop&q=80"
@@ -210,14 +210,14 @@ const LandingPage: React.FC = () => {
             Set it, Do it, Repeat."
           </h1>
 
-          <div className="flex items-center mt-8 justify-center relative">
+          <div className="flex items-center mt-12 justify-center relative">
             <span className={`text-red-500 mr-3 absolute -top-2 left-28 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-200`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
             {/* 명언 가이드라인 영역 */}
-            <div className="w-full max-w-[280px] mx-auto px-4 py-3 border border-gray-200 rounded-lg bg-white/60 backdrop-blur-sm shadow-sm">
+            <div className="w-full max-w-[280px] mx-auto px-4 py-4 border border-gray-200 rounded-lg bg-white/60 backdrop-blur-sm shadow-sm">
               <p className={`text-gray-700 text-2xl text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.9rem' }}>
                 "{quote}"
               </p>
