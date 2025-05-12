@@ -1,10 +1,8 @@
 import React from 'react';
 import { useHabit } from '@/lib/HabitContext';
-import { useAuth } from '@/hooks/useAuth';
 
 const UserSelector: React.FC = () => {
   const { users, activeUser, setActiveUser, isLoading } = useHabit();
-  const { user: authUser } = useAuth();
 
   if (isLoading) {
     return (
