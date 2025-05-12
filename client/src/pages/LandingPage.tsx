@@ -155,13 +155,12 @@ const LandingPage: React.FC = () => {
 
   return (
     <div 
-      className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto"
+      className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto aurora-gradient"
       style={{ 
         maxWidth: '1080px', 
         minHeight: '100vh',
         height: 'auto',
-        aspectRatio: '1080 / 2340',
-        background: 'linear-gradient(180deg, #1a6985 0%, #38a3a5 15%, #57cc99 30%, #80ffdb 45%, #c8b6ff 65%, #e0aaff 80%, #ffc6ff 100%)'
+        aspectRatio: '1080 / 2340'
       }}
     >
       {/* Status Bar (모바일 디바이스 스타일) */}
