@@ -41,18 +41,34 @@ export default function LoginPage() {
       }
       
       // 로그인 실패해도 기본 데이터로 로컬 스토리지 설정 (배포 환경 테스트용)
-      if (username === 'user1' || username === 'user2' || username === 'user6') {
-        const fakeUser = {
-          id: username === 'user1' ? 1 : (username === 'user2' ? 2 : 6),
-          name: username === 'user1' ? '곽완신' : (username === 'user2' ? '유은옥' : '김유나'),
-          username: username,
-          avatar: username === 'user1' ? '👨‍💼' : (username === 'user2' ? '👩‍💼' : '👩‍🦳')
+      if (username === 'user1' || username === 'user2' || username === 'user6' || username === 'zzzro') {
+        // zzzro는 user6의 변경된 아이디
+        const userLookup = {
+          'user1': { id: 1, name: '곽완신', avatar: '👨‍💼' },
+          'user2': { id: 2, name: '유은옥', avatar: '👩‍💼' },
+          'user6': { id: 6, name: '김유나', avatar: '👩‍🦳' },
+          'zzzro': { id: 6, name: '김유나', avatar: '👩‍🦳' }
         };
-        localStorage.setItem('userAuth', JSON.stringify({
-          isLoggedIn: true,
-          user: fakeUser
-        }));
-        window.location.href = '/';
+        
+        const userData = userLookup[username as keyof typeof userLookup];
+        
+        if (userData) {
+          const fakeUser = {
+            ...userData,
+            username: username
+          };
+          
+          localStorage.setItem('userAuth', JSON.stringify({
+            isLoggedIn: true,
+            user: fakeUser
+          }));
+          
+          // 성공 메시지 출력 후 홈으로 리디렉션
+          console.log("로컬 인증 성공:", username);
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 300);
+        }
       }
     }
   };
