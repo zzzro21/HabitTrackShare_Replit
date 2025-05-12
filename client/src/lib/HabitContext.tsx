@@ -129,17 +129,27 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const fetchEntriesForUser = async (userId: number) => {
     try {
       setIsLoading(true);
-      const entriesResponse = await fetch(`/api/users/${userId}/entries`);
       
-      // 401 또는 403 상태 코드인 경우 빈 배열 사용
-      if (entriesResponse.status === 401 || entriesResponse.status === 403) {
-        console.info('로그인이 필요하거나 접근 권한이 없습니다.');
+      // 인증 상태 확인
+      const authResponse = await fetch('/api/auth/status');
+      const authData = await authResponse.json();
+      
+      if (authData.isAuthenticated && authData.user) {
+        // 자신의 데이터는 접근 가능
+        const entriesResponse = await fetch(`/api/users/${authData.user.id}/entries`);
+        
+        if (entriesResponse.ok) {
+          const entriesData = await entriesResponse.json();
+          setHabitEntries(entriesData);
+        } else {
+          console.info('자신의 데이터만 볼 수 있습니다.');
+          // 다른 사용자의 데이터는 볼 수 없지만, UI 선택은 가능하게 함
+          setHabitEntries([]);
+        }
+      } else {
+        console.info('로그인이 필요합니다.');
         setHabitEntries([]);
-        return;
       }
-      
-      const entriesData = await entriesResponse.json();
-      setHabitEntries(Array.isArray(entriesData) ? entriesData : []);
     } catch (error) {
       console.error(`Error fetching entries for user ${userId}:`, error);
       setHabitEntries([]);
@@ -150,8 +160,20 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const updateHabitEntry = async (habitId: number, day: number, value: number) => {
     try {
+      // 인증 상태 확인
+      const authResponse = await fetch('/api/auth/status');
+      const authData = await authResponse.json();
+      
+      if (!authData.isAuthenticated) {
+        console.info('로그인이 필요합니다');
+        return;
+      }
+      
+      // 로그인한 사용자 ID 사용 (activeUser가 아님)
+      const loggedInUserId = authData.user.id;
+      
       const response = await apiRequest<HabitEntry>('POST', '/api/entries', {
-        userId: activeUser,
+        userId: loggedInUserId,
         habitId,
         day,
         value
@@ -160,7 +182,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       // Update local state with the new entry
       setHabitEntries(prev => {
         const existingIndex = prev.findIndex(
-          entry => entry.userId === activeUser && entry.habitId === habitId && entry.day === day
+          entry => entry.userId === loggedInUserId && entry.habitId === habitId && entry.day === day
         );
         
         if (existingIndex >= 0) {
