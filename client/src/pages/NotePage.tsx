@@ -4,6 +4,7 @@ import { useLocation } from 'wouter';
 import TabNavigation from '@/components/TabNavigation';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 const NotePage: React.FC = () => {
   const { activeUser, habits, isLoading } = useHabit();

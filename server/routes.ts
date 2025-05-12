@@ -216,14 +216,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(feedback);
   });
   
-  // Create or update daily feedback (인증 필요)
+  // Create or update daily feedback (인증 필요) - 친구의 소감/피드백 작성 가능
   app.post("/api/feedback", isAuthenticated, async (req, res) => {
     try {
       const validatedData = insertDailyFeedbackSchema.parse(req.body);
       
-      // 자신의 데이터만 수정 가능하도록 제한
-      if (validatedData.userId !== req.session.userId) {
-        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다." });
+      // 인증 확인
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "로그인이 필요합니다." });
       }
       
       // Validate that user exists
@@ -237,6 +237,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Day must be between 0 and 55" });
       }
       
+      // 소감/피드백은 친구 데이터에 작성 가능 (다른 접근 제한 없음)
       const feedback = await storage.createOrUpdateDailyFeedback(validatedData);
       res.status(201).json(feedback);
     } catch (error) {
