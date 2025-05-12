@@ -8,9 +8,12 @@ const SettingsPage: React.FC = () => {
   const { user, logout } = useAuth();
   const { toast } = useToast();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showUsernameForm, setShowUsernameForm] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [usernamePassword, setUsernamePassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogout = async () => {
@@ -62,6 +65,59 @@ const SettingsPage: React.FC = () => {
       toast({
         title: "비밀번호 변경 실패",
         description: error.message || "비밀번호 변경 중 오류가 발생했습니다.",
+        variant: "destructive",
+        duration: 3000
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  const handleChangeUsername = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newUsername.trim()) {
+      toast({
+        title: "아이디 오류",
+        description: "새 아이디를 입력해주세요.",
+        variant: "destructive",
+        duration: 3000
+      });
+      return;
+    }
+
+    if (newUsername.length < 4) {
+      toast({
+        title: "아이디 오류",
+        description: "아이디는 4자 이상이어야 합니다.",
+        variant: "destructive",
+        duration: 3000
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await apiRequest('POST', '/api/auth/change-username', {
+        newUsername,
+        password: usernamePassword
+      });
+
+      toast({
+        title: "아이디 변경 완료",
+        description: "아이디가 성공적으로 변경되었습니다. 다시 로그인해 주세요.",
+        duration: 3000
+      });
+
+      // 아이디 변경 후 로그아웃 필요
+      setTimeout(() => {
+        logout();
+      }, 2000);
+      
+    } catch (error: any) {
+      toast({
+        title: "아이디 변경 실패",
+        description: error.message || "아이디 변경 중 오류가 발생했습니다.",
         variant: "destructive",
         duration: 3000
       });
@@ -191,6 +247,76 @@ const SettingsPage: React.FC = () => {
                             setCurrentPassword('');
                             setNewPassword('');
                             setConfirmPassword('');
+                          }}
+                          className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md bg-white"
+                          disabled={isSubmitting}
+                        >
+                          취소
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? '처리 중...' : '변경하기'}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              )}
+              
+              <button 
+                onClick={() => setShowUsernameForm(!showUsernameForm)} 
+                className="w-full px-4 py-3 text-left"
+                disabled={user?.hasChangedUsername}
+              >
+                <div className={`font-medium ${user?.hasChangedUsername ? 'text-gray-400' : 'text-blue-600'}`}>
+                  아이디 변경
+                  {user?.hasChangedUsername && ' (변경 불가)'}
+                </div>
+                <div className="text-xs text-gray-500">※ 최초 1회만 변경 가능합니다</div>
+              </button>
+              
+              {showUsernameForm && !user?.hasChangedUsername && (
+                <div className="p-4 bg-gray-50">
+                  <form onSubmit={handleChangeUsername}>
+                    <div className="space-y-3">
+                      <div>
+                        <label htmlFor="newUsername" className="block text-sm font-medium text-gray-700 mb-1">
+                          새 아이디
+                        </label>
+                        <input
+                          type="text"
+                          id="newUsername"
+                          value={newUsername}
+                          onChange={(e) => setNewUsername(e.target.value)}
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                          required
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="usernamePassword" className="block text-sm font-medium text-gray-700 mb-1">
+                          비밀번호 확인
+                        </label>
+                        <input
+                          type="password"
+                          id="usernamePassword"
+                          value={usernamePassword}
+                          onChange={(e) => setUsernamePassword(e.target.value)}
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="flex items-center justify-end space-x-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowUsernameForm(false);
+                            setNewUsername('');
+                            setUsernamePassword('');
                           }}
                           className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md bg-white"
                           disabled={isSubmitting}
