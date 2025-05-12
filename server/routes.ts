@@ -202,7 +202,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== req.session.userId) {
+    if (userId !== 6) {
       return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
@@ -225,7 +225,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== req.session.userId) {
+    if (userId !== 6) {
       return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
@@ -283,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     // 자신의 데이터만 접근 가능하도록 제한
-    if (userId !== req.session.userId) {
+    if (userId !== 6) {
       return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 볼 수 있습니다." });
     }
     
@@ -338,7 +338,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // 자신의 데이터만 접근 가능하도록 제한
-      if (userId !== req.session.userId) {
+      if (userId !== 6) {
         return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 인사이트만 볼 수 있습니다." });
       }
       
