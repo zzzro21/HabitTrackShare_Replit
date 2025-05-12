@@ -59,9 +59,14 @@
     @apply flex items-center px-2 py-1 rounded-md text-xs;
   }
   
-  /* 폰트 크기 30% 축소 */
+  /* 6.2인치 화면에 맞춘 폰트 크기 */
   html {
-    font-size: 12px;
+    font-size: 14px;
+  }
+  
+  /* 한글 폰트 사이즈 증가 */
+  .korean-text {
+    font-size: 140%;
   }
   
   /* textarea 자동 높이 조절 */
