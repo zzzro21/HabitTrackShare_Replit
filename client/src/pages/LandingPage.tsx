@@ -158,9 +158,9 @@ const LandingPage: React.FC = () => {
       className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto aurora-gradient"
       style={{ 
         maxWidth: '1080px', 
-        minHeight: '100vh',
+        minHeight: '80vh',
         height: 'auto',
-        aspectRatio: '1080 / 2340'
+        aspectRatio: '1080 / 1800'
       }}
     >
       {/* Status Bar (모바일 디바이스 스타일) */}
@@ -187,7 +187,7 @@ const LandingPage: React.FC = () => {
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[304px] relative mt-12 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className={`w-full max-w-[304px] relative mt-2 mb-4 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
           <div className={`absolute -left-12 top-[60%] bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
             <div className="bg-purple-500 rounded-full w-10 h-10 flex items-center justify-center mr-3">
@@ -213,7 +213,7 @@ const LandingPage: React.FC = () => {
             </div>
             <span className="text-base font-medium">Mori</span>
           </div>
-          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl relative" style={{ height: '384px', borderRadius: '100% / 69%' }}>
+          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl relative" style={{ height: '320px', borderRadius: '100% / 69%' }}>
             <img
               src={selectedImage}
               alt="프로필 이미지"
@@ -295,20 +295,20 @@ const LandingPage: React.FC = () => {
             <span className="text-3xl">Set it, Do it, Repeat.</span>"
           </h1>
 
-          <div className="flex items-center mt-12 justify-center relative">
+          <div className="flex items-center mt-8 justify-center relative">
             <span className={`text-red-500 mr-3 absolute -top-2 left-16 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-200`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
             {/* 명언 가이드라인 영역 */}
-            <div className="w-full max-w-[280px] mx-auto px-4 py-4 border border-gray-200 rounded-lg bg-white/60 backdrop-blur-sm shadow-sm">
-              <p className={`text-gray-700 text-2xl text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.9rem' }}>
+            <div className="w-full max-w-[260px] mx-auto px-3 py-3 border border-gray-200 rounded-lg bg-white/60 backdrop-blur-sm shadow-sm">
+              <p className={`text-gray-700 text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.6rem' }}>
                 "{quote}"
               </p>
             </div>
             <span className={`text-gray-800 ml-3 absolute right-16 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-400`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </span>
