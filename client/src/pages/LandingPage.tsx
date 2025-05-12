@@ -157,10 +157,10 @@ const LandingPage: React.FC = () => {
     <div 
       className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto aurora-gradient"
       style={{ 
-        maxWidth: '414px', /* 6.2인치 화면의 일반적인 너비 */
+        maxWidth: '1080px', /* FHD+ 6.2인치 화면 너비 */
         minHeight: '100vh',
         height: 'auto',
-        aspectRatio: '19.3 / 9'
+        aspectRatio: '1080 / 2340' /* FHD+ 정확한 비율 */
       }}
     >
       {/* 배경 */}
