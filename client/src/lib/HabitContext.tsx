@@ -69,19 +69,26 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [activeWeek, setActiveWeek] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Load users and habits on mount
+  // Load users, habits, and auth status on mount
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         setIsLoading(true);
+        
+        // Fetch auth status first to know who's logged in
+        const authResponse = await fetch('/api/auth/status');
+        const authData = await authResponse.json();
         
         // Fetch users
         const usersResponse = await fetch('/api/users');
         const usersData = await usersResponse.json();
         setUsers(usersData);
         
-        // Set default active user if none selected yet
-        if (usersData.length > 0 && activeUser === 0) {
+        // Set active user to the logged in user
+        if (authData.isAuthenticated && authData.user) {
+          setActiveUser(authData.user.id);
+        } else if (usersData.length > 0 && activeUser === 0) {
+          // Fallback if not authenticated (this might not work due to auth requirements)
           setActiveUser(usersData[0].id);
         }
         
@@ -97,9 +104,9 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         
         setHabits(habitsWithScoring);
         
-        // Fetch entries for active user
-        if (activeUser) {
-          await fetchEntriesForUser(activeUser);
+        // Fetch entries for active user (will only work if authenticated)
+        if (authData.isAuthenticated && authData.user) {
+          await fetchEntriesForUser(authData.user.id);
         }
       } catch (error) {
         console.error('Error fetching initial data:', error);
@@ -111,7 +118,8 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     fetchInitialData();
   }, []);
 
-  // Fetch entries when active user changes
+  // Fetch entries when active user changes - Note: With authentication,
+  // this will only work for the authenticated user
   useEffect(() => {
     if (activeUser) {
       fetchEntriesForUser(activeUser);
