@@ -9,7 +9,8 @@ const HabitTracker: React.FC = () => {
     activeUser, 
     activeWeek, 
     updateHabitEntry, 
-    isLoading 
+    isLoading,
+    canModifyUserData
   } = useHabit();
 
   // Get value for a specific habit and day
@@ -23,6 +24,12 @@ const HabitTracker: React.FC = () => {
   // Handle change in habit value
   const handleValueChange = async (habitId: number, day: number, value: number) => {
     try {
+      // 자신의 데이터만 수정 가능
+      if (!canModifyUserData(activeUser)) {
+        console.info("다른 사용자의 데이터를 수정할 권한이 없습니다");
+        return;
+      }
+      
       await updateHabitEntry(habitId, day, value);
     } catch (error) {
       console.error("습관 업데이트 중 오류 발생:", error);
