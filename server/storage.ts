@@ -29,6 +29,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserPassword(userId: number, newPassword: string): Promise<boolean>;
+  updateUsername(userId: number, newUsername: string): Promise<{ success: boolean; message: string }>;
   getAllUsers(): Promise<User[]>;
   
   // Habit methods
@@ -95,6 +96,41 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error("비밀번호 업데이트 오류:", error as Error);
       return false;
+    }
+  }
+  
+  async updateUsername(userId: number, newUsername: string): Promise<{ success: boolean; message: string }> {
+    try {
+      // 현재 사용자 정보 확인
+      const user = await this.getUser(userId);
+      if (!user) {
+        return { success: false, message: "사용자를 찾을 수 없습니다." };
+      }
+      
+      // 이미 사용자 이름을 변경한 경우
+      if (user.hasChangedUsername) {
+        return { success: false, message: "이미 사용자 이름을 변경하셨습니다. 한 번만 변경할 수 있습니다." };
+      }
+      
+      // 새 사용자 이름이 이미 사용 중인지 확인
+      const existingUser = await this.getUserByUsername(newUsername);
+      if (existingUser) {
+        return { success: false, message: "이미 사용 중인 사용자 이름입니다." };
+      }
+      
+      // 사용자 이름 변경
+      await db
+        .update(users)
+        .set({ 
+          username: newUsername,
+          hasChangedUsername: true 
+        })
+        .where(eq(users.id, userId));
+      
+      return { success: true, message: "사용자 이름이 성공적으로 변경되었습니다." };
+    } catch (error) {
+      console.error("사용자 이름 업데이트 오류:", error as Error);
+      return { success: false, message: "사용자 이름 변경 중 오류가 발생했습니다." };
     }
   }
 

@@ -64,6 +64,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
     }
   });
+  
+  // 사용자 이름 변경 API (가입 후 1회만 가능)
+  app.post("/api/auth/change-username", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.session as any).userId;
+      const { newUsername, password } = req.body;
+      
+      if (!newUsername || !password) {
+        return res.status(400).json({ success: false, message: "새 아이디와 비밀번호를 모두 입력해주세요." });
+      }
+      
+      // 현재 사용자 정보 확인
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "사용자를 찾을 수 없습니다." });
+      }
+      
+      // 비밀번호 확인
+      if (user.password !== password) {
+        return res.status(401).json({ success: false, message: "비밀번호가 일치하지 않습니다." });
+      }
+      
+      // 사용자 이름 변경
+      const result = await storage.updateUsername(userId, newUsername);
+      
+      if (result.success) {
+        // 세션 업데이트를 위해 로그아웃 후 재로그인 필요
+        req.session.destroy((err) => {
+          if (err) {
+            console.error("세션 삭제 오류:", err);
+            return res.status(500).json({ success: false, message: "세션 갱신 중 오류가 발생했습니다." });
+          }
+          return res.status(200).json({ success: true, message: result.message, requireRelogin: true });
+        });
+      } else {
+        return res.status(400).json({ success: false, message: result.message });
+      }
+    } catch (error) {
+      console.error("사용자 이름 변경 오류:", error);
+      return res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
+    }
+  });
 
   // Get all users
   app.get("/api/users", async (req, res) => {
