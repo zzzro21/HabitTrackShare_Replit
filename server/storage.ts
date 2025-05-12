@@ -290,16 +290,16 @@ export class DatabaseStorage implements IStorage {
       // 기존 사용자 목록
       const existingUsernames = existingUsers.map(user => user.username);
       
-      // 8명의 사용자 정의 (아바타와 함께)
+      // 8명의 사용자 정의 (젊은 캐릭터 이모티콘으로 변경)
       const demoUsers = [
-        { id: 1, name: '곽완신', avatar: '👤', username: 'user1', email: 'user1@example.com' },
-        { id: 2, name: '유은옥', avatar: '👩', username: 'user2', email: 'user2@example.com' },
-        { id: 3, name: '이경희', avatar: '👨', username: 'user3', email: 'user3@example.com' },
-        { id: 4, name: '임용녀', avatar: '👦', username: 'user4', email: 'user4@example.com' },
-        { id: 5, name: '박혜경', avatar: '👧', username: 'user5', email: 'user5@example.com' },
-        { id: 6, name: '김유나', avatar: '👵', username: 'user6', email: 'user6@example.com' },
-        { id: 7, name: '최지혜', avatar: '👴', username: 'user7', email: 'user7@example.com' },
-        { id: 8, name: '김미희', avatar: '🧓', username: 'user8', email: 'user8@example.com' }
+        { id: 1, name: '곽완신', avatar: '👨‍💼', username: 'user1', email: 'user1@example.com' },
+        { id: 2, name: '유은옥', avatar: '👩‍💼', username: 'user2', email: 'user2@example.com' },
+        { id: 3, name: '이경희', avatar: '🧑‍💻', username: 'user3', email: 'user3@example.com' },
+        { id: 4, name: '임용녀', avatar: '👩‍💻', username: 'user4', email: 'user4@example.com' },
+        { id: 5, name: '박혜경', avatar: '👱‍♀️', username: 'user5', email: 'user5@example.com' },
+        { id: 6, name: '김유나', avatar: '👩‍🎓', username: 'user6', email: 'user6@example.com' },
+        { id: 7, name: '최지혜', avatar: '👨‍🎓', username: 'user7', email: 'user7@example.com' },
+        { id: 8, name: '김미희', avatar: '🧑‍🎤', username: 'user8', email: 'user8@example.com' }
       ];
       
       // 누락된 사용자 생성
