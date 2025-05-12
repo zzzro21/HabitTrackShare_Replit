@@ -4,10 +4,10 @@ import { useLocation } from 'wouter';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login, isLoading } = useAuth();
   const [, setLocation] = useLocation();
+  const defaultPassword = "password123";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +19,6 @@ export default function LoginPage() {
     }
 
     try {
-      const defaultPassword = "password123";
       await login(username, defaultPassword);
       setLocation('/'); // 로그인 성공 시 홈 페이지로 이동
     } catch (err: any) {
@@ -58,13 +57,6 @@ export default function LoginPage() {
               placeholder="사용자 이름 입력 (예: user1)"
             />
           </div>
-          
-          <input
-            id="password"
-            type="hidden"
-            value={password || "password123"}
-            onChange={(e) => setPassword(e.target.value)}
-          />
           
           <button
             type="submit"
