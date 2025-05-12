@@ -19,12 +19,17 @@ export default function LoginPage() {
     }
 
     try {
-      await login(username, password);
-      setLocation('/'); // 로그인 성공 시 홈 페이지로 이동
+      const result = await login(username, password);
+      console.log("로그인 성공:", result);
+      
+      // 약간의 지연 후 홈으로 이동
+      setTimeout(() => {
+        setLocation('/');
+      }, 100);
     } catch (err: any) {
       console.error('Login error:', err);
       if (err?.message) {
-        setError(`로그인에 실패했습니다: ${err.message}`);
+        setError(`오류: ${err.message}`);
       } else {
         setError('로그인에 실패했습니다. 사용자 이름을 확인해주세요.');
       }
