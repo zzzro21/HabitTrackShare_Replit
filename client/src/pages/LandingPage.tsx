@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 
+// 동기부여 문장 배열
+const motivationalQuotes = [
+  "Just a few taps, and we'll remind you exactly when you need it!",
+  "Small steps today, big achievements tomorrow!",
+  "Every habit you build is a brick in your success wall.",
+  "Track today, transform tomorrow!",
+  "Your habits define your future. Start now!",
+  "One check at a time towards your best self.",
+  "Consistency is the secret ingredient to success.",
+  "Growth happens outside your comfort zone.",
+  "Today's discipline creates tomorrow's achievements.",
+  "Turn your goals into daily actions and watch the magic happen!"
+];
+
 const LandingPage: React.FC = () => {
   const [, navigate] = useLocation();
   const [showAnimation, setShowAnimation] = useState(false);
+  const [quote, setQuote] = useState("");
   
   // FHD+ 해상도(1080x2340)에 맞는 비율 계산
   const aspectRatio = 2340 / 1080;
@@ -13,6 +28,10 @@ const LandingPage: React.FC = () => {
     const timer = setTimeout(() => {
       setShowAnimation(true);
     }, 100);
+
+    // 랜덤 동기부여 문장 선택
+    const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+    setQuote(motivationalQuotes[randomIndex]);
 
     return () => clearTimeout(timer);
   }, []);
@@ -106,7 +125,7 @@ const LandingPage: React.FC = () => {
               </svg>
             </span>
             <p className={`text-gray-700 text-xl transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300`}>
-              "Just a few taps, and we'll<br />remind you exactly when you need it!"
+              "{quote}"
             </p>
             <span className={`text-gray-800 ml-3 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-400`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
