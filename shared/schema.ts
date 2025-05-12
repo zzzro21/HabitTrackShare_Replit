@@ -9,8 +9,6 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().default('user@example.com'),
-  hasChangedUsername: boolean("has_changed_username").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
