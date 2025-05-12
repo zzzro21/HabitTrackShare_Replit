@@ -163,29 +163,11 @@ const LandingPage: React.FC = () => {
         aspectRatio: '1080 / 1800'
       }}
     >
-      {/* Status Bar (모바일 디바이스 스타일) */}
-      <div className="relative z-10 w-full bg-transparent px-8 py-4 flex justify-between items-center">
-        <div className="text-white font-semibold text-lg drop-shadow-md">9:41</div>
-        <div className="flex items-center space-x-3">
-          <div className="w-5 h-5 text-white drop-shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 10a6 6 0 00-12 0v4M5 18h14a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-            </svg>
-          </div>
-          <div className="w-5 h-5 text-white drop-shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M1 5h22M1 12h22M1 19h22" />
-            </svg>
-          </div>
-          <div className="w-8 h-3.5 bg-white rounded-sm"></div>
-        </div>
-      </div>
-
-      {/* 배경 (핑크 그라데이션) */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-pink-50 to-white"></div>
+      {/* 배경 */}
+      <div className="absolute top-0 left-0 w-full h-full"></div>
 
       {/* 메인 콘텐츠 */}
-      <div className="relative flex flex-col items-center px-8 pt-6 pb-24 z-10 flex-grow">
+      <div className="relative flex flex-col items-center px-8 pt-2 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
         <div className={`w-full max-w-[304px] relative mt-2 mb-4 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
