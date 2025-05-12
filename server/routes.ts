@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { generateHabitInsights } from "./ai";
 import { z } from "zod";
 import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
-import { sessionMiddleware, login, logout, getCurrentUser, checkAuthStatus, isAuthenticated } from "./auth";
+import { sessionMiddleware, login, logout, getCurrentUser, checkAuthStatus, isAuthenticated, onlySelfModify, allowFeedbackForAny } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // 세션 미들웨어 설정
@@ -62,8 +62,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(entries);
   });
 
-  // Create or update a habit entry (인증 필요)
-  app.post("/api/entries", isAuthenticated, async (req, res) => {
+  // Create or update a habit entry (인증 필요 + 자신의 데이터만 수정 가능)
+  app.post("/api/entries", isAuthenticated, onlySelfModify, async (req, res) => {
     try {
       const validatedData = insertHabitEntrySchema.parse(req.body);
       
@@ -154,7 +154,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create or update a habit note (인증 필요)
-  app.post("/api/notes", isAuthenticated, async (req, res) => {
+  app.post("/api/notes", isAuthenticated, onlySelfModify, async (req, res) => {
     try {
       const validatedData = insertHabitNoteSchema.parse(req.body);
       

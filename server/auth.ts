@@ -124,6 +124,42 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
   res.status(401).json({ message: '로그인이 필요합니다.' });
 }
 
+// 자신의 데이터만 수정할 수 있도록 하는 미들웨어
+export function onlySelfModify(req: Request, res: Response, next: NextFunction) {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: '로그인이 필요합니다.' });
+  }
+
+  // userId가 있는지 확인하고 현재 로그인한 사용자와 일치하는지 확인
+  const userId = 
+    req.body.userId || 
+    (req.params.userId ? parseInt(req.params.userId) : null);
+  
+  if (!userId) {
+    return res.status(400).json({ message: '사용자 ID가 필요합니다.' });
+  }
+  
+  if (userId !== req.session.userId) {
+    return res.status(403).json({ 
+      message: '접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다.',
+      attemptedUserId: userId,
+      yourUserId: req.session.userId
+    });
+  }
+  
+  next();
+}
+
+// 피드백은 친구의 데이터에도 작성할 수 있도록 하는 미들웨어
+export function allowFeedbackForAny(req: Request, res: Response, next: NextFunction) {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: '로그인이 필요합니다.' });
+  }
+  
+  // 피드백은 모든 사용자에게 작성 가능
+  next();
+}
+
 // 로그인 여부 확인
 export function checkAuthStatus(req: Request, res: Response) {
   if (req.session.userId) {
