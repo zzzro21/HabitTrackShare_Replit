@@ -14,7 +14,7 @@ export const sessionMiddleware = session({
   store: new PgSession({
     conObject: { connectionString: process.env.DATABASE_URL },
     tableName: 'session',
-    createTableIfMissing: false
+    createTableIfMissing: true // 필요한 경우 테이블 생성
   }),
   secret: process.env.SESSION_SECRET || 'habit-tracker-secret-key',
   resave: false,
@@ -22,7 +22,7 @@ export const sessionMiddleware = session({
   cookie: {
     maxAge: COOKIE_MAX_AGE, 
     httpOnly: true,
-    secure: false, // secure 쿠키 비활성화
+    secure: process.env.NODE_ENV === 'production', // 프로덕션 환경에서만 secure 쿠키 사용
     sameSite: 'lax' // sameSite lax 사용
   }
 });
