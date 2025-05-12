@@ -71,12 +71,24 @@ export function useAuth() {
 
   // 로그아웃 함수
   const logout = async () => {
-    const result = await logoutMutation.mutateAsync();
-    // 로그아웃 시 로컬 스토리지 정보 제거
-    localStorage.removeItem('userAuth');
-    // 로그아웃 성공 후 강제 페이지 새로고침
-    window.location.href = '/login';
-    return result;
+    try {
+      const result = await logoutMutation.mutateAsync();
+      // 로그아웃 시 로컬 스토리지 정보 제거
+      localStorage.removeItem('userAuth');
+      // 로그아웃 성공 후 강제 페이지 새로고침 (지연 적용)
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 300);
+      return result;
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+      // 오류 발생시에도 로컬 스토리지는 정리
+      localStorage.removeItem('userAuth');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 300);
+      throw error;
+    }
   };
 
   // 컴포넌트 마운트 시 인증 상태 확인
