@@ -231,13 +231,10 @@ const NotePage: React.FC = () => {
     try {
       setIsSubmitting(true);
       
-      const response = await apiRequest('POST', '/api/feedback', {
-        userId: activeUser,
-        day,
-        feedback: feedback || ''
-      });
+      // HabitContext의 updateDailyFeedback 함수 사용 (권한 관리 포함)
+      await updateDailyFeedback(activeUser, day, feedback || '');
       
-      // 응답이 성공적이면 성공 메시지 표시
+      // 성공 메시지 표시
       toast({
         title: "저장 완료",
         description: isOwnData 
@@ -278,12 +275,8 @@ const NotePage: React.FC = () => {
           })
         );
         
-        // 자신의 피드백 저장
-        const saveFeedbackPromise = apiRequest('POST', '/api/feedback', {
-          userId: activeUser,
-          day,
-          feedback: feedback || ''
-        });
+        // 자신의 피드백 저장 (HabitContext의 함수 사용)
+        const saveFeedbackPromise = updateDailyFeedback(activeUser, day, feedback || '');
         
         // 모든 저장 작업 병렬로 실행
         await Promise.all([...saveNotesPromises, saveFeedbackPromise]);
