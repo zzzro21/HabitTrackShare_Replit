@@ -120,7 +120,9 @@ const LandingPage: React.FC = () => {
 
     // 하루에 한 번만 바뀌도록 날짜 기반으로 문장 선택
     const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+    const startOfYear = new Date(today.getFullYear(), 0, 0);
+    const diff = today.getTime() - startOfYear.getTime();
+    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
     const quoteIndex = dayOfYear % motivationalQuotes.length;
     setQuote(motivationalQuotes[quoteIndex]);
 
@@ -204,7 +206,7 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-8">
-          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-gamja ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             "Little actions, <span className="inline-block bg-orange-400 px-3 py-1 text-white rounded-md">Big results</span>,<br />
             Set it, Do it, Repeat."
           </h1>
@@ -215,7 +217,7 @@ const LandingPage: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
-            <p className={`text-gray-700 text-xl transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300`}>
+            <p className={`text-gray-700 text-xl transition-all duration-500 font-gothic ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300`}>
               "{quote}"
             </p>
             <span className={`text-gray-800 ml-3 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-400`}>
@@ -230,9 +232,9 @@ const LandingPage: React.FC = () => {
         <div className="w-full mt-auto">
           <button
             onClick={handleBeginClick}
-            className={`w-full bg-orange-400 hover:bg-orange-500 text-white font-bold py-6 px-8 rounded-full text-2xl shadow-xl transform transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
+            className={`w-full bg-orange-400 hover:bg-orange-500 text-white font-bold py-6 px-8 rounded-full text-2xl shadow-xl transform transition-all duration-500 font-songmyung ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
           >
-            Lets Begin
+            시작하기
           </button>
           
           {/* 홈 인디케이터 (iOS 스타일) */}
