@@ -15,6 +15,7 @@ import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
 import LoginPage from "@/pages/LoginPage";
 import DirectLoginPage from "@/pages/DirectLoginPage";
+import EmergencyLoginPage from "@/pages/EmergencyLoginPage";
 
 // 인증이 필요한 라우트를 보호하는 컴포넌트
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
