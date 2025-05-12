@@ -205,7 +205,7 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-8">
-          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-bebas tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-oswald tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             "LITTLE ACTIONS, <span className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md">BIG RESULTS</span>,<br />
             SET IT, DO IT, REPEAT."
           </h1>
@@ -231,7 +231,7 @@ const LandingPage: React.FC = () => {
         <div className="w-full mt-auto">
           <button
             onClick={handleBeginClick}
-            className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-8 rounded-full text-3xl shadow-xl transform transition-all duration-500 font-bebas tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
+            className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-8 rounded-full text-3xl shadow-xl transform transition-all duration-500 font-oswald tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
           >
             LETS BEGIN
           </button>
