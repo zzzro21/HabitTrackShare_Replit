@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 const NotePage: React.FC = () => {
   const { activeUser, habits, isLoading } = useHabit();
+  const { user } = useAuth();
   const [day, setDay] = useState<number>(0);
   const [notes, setNotes] = useState<{[key: number]: string}>({});
   const [habitEntries, setHabitEntries] = useState<{[key: number]: number}>({});
@@ -16,6 +17,9 @@ const NotePage: React.FC = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  
+  // 자신의 데이터인지 여부 확인 (습관 데이터 수정 권한)
+  const isOwnData = user && activeUser === user.id;
 
   // 날짜 범위 생성 (1-56일)
   const daysArray = Array.from({ length: 56 }, (_, i) => i);
@@ -119,6 +123,17 @@ const NotePage: React.FC = () => {
   const handleSaveNote = async (habitId: number) => {
     if (!activeUser) return;
     
+    // 다른 사용자의 노트는 수정할 수 없음
+    if (!isOwnData) {
+      toast({
+        title: "권한 없음",
+        description: "다른 사용자의 노트는 수정할 수 없습니다.",
+        variant: "destructive",
+        duration: 3000
+      });
+      return;
+    }
+    
     try {
       setIsSubmitting(true);
       
@@ -129,12 +144,11 @@ const NotePage: React.FC = () => {
         note: notes[habitId] || ''
       });
       
-      if (response.ok) {
-        toast({
-          title: "저장 완료",
-          description: "습관 노트가 저장되었습니다.",
-        });
-      }
+      toast({
+        title: "저장 완료",
+        description: "습관 노트가 저장되었습니다.",
+        duration: 2000
+      });
     } catch (error) {
       console.error('Error saving note:', error);
       toast({
@@ -151,12 +165,24 @@ const NotePage: React.FC = () => {
   const handleHabitEntryUpdate = async (habitId: number, value: number) => {
     if (!activeUser) return;
     
+    // 다른 사용자의 데이터는 수정할 수 없음
+    if (!isOwnData) {
+      toast({
+        title: "권한 없음",
+        description: "다른 사용자의 습관 데이터는 수정할 수 없습니다.",
+        variant: "destructive",
+        duration: 3000
+      });
+      return;
+    }
+    
     // 모든 습관은 내용이 작성된 후에만 체크 가능
     if (value > 0 && !notes[habitId]) {
       toast({
         title: "세부내용 필요",
         description: "세부내용을 작성한 후에 체크할 수 있습니다.",
         variant: "destructive",
+        duration: 3000
       });
       return;
     }
@@ -176,12 +202,11 @@ const NotePage: React.FC = () => {
         value
       });
       
-      if (response.ok) {
-        toast({
-          title: "점수 업데이트",
-          description: "습관 점수가 업데이트되었습니다.",
-        });
-      }
+      toast({
+        title: "점수 업데이트",
+        description: "습관 점수가 업데이트되었습니다.",
+        duration: 2000
+      });
     } catch (error) {
       console.error('Error updating habit entry:', error);
       toast({
@@ -237,30 +262,47 @@ const NotePage: React.FC = () => {
     try {
       setIsSubmitting(true);
       
-      // 노트 저장
-      const saveNotesPromises = Object.entries(notes).map(([habitId, note]) => 
-        apiRequest('POST', '/api/notes', {
+      // 자신의 노트만 저장 가능
+      if (isOwnData) {
+        // 노트 저장
+        const saveNotesPromises = Object.entries(notes).map(([habitId, note]) => 
+          apiRequest('POST', '/api/notes', {
+            userId: activeUser,
+            habitId: parseInt(habitId),
+            day,
+            note: note || ''
+          })
+        );
+        
+        // 자신의 피드백 저장
+        const saveFeedbackPromise = apiRequest('POST', '/api/feedback', {
           userId: activeUser,
-          habitId: parseInt(habitId),
           day,
-          note: note || ''
-        })
-      );
-      
-      // 피드백 저장
-      const saveFeedbackPromise = apiRequest('POST', '/api/feedback', {
-        userId: activeUser,
-        day,
-        feedback: feedback || ''
-      });
-      
-      // 모든 저장 작업 병렬로 실행
-      await Promise.all([...saveNotesPromises, saveFeedbackPromise]);
-      
-      toast({
-        title: "저장 완료",
-        description: "모든 습관 노트와 소감/피드백이 저장되었습니다.",
-      });
+          feedback: feedback || ''
+        });
+        
+        // 모든 저장 작업 병렬로 실행
+        await Promise.all([...saveNotesPromises, saveFeedbackPromise]);
+        
+        toast({
+          title: "저장 완료",
+          description: "모든 습관 노트와 소감/피드백이 저장되었습니다.",
+          duration: 2000
+        });
+      } else {
+        // 다른 사용자의 경우 피드백만 저장
+        await apiRequest('POST', '/api/feedback', {
+          userId: activeUser,
+          day,
+          feedback: feedback || ''
+        });
+        
+        toast({
+          title: "소감/피드백 저장 완료",
+          description: "친구에게 소감/피드백을 작성했습니다.",
+          duration: 2000
+        });
+      }
     } catch (error) {
       console.error('Error saving data:', error);
       toast({
@@ -363,7 +405,8 @@ const NotePage: React.FC = () => {
                         name="book-score" 
                         className="mr-1.5"
                         checked={habitEntries[1] === 0}
-                        onChange={() => handleHabitEntryUpdate(1, 0)} 
+                        onChange={() => handleHabitEntryUpdate(1, 0)}
+                        disabled={!isOwnData}
                       />
                       <label htmlFor="book-none" className="text-xs">미완료 (0점)</label>
                     </div>
