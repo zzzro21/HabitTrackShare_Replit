@@ -60,12 +60,18 @@ export function useAuth() {
 
   // 로그인 함수
   const login = async (username: string, password: string) => {
-    return loginMutation.mutateAsync({ username, password });
+    const result = await loginMutation.mutateAsync({ username, password });
+    // 로그인 성공 후 강제 페이지 새로고침
+    window.location.href = '/';
+    return result;
   };
 
   // 로그아웃 함수
   const logout = async () => {
-    return logoutMutation.mutateAsync();
+    const result = await logoutMutation.mutateAsync();
+    // 로그아웃 성공 후 강제 페이지 새로고침
+    window.location.href = '/login';
+    return result;
   };
 
   // 컴포넌트 마운트 시 인증 상태 확인
