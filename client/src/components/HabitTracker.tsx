@@ -45,6 +45,16 @@ const HabitTracker: React.FC = () => {
   // Calculate start day for the current week
   const startDay = activeWeek * 14;
 
+  // 각 습관의 상태 아이콘 렌더링 함수
+  const renderValueOption = (value: number) => {
+    switch(value) {
+      case 0: return "-";
+      case 1: return "△";  // 모든 습관에서 1 값은 삼각형으로 통일
+      case 2: return "○";  // 모든 습관에서 2 값은 동그라미로 통일
+      default: return "-";
+    }
+  };
+
   return (
     <div className="mb-5">
       <div className="flex justify-between items-center mb-2">
@@ -92,9 +102,6 @@ const HabitTracker: React.FC = () => {
                   if (value === 1) bgColor = 'bg-blue-50';
                   if (value === 2) bgColor = 'bg-green-100';
                   
-                  // Different rendering for binary habits vs those with partial completion
-                  const isBinary = habit.scoreType === 'binary';
-                  
                   return (
                     <td key={i} className="border p-0 text-center">
                       <select
@@ -103,14 +110,8 @@ const HabitTracker: React.FC = () => {
                         className={`w-full text-xs py-1 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
                       >
                         <option value="0">-</option>
-                        {isBinary ? (
-                          <option value="1">완료</option>
-                        ) : (
-                          <>
-                            <option value="1">△</option>
-                            <option value="2">○</option>
-                          </>
-                        )}
+                        <option value="1">△</option>
+                        {habit.scoreType !== 'binary' && <option value="2">○</option>}
                       </select>
                     </td>
                   );
@@ -144,9 +145,6 @@ const HabitTracker: React.FC = () => {
                   if (value === 1) bgColor = 'bg-blue-50';
                   if (value === 2) bgColor = 'bg-green-100';
                   
-                  // Different rendering for binary habits vs those with partial completion
-                  const isBinary = habit.scoreType === 'binary';
-                  
                   return (
                     <td key={i} className="border p-0 text-center">
                       <select
@@ -155,14 +153,8 @@ const HabitTracker: React.FC = () => {
                         className={`w-full text-xs py-1 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
                       >
                         <option value="0">-</option>
-                        {isBinary ? (
-                          <option value="1">완료</option>
-                        ) : (
-                          <>
-                            <option value="1">△</option>
-                            <option value="2">○</option>
-                          </>
-                        )}
+                        <option value="1">△</option>
+                        {habit.scoreType !== 'binary' && <option value="2">○</option>}
                       </select>
                     </td>
                   );
