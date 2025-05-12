@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch, Route, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -75,13 +75,21 @@ function NavBar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   
-  // 로컬 스토리지에서 인증 정보 확인
+  // 로컬 스토리지에서 인증 정보 확인 (매 렌더링마다 새로 가져옴)
   const localAuth = localStorage.getItem('userAuth');
   const localUser = localAuth ? JSON.parse(localAuth).user : null;
   const isLocallyAuthenticated = !!localUser;
   
   // 실제 표시할 사용자 정보 (세션 또는 로컬 스토리지)
   const displayUser = user || localUser;
+  
+  // 배포 환경에서 로컬 스토리지 인증 정보가 있으면 사용
+  useEffect(() => {
+    // 서버 세션 인증이 없지만 로컬 스토리지에 인증 정보가 있으면 유지
+    if (!isAuthenticated && isLocallyAuthenticated && localUser) {
+      console.log("로컬 인증 정보 사용:", localUser.username);
+    }
+  }, [isAuthenticated, isLocallyAuthenticated, localUser]);
   
   const handleLogout = async () => {
     try {
