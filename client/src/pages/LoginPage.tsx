@@ -158,19 +158,50 @@ export default function LoginPage() {
                   key={user.id}
                   onClick={() => {
                     // 로컬 스토리지에 사용자 정보 저장
-                    const userData = {
-                      id: ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8'].indexOf(user.id === 'zzzro' ? 'user6' : user.id) + 1,
-                      name: user.name,
-                      username: user.id,
-                      avatar: user.avatar
-                    };
-                    
-                    localStorage.setItem('userAuth', JSON.stringify({
-                      isLoggedIn: true,
-                      user: userData
-                    }));
-                    
-                    window.location.href = '/';
+                    try {
+                      // 로컬 스토리지 및 세션 스토리지 모두 사용
+                      const userId = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8'].indexOf(user.id === 'zzzro' ? 'user6' : user.id) + 1;
+                      const userData = {
+                        id: userId,
+                        name: user.name,
+                        username: user.id,
+                        avatar: user.avatar
+                      };
+                      
+                      console.log("빠른 로그인 시도:", userData);
+                      
+                      // 로컬 스토리지 사용
+                      localStorage.setItem('userAuth', JSON.stringify({
+                        isLoggedIn: true,
+                        user: userData
+                      }));
+                      
+                      // 세션 스토리지도 함께 사용
+                      sessionStorage.setItem('userAuth', JSON.stringify({
+                        isLoggedIn: true,
+                        user: userData
+                      }));
+                      
+                      // 로그인 서버 요청 자동화 (옵션)
+                      fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user.id, password: 'password123' }),
+                        credentials: 'include'
+                      }).then(res => {
+                        console.log("로그인 응답:", res.status);
+                      }).catch(err => {
+                        console.error("로그인 요청 실패:", err);
+                      });
+                      
+                      // 짧은 지연 후 홈으로 이동
+                      setTimeout(() => {
+                        window.location.href = '/';
+                      }, 100);
+                    } catch (error) {
+                      console.error("로그인 처리 중 오류:", error);
+                      alert("로그인 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    }
                   }}
                   className="flex flex-col items-center bg-blue-50 hover:bg-blue-100 p-3 rounded-lg transition-colors shadow-sm hover:shadow-md border border-blue-200"
                 >
