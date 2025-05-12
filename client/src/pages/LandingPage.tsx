@@ -56,8 +56,8 @@ const LandingPage: React.FC = () => {
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-24 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[380px] relative mt-8 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl" style={{ height: '480px', borderRadius: '70% / 80%' }}>
+        <div className={`w-full max-w-[304px] relative mt-8 mb-10 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+          <div className="w-full overflow-hidden bg-orange-100 border-4 border-white shadow-xl" style={{ height: '384px', borderRadius: '70% / 80%' }}>
             <img
               src="https://images.unsplash.com/photo-1596079890744-c1a0462d0975?auto=format&fit=crop&q=80"
               alt="여성이 노트북을 사용하는 모습"
