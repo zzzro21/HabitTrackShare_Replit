@@ -67,11 +67,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertHabitEntrySchema.parse(req.body);
       
-      // 자신의 데이터만 수정 가능하도록 제한
-      if (validatedData.userId !== req.session.userId) {
-        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다." });
-      }
-      
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
       if (!user) {
@@ -153,15 +148,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(note);
   });
   
-  // Create or update a habit note (인증 필요)
+  // Create or update a habit note (인증 필요 + 자신의 데이터만 수정 가능)
   app.post("/api/notes", isAuthenticated, onlySelfModify, async (req, res) => {
     try {
       const validatedData = insertHabitNoteSchema.parse(req.body);
-      
-      // 자신의 데이터만 수정 가능하도록 제한
-      if (validatedData.userId !== req.session.userId) {
-        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 데이터만 수정할 수 있습니다." });
-      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
@@ -217,7 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Create or update daily feedback (인증 필요) - 친구의 소감/피드백 작성 가능
-  app.post("/api/feedback", isAuthenticated, async (req, res) => {
+  app.post("/api/feedback", isAuthenticated, allowFeedbackForAny, async (req, res) => {
     try {
       const validatedData = insertDailyFeedbackSchema.parse(req.body);
       
@@ -292,14 +282,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Manually create habit insights (mostly for testing) (인증 필요)
-  app.post("/api/insights", isAuthenticated, async (req, res) => {
+  app.post("/api/insights", isAuthenticated, onlySelfModify, async (req, res) => {
     try {
       const validatedData = insertHabitInsightSchema.parse(req.body);
-      
-      // 자신의 데이터만 수정 가능하도록 제한
-      if (validatedData.userId !== req.session.userId) {
-        return res.status(403).json({ message: "접근 권한이 없습니다. 자신의 인사이트만 생성할 수 있습니다." });
-      }
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
