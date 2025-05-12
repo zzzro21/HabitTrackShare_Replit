@@ -19,11 +19,8 @@ export default function LoginPage() {
     }
 
     try {
-      const result = await login(username, password);
-      console.log("로그인 성공:", result);
-      
-      // 강제로 페이지 새로고침
-      window.location.href = '/';
+      await login(username, password);
+      // 로그인 함수에서 페이지 이동 처리
     } catch (err: any) {
       console.error('Login error:', err);
       if (err?.message) {
