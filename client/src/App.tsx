@@ -43,6 +43,7 @@ function Router() {
       {/* 공개 라우트 */}
       <Route path="/login" component={LoginPage} />
       <Route path="/direct-login" component={DirectLoginPage} />
+      <Route path="/emergency-login" component={EmergencyLoginPage} />
       
       {/* 보호된 라우트 */}
       <Route path="/">
