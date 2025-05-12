@@ -30,9 +30,13 @@ export function useAuth() {
   // 로그인 중인지 확인 (안전한 기본값 설정)
   const authData = data || { isAuthenticated: false, user: undefined };
   
-  // 로컬 스토리지 인증 정보 확인
+  // 로컬 스토리지 및 세션 스토리지 인증 정보 확인
   const localAuthStr = localStorage.getItem('userAuth');
-  const localAuth = localAuthStr ? JSON.parse(localAuthStr) : null;
+  const sessionAuthStr = sessionStorage.getItem('userAuth');
+  
+  // 둘 중 하나라도 있으면 사용
+  const authStr = localAuthStr || sessionAuthStr;
+  const localAuth = authStr ? JSON.parse(authStr) : null;
   const isLocallyAuthenticated = localAuth?.isLoggedIn || false;
   const localUser = localAuth?.user;
   const isAuthenticated = Boolean(authData.isAuthenticated);
@@ -42,12 +46,18 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       const response = await apiRequest<{ message: string; user: AuthUser }>('POST', '/api/auth/login', credentials);
-      // 로그인 성공 시 로컬 스토리지에 인증 정보 저장
+      // 로그인 성공 시 로컬 스토리지와 세션 스토리지에 인증 정보 저장
       if (response && response.user) {
-        localStorage.setItem('userAuth', JSON.stringify({
+        const authData = {
           isLoggedIn: true,
           user: response.user
-        }));
+        };
+        
+        // 로컬 스토리지와 세션 스토리지 모두 사용 (이중 안전장치)
+        localStorage.setItem('userAuth', JSON.stringify(authData));
+        sessionStorage.setItem('userAuth', JSON.stringify(authData));
+        
+        console.log("로그인 성공: 로컬 및 세션 스토리지에 저장됨", response.user.username);
       }
       return response;
     },
@@ -86,21 +96,32 @@ export function useAuth() {
   // 로그아웃 함수
   const logout = async () => {
     try {
+      // 서버 로그아웃 요청
       const result = await logoutMutation.mutateAsync();
-      // 로그아웃 시 로컬 스토리지 정보 제거
+      
+      // 모든 클라이언트 저장소에서 로그인 정보 제거
       localStorage.removeItem('userAuth');
+      sessionStorage.removeItem('userAuth');
+      
+      console.log("로그아웃 완료: 모든 저장소 정리됨");
+      
       // 로그아웃 성공 후 강제 페이지 새로고침 (지연 적용)
       setTimeout(() => {
         window.location.href = '/login';
       }, 300);
+      
       return result;
     } catch (error) {
       console.error("로그아웃 오류:", error);
-      // 오류 발생시에도 로컬 스토리지는 정리
+      
+      // 오류 발생시에도 모든 저장소 정리
       localStorage.removeItem('userAuth');
+      sessionStorage.removeItem('userAuth');
+      
       setTimeout(() => {
         window.location.href = '/login';
       }, 300);
+      
       throw error;
     }
   };
