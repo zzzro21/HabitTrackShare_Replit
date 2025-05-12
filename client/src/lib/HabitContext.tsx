@@ -102,8 +102,8 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         
         // Set user if not set from local storage
         if (!localUser && usersData.length > 0) {
-          // 기본 사용자로 김철수 (ID: 6) 사용
-          const defaultUser = usersData.find(u => u.id === 6) || usersData[0];
+          // 기본 사용자로 김유나 (ID: 6) 사용
+          const defaultUser = usersData.find((u: User) => u.id === 6) || usersData[0];
           setActiveUser(defaultUser.id);
           setCurrentUserId(defaultUser.id);
           
@@ -170,20 +170,14 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const updateHabitEntry = async (habitId: number, day: number, value: number) => {
     try {
-      // 인증 상태 확인
-      const authResponse = await fetch('/api/auth/status');
-      const authData = await authResponse.json();
-      
-      if (!authData.isAuthenticated) {
-        console.info('로그인이 필요합니다');
+      // 현재 선택된 사용자 ID 사용 (로그인 필요 없음)
+      if (!currentUserId) {
+        console.info('사용자가 선택되지 않았습니다');
         return;
       }
       
-      // 로그인한 사용자 ID 사용 (activeUser가 아님)
-      const loggedInUserId = authData.user.id;
-      
       const response = await apiRequest<HabitEntry>('POST', '/api/entries', {
-        userId: loggedInUserId,
+        userId: currentUserId,
         habitId,
         day,
         value
@@ -192,7 +186,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       // Update local state with the new entry
       setHabitEntries(prev => {
         const existingIndex = prev.findIndex(
-          entry => entry.userId === loggedInUserId && entry.habitId === habitId && entry.day === day
+          entry => entry.userId === currentUserId && entry.habitId === habitId && entry.day === day
         );
         
         if (existingIndex >= 0) {
@@ -304,15 +298,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // 데일리 피드백 업데이트 (친구에게도 작성 가능)
   const updateDailyFeedback = async (userId: number, day: number, feedback: string) => {
     try {
-      // 인증 상태 확인
-      const authResponse = await fetch('/api/auth/status');
-      const authData = await authResponse.json();
-      
-      if (!authData.isAuthenticated) {
-        console.info('로그인이 필요합니다');
-        return;
-      }
-      
+      // 인증 필요 없음
       const response = await apiRequest('POST', '/api/feedback', {
         userId,
         day,
@@ -321,12 +307,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       return response;
     } catch (error) {
-      const err = error as { response?: { status: number } };
-      if (err?.response?.status === 401) {
-        console.info('로그인이 필요합니다');
-      } else {
-        console.error('Error updating daily feedback:', error);
-      }
+      console.error('피드백 업데이트 오류:', error);
     }
   };
 
