@@ -146,11 +146,11 @@ export default function LoginPage() {
             <div className="grid grid-cols-4 gap-2">
               {[
                 { id: 'user1', name: '곽완신', avatar: '👨‍💼' },
-                { id: 'user2', name: '유은옥', avatar: '👩‍💼' },
-                { id: 'user3', name: '이경희', avatar: '👨‍🦱' },
-                { id: 'user4', name: '임용녀', avatar: '👩‍🦰' },
-                { id: 'user5', name: '박혜경', avatar: '👱‍♀️' },
-                { id: 'zzzro', name: '김유나', avatar: '👩‍🦳' },
+                { id: 'user2', name: '마정수', avatar: '👩‍💼' },
+                { id: 'user3', name: '조갑석', avatar: '👨‍🦱' },
+                { id: 'user4', name: '이경희', avatar: '👩‍🦰' },
+                { id: 'user5', name: '박경희', avatar: '👱‍♀️' },
+                { id: 'zzzro', name: '김철수', avatar: '👩‍🦳' },
                 { id: 'user7', name: '최지혜', avatar: '👩‍🦱' },
                 { id: 'user8', name: '김미희', avatar: '👧' }
               ].map(user => (
