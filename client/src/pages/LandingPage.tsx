@@ -206,7 +206,7 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-8">
-          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-gamja ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             "Little actions, <span className="inline-block bg-orange-400 px-3 py-1 text-white rounded-md">Big results</span>,<br />
             Set it, Do it, Repeat."
           </h1>
