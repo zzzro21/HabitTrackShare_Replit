@@ -22,12 +22,19 @@ export function useAuth() {
   // 현재 로그인 상태 확인
   const { data, isLoading, refetch } = useQuery<any>({
     queryKey: ['/api/auth/status'],
-    staleTime: 300000, // 5분
-    retry: false
+    staleTime: 0, // 항상 최신 값 가져오기
+    retry: false,
+    refetchOnWindowFocus: true // 윈도우 포커스 시 다시 가져오기
   });
 
   // 로그인 중인지 확인 (안전한 기본값 설정)
   const authData = data || { isAuthenticated: false, user: undefined };
+  
+  // 로컬 스토리지 인증 정보 확인
+  const localAuthStr = localStorage.getItem('userAuth');
+  const localAuth = localAuthStr ? JSON.parse(localAuthStr) : null;
+  const isLocallyAuthenticated = localAuth?.isLoggedIn || false;
+  const localUser = localAuth?.user;
   const isAuthenticated = Boolean(authData.isAuthenticated);
   const user = authData.user as AuthUser | undefined;
 
