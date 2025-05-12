@@ -13,6 +13,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize predefined data
   await storage.initializePredefinedData();
   
+  // 사용자 캐릭터 업데이트를 위한 관리자 전용 엔드포인트
+  app.get('/api/admin/update-avatars', async (req, res) => {
+    try {
+      await storage.initializePredefinedData();
+      res.json({ success: true, message: '사용자 아바타가 업데이트되었습니다.' });
+    } catch (error) {
+      console.error('아바타 업데이트 오류:', error);
+      res.status(500).json({ success: false, message: '사용자 아바타 업데이트 중 오류가 발생했습니다.' });
+    }
+  });
+  
   // 인증 관련 라우트
   app.post("/api/auth/login", login);
   app.post("/api/auth/logout", logout);
