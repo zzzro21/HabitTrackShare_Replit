@@ -40,9 +40,11 @@ interface HabitContextType {
   habitEntries: HabitEntry[];
   activeUser: number;
   activeWeek: number;
+  currentUserId: number | null; // 현재 로그인한 사용자 ID
   setActiveUser: (userId: number) => void;
   setActiveWeek: (week: number) => void;
   updateHabitEntry: (habitId: number, day: number, value: number) => Promise<void>;
+  updateDailyFeedback: (userId: number, day: number, feedback: string) => Promise<void>;
   isLoading: boolean;
   calculateCompletionRate: (userId: number) => number;
   calculateWeekScores: (userId: number, week: number) => number[];
@@ -57,6 +59,7 @@ interface HabitContextType {
     totalScore: number;
     completionRate: number;
   }[];
+  canModifyUserData: (userId: number) => boolean;
 }
 
 const HabitContext = createContext<HabitContextType | undefined>(undefined);
@@ -67,6 +70,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [habitEntries, setHabitEntries] = useState<HabitEntry[]>([]);
   const [activeUser, setActiveUser] = useState<number>(1);
   const [activeWeek, setActiveWeek] = useState<number>(0);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Load users, habits, and auth status on mount
@@ -87,6 +91,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // Set active user to the logged in user
         if (authData.isAuthenticated && authData.user) {
           setActiveUser(authData.user.id);
+          setCurrentUserId(authData.user.id);
         } else if (usersData.length > 0 && activeUser === 0) {
           // Fallback if not authenticated (this might not work due to auth requirements)
           setActiveUser(usersData[0].id);
