@@ -292,7 +292,7 @@ const LandingPage: React.FC = () => {
         <div className="w-full text-center mt-4">
           <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             "Little actions, <span className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md">Big results</span>,<br />
-            Set it, Do it, Repeat."
+            <span className="text-3xl">Set it, Do it, Repeat.</span>"
           </h1>
 
           <div className="flex items-center mt-12 justify-center relative">
