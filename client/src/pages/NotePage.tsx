@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
 const NotePage: React.FC = () => {
-  const { activeUser, habits, isLoading } = useHabit();
+  const { activeUser, habits, isLoading, updateDailyFeedback } = useHabit();
   const { user } = useAuth();
   const [day, setDay] = useState<number>(0);
   const [notes, setNotes] = useState<{[key: number]: string}>({});
@@ -224,7 +224,7 @@ const NotePage: React.FC = () => {
     }
   };
   
-  // 피드백 저장 핸들러
+  // 피드백 저장 핸들러 (친구에게도 작성 가능)
   const handleSaveFeedback = async () => {
     if (!activeUser) return;
     
@@ -237,18 +237,22 @@ const NotePage: React.FC = () => {
         feedback: feedback || ''
       });
       
-      if (response.ok) {
-        toast({
-          title: "저장 완료",
-          description: "소감/피드백이 저장되었습니다.",
-        });
-      }
+      // 응답이 성공적이면 성공 메시지 표시
+      toast({
+        title: "저장 완료",
+        description: isOwnData 
+          ? "소감/피드백이 저장되었습니다." 
+          : "친구에게 피드백을 남겼습니다.",
+        duration: 2000
+      });
+      
     } catch (error) {
       console.error('Error saving feedback:', error);
       toast({
         title: "저장 실패",
         description: "소감/피드백 저장 중 오류가 발생했습니다.",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 3000
       });
     } finally {
       setIsSubmitting(false);
