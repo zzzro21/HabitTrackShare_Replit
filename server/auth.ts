@@ -22,8 +22,8 @@ export const sessionMiddleware = session({
   cookie: {
     maxAge: COOKIE_MAX_AGE, 
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax'
+    secure: false, // 배포 환경에서도 HTTP 사용 허용
+    sameSite: 'none'
   }
 });
 
