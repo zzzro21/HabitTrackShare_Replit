@@ -76,7 +76,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       
       <CardContent className="p-4 pb-12">
         
-        <div className="h-64 w-full relative">
+        <div className="h-44 w-full relative">
           <div className="flex h-full items-end justify-between px-4">
             {data.map((item, idx) => (
               <div 
