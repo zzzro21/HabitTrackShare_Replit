@@ -334,15 +334,15 @@ const Mori: React.FC = () => {
         
         {/* 할 일 목록 */}
         {categorizedResults.tasks.length > 0 && (
-          <div className="border border-purple-300 rounded-lg p-3 bg-purple-100">
-            <div className="flex items-center mb-3">
-              <span className="text-xl mr-2">{getTypeIcon('task')}</span>
+          <div className="border-b border-gray-200 p-2 mb-2">
+            <div className="flex items-center mb-2">
+              <span className="text-xl mr-2 text-blue-500">{getTypeIcon('task')}</span>
               <h3 className="font-semibold">할 일</h3>
             </div>
             <div className="space-y-2">
               {categorizedResults.tasks.map((task, idx) => (
                 <div key={idx} className="flex items-center text-sm mb-2">
-                  <input type="checkbox" className="mr-2 h-4 w-4" />
+                  <input type="checkbox" className="mr-2 h-4 w-4 accent-blue-500" />
                   <div className="font-medium">{task.title}</div>
                 </div>
               ))}
@@ -352,15 +352,15 @@ const Mori: React.FC = () => {
         
         {/* 아이디어 목록 */}
         {categorizedResults.ideas.length > 0 && (
-          <div className="border border-yellow-300 rounded-lg p-3 bg-yellow-100">
-            <div className="flex items-center mb-3">
-              <span className="text-xl mr-2">{getTypeIcon('idea')}</span>
+          <div className="border-b border-gray-200 p-2 mb-2">
+            <div className="flex items-center mb-2">
+              <span className="text-xl mr-2 text-blue-500">{getTypeIcon('idea')}</span>
               <h3 className="font-semibold">아이디어</h3>
             </div>
             <div className="space-y-2">
               {categorizedResults.ideas.map((idea, idx) => (
                 <div key={idx} className="text-sm mb-2">
-                  <div className="font-medium text-amber-800">{idea.content}</div>
+                  <div className="font-medium text-blue-500">{idea.content}</div>
                 </div>
               ))}
             </div>
@@ -369,15 +369,15 @@ const Mori: React.FC = () => {
         
         {/* 메모 목록 */}
         {categorizedResults.memos.length > 0 && (
-          <div className="border border-green-300 rounded-lg p-3 bg-green-100">
-            <div className="flex items-center mb-3">
-              <span className="text-xl mr-2">{getTypeIcon('memo')}</span>
+          <div className="border-b border-gray-200 p-2 mb-2">
+            <div className="flex items-center mb-2">
+              <span className="text-xl mr-2 text-blue-500">{getTypeIcon('memo')}</span>
               <h3 className="font-semibold">메모</h3>
             </div>
             <div className="space-y-2">
               {categorizedResults.memos.map((memo, idx) => (
                 <div key={idx} className="text-sm mb-2">
-                  <div className="font-medium text-green-800">{memo.content}</div>
+                  <div className="font-medium text-blue-500">{memo.content}</div>
                 </div>
               ))}
             </div>
@@ -389,8 +389,8 @@ const Mori: React.FC = () => {
          categorizedResults.tasks.length === 0 && 
          categorizedResults.ideas.length === 0 && 
          categorizedResults.memos.length === 0 && (
-          <div className="text-center text-gray-500 p-3">
-            음성 명령을 통해 일정, 할 일, 아이디어, 메모를 추가해보세요.
+          <div className="text-center p-3 border-b border-gray-200">
+            <span className="text-blue-500">음성 명령</span>을 통해 일정, 할 일, 아이디어, 메모를 추가해보세요.
           </div>
         )}
       </div>
@@ -637,8 +637,8 @@ const Mori: React.FC = () => {
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category || category === '고객관리'
-                ? 'bg-blue-500 text-white border-0'
-                : 'bg-white border border-blue-300 text-gray-800 hover:bg-blue-50'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white border border-blue-500 text-gray-800 hover:bg-blue-50'
             }`}
           >
             {category}
@@ -652,8 +652,8 @@ const Mori: React.FC = () => {
       </div>
       
       {/* 선택된 카테고리 내용 표시 */}
-      <div className="px-2 pb-2 mt-1">
-        <div className="bg-blue-50/60 p-2 rounded-2xl">
+      <div className="px-2 pb-2 mt-2">
+        <div className="p-1">
           {renderCategoryContent()}
         </div>
       </div>
