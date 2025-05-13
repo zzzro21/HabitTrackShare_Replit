@@ -285,7 +285,7 @@ const LandingPage: React.FC = () => {
             </span>
             {/* 명언 가이드라인 영역 */}
             <div className="w-full max-w-[260px] mx-auto px-3 py-3">
-              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line font-bold`} style={{ fontSize: '1.6rem' }}>
+              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.6rem' }}>
                 "{quote}"
               </p>
             </div>
