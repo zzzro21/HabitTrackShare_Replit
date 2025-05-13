@@ -302,7 +302,7 @@ const LandingPage: React.FC = () => {
           <div className="flex justify-center">
             <button
               onClick={handleBeginClick}
-              className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-2xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
+              className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
             >
               Let's Begin
             </button>
