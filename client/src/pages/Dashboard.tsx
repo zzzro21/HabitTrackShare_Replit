@@ -66,15 +66,16 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
-      {/* MORI AI 비서 버튼 */}
-      <div className="fixed right-4 bottom-20 z-20">
+      {/* MORI AI 비서 버튼 - 타이틀 카드 우측 상단에 배치 */}
+      <div className="absolute top-5 right-5 z-20">
         <button 
-          className="flex items-center justify-center bg-black text-white rounded-full px-5 py-3 shadow-lg"
+          className="flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white rounded-full px-4 py-2 shadow-lg transition-colors"
           onClick={() => {
             toggleAssistantGender();
             toggleAssistant();
           }}
         >
+          <span className="mr-1">🎤</span>
           <span className="text-base font-bold tracking-wider">MORI</span>
         </button>
       </div>
@@ -264,7 +265,7 @@ const Dashboard: React.FC = () => {
                 )}
               </div>
               <div>
-                <h3 className="font-bold text-xl">MORI Assistant</h3>
+                <h3 className="font-bold text-xl"><span className="mr-1">🎤</span>MORI Assistant</h3>
                 <p className="text-sm text-gray-500">AI 음성인식 및 일정관리 도우미</p>
               </div>
             </div>
