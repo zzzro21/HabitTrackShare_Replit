@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { generateHabitInsights } from "./ai";
+import { generateHabitInsights, classifyUserInput } from "./ai";
 import { z } from "zod";
 import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
 import { sessionMiddleware, login, logout, getCurrentUser, checkAuthStatus, isAuthenticated, onlySelfModify, allowFeedbackForAny } from "./auth";
@@ -361,7 +361,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Otherwise, generate new insights
-      const insights = await generateHabitInsights(userId, storage);
+      const habitEntries = await storage.getUserHabitEntries(userId);
+      const habits = await storage.getAllHabits();
+      const insights = await generateHabitInsights(userId, habitEntries, habits);
       const savedInsights = await storage.createOrUpdateHabitInsight(insights);
       
       res.json(savedInsights);
@@ -392,6 +394,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
       }
       throw error;
+    }
+  });
+  
+  // AI 비서 - 사용자 입력 분류 API (인증 필요)
+  app.post("/api/assistant/classify", isAuthenticated, async (req, res) => {
+    try {
+      const { input } = req.body;
+      
+      if (!input || typeof input !== 'string') {
+        return res.status(400).json({ message: "유효한 입력이 필요합니다." });
+      }
+      
+      // 입력을 분류하고 JSON 형식으로 반환
+      const classification = await classifyUserInput(input);
+      res.json(classification);
+    } catch (error) {
+      console.error("AI 비서 입력 분류 오류:", error);
+      res.status(500).json({ 
+        message: "입력 분류 중 오류가 발생했습니다.", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
     }
   });
 
