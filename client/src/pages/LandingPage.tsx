@@ -299,7 +299,7 @@ const LandingPage: React.FC = () => {
 
         {/* 하단 버튼 영역 */}
         <div className="w-full mt-auto">
-          <div className="flex justify-center mt-16">
+          <div className="flex justify-center mt-12">
             <button
               onClick={handleBeginClick}
               className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-2xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
