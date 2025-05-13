@@ -23,13 +23,13 @@ const WeekSelector: React.FC = () => {
           <button
             key={index}
             onClick={() => setActiveWeek(index)}
-            className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${
+            className={`flex-1 py-1 font-medium border-b-2 transition-colors ${
               activeWeek === index
                 ? 'border-primary text-primary'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
             }`}
           >
-            {index*2 + 1}-{index*2 + 2}주차
+            <span className="text-xs">{index*2 + 1}-{index*2 + 2}주차</span>
           </button>
         ))}
       </div>
