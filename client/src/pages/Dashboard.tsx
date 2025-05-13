@@ -51,101 +51,129 @@ const Dashboard: React.FC = () => {
     return circles;
   };
 
+  // 현재 날짜 정보 구하기
+  const today = new Date();
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNumber = today.getDate();
+  const dayOfWeek = today.getDay(); // 0: 일요일, 1: 월요일, ...
+  
+  // 주간 날짜 계산
+  const weekDays: string[] = [];
+  const weekDates: number[] = [];
+  
+  for (let i = -3; i <= 3; i++) {
+    const day = new Date(today);
+    day.setDate(today.getDate() + i);
+    weekDays.push(days[day.getDay()]);
+    weekDates.push(day.getDate());
+  }
+
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
-      {/* 상단 여백 */}
-      <div className="h-4"></div>
-
-      {/* 일일 리플렉션 카드 */}
-      <div className="mx-4 p-5 bg-amber-50 rounded-3xl shadow-sm">
-        <div className="text-sm text-gray-600 mb-2">Daily reflection</div>
-        <h2 className="text-2xl font-bold mb-1">
-          Hello, {user?.name || "친구"}
-        </h2>
-        <p className="text-2xl mb-4">
-          How do you feel about your <span className="font-bold">current emotions?</span>
-        </p>
-        
-        <div 
-          className="bg-amber-100 p-3 rounded-xl flex justify-between items-center cursor-pointer"
-          onClick={() => setLocation('/notes')}
-        >
-          <span className="text-gray-500">Your reflection...</span>
+      {/* 상단 프로필 영역 - 푸른색 배경 */}
+      <div className="bg-blue-500 text-white p-4 rounded-b-3xl flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="w-10 h-10 rounded-full bg-white overflow-hidden mr-3">
+            <img 
+              src={user?.profileImageUrl || "https://ui-avatars.com/api/?name=" + (user?.name || "User")} 
+              alt="User avatar" 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = `https://ui-avatars.com/api/?name=${user?.name || "User"}`;
+              }}
+            />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold">
+              Hello, {user?.name || "친구"}
+            </h2>
+            <p className="text-sm text-blue-100">Welcome back!</p>
+          </div>
+        </div>
+        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
           </svg>
         </div>
       </div>
-
-      {/* 일일 감정 로그 */}
-      <div className="mt-6 mx-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="font-bold">Daily Mood Log</h3>
-          <button className="text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-            </svg>
-          </button>
-        </div>
+      
+      {/* Manage your tasks 영역 */}
+      <div className="mx-4 mt-4 p-5 bg-blue-500 text-white rounded-3xl shadow-sm">
+        <h1 className="text-3xl font-bold mb-6">Manage<br/>your tasks</h1>
         
-        <div className="flex justify-between">
-          {moods.map((mood, index) => (
-            <button
-              key={index}
-              className={`w-12 h-12 rounded-full flex items-center justify-center text-xl
-                ${currentMood === index ? 'ring-2 ring-blue-500' : ''} ${mood.color}`}
-              onClick={() => handleMoodSelect(index)}
+        {/* 주간 캘린더 */}
+        <div className="flex justify-between mb-4">
+          {weekDays.map((day, index) => (
+            <div 
+              key={index} 
+              className={`text-center ${dayOfWeek === ((index + 4) % 7) ? 'bg-black rounded-lg' : ''} px-2 py-1`}
             >
-              {mood.emoji}
-            </button>
+              <div className="text-xs">{day}</div>
+              <div className={`text-lg font-medium ${dayOfWeek === ((index + 4) % 7) ? 'text-white' : ''}`}>
+                {weekDates[index]}
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* 진행 상황 */}
-      <div className="mt-8 mx-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="font-bold">Your progress</h3>
-          <button className="text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-            </svg>
-          </button>
-        </div>
-        
+      {/* 원형 스코어 영역 */}
+      <div className="mt-6 mx-4">
         <div className="flex justify-between items-center">
-          <div className="text-6xl font-bold">{completionRate}%</div>
-          <div className="text-right text-gray-500 text-sm">
-            <p>Of the weekly</p>
-            <p>plan completed</p>
-          </div>
+          {[3, 4, 5].map((num, index) => (
+            <div 
+              key={index} 
+              className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl font-light ${index === 2 ? 'bg-blue-500 text-white' : 'bg-white border-2 border-gray-200 text-blue-500'}`}
+            >
+              {num}
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Annual Growth 차트 */}
+      <div className="mt-6 mx-4 bg-white p-5 rounded-3xl shadow-sm">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Annual Growth</h2>
+          <span className="bg-yellow-300 text-xs px-2 py-1 rounded-full font-bold">+19%</span>
         </div>
         
-        <div className="mt-4 flex flex-wrap gap-2 justify-center">
-          {renderProgressCircles()}
+        {/* 간단한 그래프 구현 */}
+        <div className="h-32 flex items-end justify-between">
+          {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, index) => {
+            // 랜덤 높이 계산 (실제로는 데이터 기반으로 설정하세요)
+            const height = 20 + Math.floor(Math.random() * 80); 
+            const isLastMonth = index === 11;
+            
+            return (
+              <div key={index} className="flex flex-col items-center">
+                <div 
+                  className={`w-1 rounded-full ${isLastMonth ? 'bg-black' : 'bg-gray-300'}`} 
+                  style={{ height: `${height}%` }}
+                >
+                  {isLastMonth && (
+                    <div className="w-3 h-3 bg-black rounded-full -mt-1.5 -ml-1"></div>
+                  )}
+                </div>
+                <span className="text-[9px] mt-1 text-gray-500">{month.substring(0, 3)}</span>
+              </div>
+            );
+          })}
         </div>
-        
-        {/* 빠른 액션 버튼 */}
-        <div className="flex justify-center mt-4 gap-4">
-          <button 
-            className="bg-black text-white p-4 rounded-full"
-            onClick={() => setLocation('/checklist')}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-          </button>
-          
-          <button 
-            className="border border-gray-300 p-4 rounded-xl"
-            onClick={() => setLocation('/insights')}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-              <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-            </svg>
-          </button>
-        </div>
+      </div>
+      
+      {/* 일일 감정 로그 - 삭제하고 위의 차트로 대체 */}
+
+      {/* 액션 버튼 영역 */}
+      <div className="fixed bottom-[70px] right-6">
+        <button 
+          className="bg-blue-600 text-white p-4 rounded-full shadow-lg"
+          onClick={() => setLocation('/checklist')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
+        </button>
       </div>
 
       <TabNavigation />
