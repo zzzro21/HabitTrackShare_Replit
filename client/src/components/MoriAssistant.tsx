@@ -580,8 +580,8 @@ const MoriAssistant: React.FC = () => {
             key={category}
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
-              selectedCategory === category
-                ? 'bg-black text-white'
+              selectedCategory === category || category === '고객관리'
+                ? 'bg-blue-600 text-white'
                 : 'bg-white border border-yellow-300 text-gray-800 hover:bg-gray-100'
             }`}
           >
@@ -589,7 +589,7 @@ const MoriAssistant: React.FC = () => {
           </button>
         ))}
         <button
-          className="py-2 px-3 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800"
+          className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 flex items-center justify-center"
         >
           +
         </button>
