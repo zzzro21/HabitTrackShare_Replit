@@ -1,17 +1,29 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 
-// 사용자가 선택할 수 있는 이미지 목록
-const profileImages = [
-  "https://images.unsplash.com/photo-1596079890744-c1a0462d0975?auto=format&fit=crop&q=80", // 기본 이미지
-  "/attached_assets/KakaoTalk_20250509_131525036.jpg",
-  "/attached_assets/KakaoTalk_20250511_022622360_03.jpg",
-  "/attached_assets/sample.jpg",
-  "/attached_assets/스크린샷 2025-05-09 170854.png",
-  "/attached_assets/스크린샷 2025-05-09 182446.png"
+// 인트로 슬라이드 데이터
+const introSlides = [
+  {
+    title: "자기관리 습관 형성 56일 챌린지",
+    description: "56일(8주) 동안의 습관 형성을 통해 성공의 기반을 다집니다",
+    image: "bg-amber-100",
+    icon: "🌱"
+  },
+  {
+    title: "친구들과 함께하는 동기부여",
+    description: "8명의 친구들과 함께 성장하고 서로에게 동기를 부여하세요",
+    image: "bg-blue-100",
+    icon: "👥"
+  },
+  {
+    title: "AI 기반 습관 분석",
+    description: "Mori AI 비서가 당신의 습관을 분석하고 맞춤형 조언을 제공합니다",
+    image: "bg-purple-100",
+    icon: "🤖"
+  }
 ];
 
-// 동기부여 문장 배열 (한국어)
+// 기존 코드는 동기부여 문장으로 유지
 const motivationalQuotes = [
   "작은 습관이 모여 인생을 바꿉니다.",
   "오늘 하루, 미래를 위한 투자입니다.",
@@ -115,206 +127,91 @@ const motivationalQuotes = [
 ];
 
 const LandingPage: React.FC = () => {
-  const [, navigate] = useLocation();
-  const [showAnimation, setShowAnimation] = useState(false);
-  const [quote, setQuote] = useState("");
-  const [selectedImage, setSelectedImage] = useState(profileImages[0]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [, setLocation] = useLocation();
+  const [currentSlide, setCurrentSlide] = useState(0);
   
-  // FHD+ 해상도(1080x2340)에 맞는 비율 계산
-  const aspectRatio = 2340 / 1080;
-
+  // 자동 슬라이드 기능
   useEffect(() => {
-    // 애니메이션을 위한 딜레이 추가
     const timer = setTimeout(() => {
-      setShowAnimation(true);
-    }, 100);
-
-    // 랜덤으로 명언 선택
-    const quoteIndex = Math.floor(Math.random() * motivationalQuotes.length);
+      setCurrentSlide((prev) => (prev < 2 ? prev + 1 : 0));
+    }, 5000);
     
-    // 선택된 명언 설정
-    setQuote(motivationalQuotes[quoteIndex]);
-
     return () => clearTimeout(timer);
-  }, []);
+  }, [currentSlide]);
 
-  // 습관 트래커로 이동
-  const handleBeginClick = () => {
-    // 인증 상태 확인
-    const authStr = localStorage.getItem('userAuth');
-    const auth = authStr ? JSON.parse(authStr) : null;
-    
-    if (auth?.isLoggedIn) {
-      navigate('/home'); // 로그인된 경우 홈으로 이동
-    } else {
-      navigate('/login'); // 로그인되지 않은 경우 로그인 페이지로 이동
-    }
+  // 랜덤 명언 가져오기
+  const [quote] = useState(() => {
+    const quoteIndex = Math.floor(Math.random() * motivationalQuotes.length);
+    return motivationalQuotes[quoteIndex];
+  });
+
+  const handleLoginClick = () => {
+    setLocation('/login');
   };
-  
-  // 프로필 이미지 선택 함수
-  const handleChangeProfileImage = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+
+  const handleDirectStartClick = () => {
+    setLocation('/');
   };
-  
-  // 갤러리 이미지 선택 모달 표시
-  const [showGallery, setShowGallery] = useState(false);
 
   return (
-    <div 
-      className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto aurora-gradient"
-      style={{ 
-        maxWidth: '920px', /* FHD+ 6.2인치 화면 너비를 15% 줄임 */
-        minHeight: '80vh',
-        height: 'auto',
-        aspectRatio: '1080 / 2000' /* 세로 비율도 줄임 */
-      }}
-    >
-      {/* 배경 */}
-      <div className="absolute top-0 left-0 w-full h-full"></div>
-
-      {/* 메인 콘텐츠 */}
-      <div className="relative flex flex-col items-center px-8 pt-6 pb-12 z-10 flex-grow">
-        {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[250px] relative mt-2 mb-4 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-          {/* Vibes 버블 - 좌측 */}
-          <div className={`absolute -left-14 top-[60%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
-            <div className="bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                <line x1="15" y1="9" x2="15.01" y2="9"></line>
-              </svg>
-            </div>
-            <span className="text-sm font-medium">Vibes</span>
-          </div>
-          
-          {/* AI 비서 버블 - 우측 */}
-          <div className={`absolute -right-14 top-[30%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
-            <div className="bg-orange-400 rounded-full w-8 h-8 flex items-center justify-center mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                <line x1="12" y1="19" x2="12" y2="23" />
-                <line x1="8" y1="23" x2="16" y2="23" />
-              </svg>
-            </div>
-            <span className="text-sm font-medium">Mori</span>
-          </div>
-          <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '270px', width: '250px', borderRadius: '50% / 40%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-            <img
-              src={selectedImage}
-              alt="프로필 이미지"
-              className="w-full h-full object-cover"
-            />
-            <input 
-              type="file" 
-              accept="image/*" 
-              ref={fileInputRef}
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const file = e.target.files[0];
-                  const imageUrl = URL.createObjectURL(file);
-                  setSelectedImage(imageUrl);
-                }
-              }}
-            />
-            <div className="absolute bottom-3 right-3 flex gap-2">
-              <button 
-                className="bg-white p-2 rounded-full shadow-lg z-10 opacity-70 hover:opacity-100 transition-opacity"
-                onClick={() => setShowGallery(!showGallery)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
-              </button>
-              <button 
-                className="bg-white p-2 rounded-full shadow-lg z-10 opacity-70 hover:opacity-100 transition-opacity"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                  <path d="M18 2l4 4-10 10H8v-4L18 2z"></path>
-                </svg>
-              </button>
-            </div>
-            
-            {/* 갤러리 모달 */}
-            {showGallery && (
-              <div className="absolute inset-0 bg-black/70 z-20 flex items-center justify-center">
-                <div className="bg-white rounded-lg p-4 w-[90%] max-h-[90%] overflow-y-auto">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-medium">갤러리에서 선택</h3>
-                    <button onClick={() => setShowGallery(false)} className="text-gray-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {profileImages.map((img, index) => (
-                      <div 
-                        key={index} 
-                        className={`aspect-square overflow-hidden rounded-lg cursor-pointer border-2 ${selectedImage === img ? 'border-blue-500' : 'border-transparent'}`}
-                        onClick={() => {
-                          handleChangeProfileImage(img);
-                          setShowGallery(false);
-                        }}
-                      >
-                        <img src={img} alt={`갤러리 이미지 ${index+1}`} className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
+    <div className="flex flex-col min-h-screen bg-amber-50">
+      {/* 슬라이드 부분 */}
+      <div className="flex-1 flex flex-col items-center justify-center p-6 relative">
+        <div className="w-full max-w-md">
+          {introSlides.map((slide, index) => (
+            <div 
+              key={index}
+              className={`transition-opacity duration-500 absolute inset-0 p-8 flex flex-col items-center justify-center
+                ${currentSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+            >
+              <div className={`mb-8 w-24 h-24 rounded-full ${slide.image} flex items-center justify-center text-4xl`}>
+                {slide.icon}
               </div>
-            )}
-
-
-          </div>
-        </div>
-
-        {/* 메인 텍스트 영역 */}
-        <div className="w-full text-center mt-4">
-          <h1 className={`text-2xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            "Little actions,<br />
-            <span className="inline-block bg-blue-500 px-2 py-0.5 text-white rounded-md">Big results!</span>"<br />
-            <span className="text-2xl font-semibold">Set it, Do it, Repeat.</span>
-          </h1>
-
-          <div className="flex items-center mt-6 justify-center relative">
-            <span className={`text-red-500 mr-3 absolute -top-2 left-6 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-200`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </span>
-            {/* 명언 가이드라인 영역 */}
-            <div className="w-full max-w-[260px] mx-auto px-3 py-2 mt-2">
-              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.3rem' }}>
-                "{quote}"
+              
+              <h1 className="text-3xl font-bold text-center mb-4">
+                {slide.title}
+              </h1>
+              
+              <p className="text-gray-700 text-center mb-6">
+                {slide.description}
               </p>
             </div>
-            <span className={`text-gray-800 ml-3 absolute -top-2 right-6 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-400`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-            </span>
-          </div>
+          ))}
         </div>
-
-        {/* 하단 버튼 영역 */}
-        <div className="w-full mt-12">
-          <div className="flex justify-center">
+        
+        {/* 슬라이드 인디케이터 */}
+        <div className="flex space-x-2 mt-auto">
+          {introSlides.map((_, index) => (
             <button
-              onClick={handleBeginClick}
-              className={`w-4/5 max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full text-lg shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
-            >
-              Let's Begin
-            </button>
-          </div>
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors
+                ${currentSlide === index ? 'bg-amber-600' : 'bg-amber-200'}`}
+              onClick={() => setCurrentSlide(index)}
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* 버튼 영역 */}
+      <div className="p-6 bg-white rounded-t-3xl shadow-lg">
+        <div className="max-w-md mx-auto space-y-3">
+          <button 
+            onClick={handleDirectStartClick}
+            className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-xl text-lg"
+          >
+            시작하기
+          </button>
+          
+          <button 
+            onClick={handleLoginClick}
+            className="w-full border border-amber-300 text-amber-600 hover:bg-amber-50 font-bold py-3 px-4 rounded-xl text-lg"
+          >
+            로그인
+          </button>
+          
+          <p className="text-center text-sm text-gray-500 mt-4">
+            © 2025 주식회사 자장격지 | 모든 권리 보유
+          </p>
         </div>
       </div>
     </div>
