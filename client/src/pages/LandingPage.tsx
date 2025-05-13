@@ -180,7 +180,7 @@ const LandingPage: React.FC = () => {
                 <line x1="15" y1="9" x2="15.01" y2="9"></line>
               </svg>
             </div>
-            <span className="text-base font-medium">Vibes</span>
+            <span className="text-sm font-normal">Vibes</span>
           </div>
           
           {/* AI 비서 버블 - 우측 */}
@@ -193,7 +193,7 @@ const LandingPage: React.FC = () => {
                 <line x1="8" y1="23" x2="16" y2="23" />
               </svg>
             </div>
-            <span className="text-base font-medium">Mori</span>
+            <span className="text-sm font-normal">Mori</span>
           </div>
           <div className="w-full overflow-hidden bg-orange-100 shadow-xl relative" style={{ height: '360px', width: '288px', borderRadius: '50% / 38%' }}>
             <img
