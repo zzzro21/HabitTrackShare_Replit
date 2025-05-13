@@ -401,29 +401,29 @@ const Mori: React.FC = () => {
     switch (selectedCategory) {
       case '고객관리':
         return (
-          <div>
-            <div className="flex justify-between items-start mb-3">
+          <div className="p-4 bg-yellow-50 rounded-xl">
+            <div className="flex justify-between items-start mb-2">
               <h3 className="font-bold text-lg text-gray-800">고객 관리</h3>
-              <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
+              <div className="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
                 <span>3</span>
               </div>
             </div>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-white p-3 rounded-lg shadow-sm">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수</span>
                   <span className="text-sm text-gray-500">최근 연락: 3일 전</span>
                 </div>
                 <div className="text-sm text-gray-600">생명보험 상담 완료, 가입 고려 중</div>
               </div>
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-white p-3 rounded-lg shadow-sm">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">박영희</span>
                   <span className="text-sm text-gray-500">최근 연락: 오늘</span>
                 </div>
                 <div className="text-sm text-gray-600">자녀 교육보험 상담 예정</div>
               </div>
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-white p-3 rounded-lg shadow-sm">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은</span>
                   <span className="text-sm text-gray-500">최근 연락: 1주일 전</span>
