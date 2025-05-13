@@ -67,15 +67,15 @@ const Dashboard: React.FC = () => {
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
       {/* MORI AI 비서 버튼 */}
-      <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10">
+      <div className="fixed right-4 bottom-20 z-20">
         <button 
-          className="flex items-center justify-center bg-black/80 text-white rounded-full px-4 py-2 shadow-lg"
+          className="flex items-center justify-center bg-black text-white rounded-full px-5 py-3 shadow-lg"
           onClick={() => {
             toggleAssistantGender();
             toggleAssistant();
           }}
         >
-          <span className="text-sm font-bold tracking-wider">MORI</span>
+          <span className="text-base font-bold tracking-wider">MORI</span>
         </button>
       </div>
       
