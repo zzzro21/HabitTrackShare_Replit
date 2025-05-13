@@ -114,10 +114,13 @@ export class DatabaseStorage implements IStorage {
         return { success: false, message: "사용자를 찾을 수 없습니다." };
       }
       
-      // 이미 사용자 이름을 변경한 경우
+      // 사용자 이름 변경 제한은 일단 비활성화
+      // 데이터베이스 스키마가 업데이트되면 다시 활성화할 수 있음
+      /*
       if (user.hasChangedUsername) {
         return { success: false, message: "이미 사용자 이름을 변경하셨습니다. 한 번만 변경할 수 있습니다." };
       }
+      */
       
       // 새 사용자 이름이 이미 사용 중인지 확인
       const existingUser = await this.getUserByUsername(newUsername);
@@ -129,8 +132,7 @@ export class DatabaseStorage implements IStorage {
       await db
         .update(users)
         .set({ 
-          username: newUsername,
-          hasChangedUsername: true 
+          username: newUsername
         })
         .where(eq(users.id, userId));
       
