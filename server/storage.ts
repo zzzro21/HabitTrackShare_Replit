@@ -5,6 +5,7 @@ import {
   habitNotes,
   dailyFeedbacks,
   habitInsights,
+  userApiKeys,
   type User, 
   type InsertUser, 
   type Habit, 
@@ -17,6 +18,8 @@ import {
   type InsertDailyFeedback,
   type HabitInsight,
   type InsertHabitInsight,
+  type UserApiKey,
+  type InsertUserApiKey,
   predefinedHabits
 } from "@shared/schema";
 import { db } from './db';
@@ -333,6 +336,50 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return insight;
+  }
+  
+  // 사용자별 API 키 관리 메서드
+  async getUserApiKey(userId: number): Promise<UserApiKey | undefined> {
+    const [apiKey] = await db
+      .select()
+      .from(userApiKeys)
+      .where(eq(userApiKeys.userId, userId));
+      
+    return apiKey;
+  }
+  
+  async createOrUpdateUserApiKey(insertApiKey: InsertUserApiKey): Promise<UserApiKey> {
+    // 기존 API 키 찾기
+    const [existingApiKey] = await db
+      .select()
+      .from(userApiKeys)
+      .where(eq(userApiKeys.userId, insertApiKey.userId));
+    
+    if (existingApiKey) {
+      // 기존 API 키가 있으면 업데이트
+      const [updatedApiKey] = await db
+        .update(userApiKeys)
+        .set({
+          ...insertApiKey,
+          updatedAt: new Date()
+        })
+        .where(eq(userApiKeys.id, existingApiKey.id))
+        .returning();
+      
+      return updatedApiKey;
+    } else {
+      // 없으면 새로 생성
+      const [apiKey] = await db
+        .insert(userApiKeys)
+        .values({
+          ...insertApiKey,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        })
+        .returning();
+      
+      return apiKey;
+    }
   }
 
   // Initialize predefined data
