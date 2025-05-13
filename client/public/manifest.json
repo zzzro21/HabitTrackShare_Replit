@@ -1,0 +1,18 @@
+{
+  "name": "습관 트래커",
+  "short_name": "습관 트래커",
+  "description": "자장격지 행동습관 점검표 - 56일(8주) 동안의 습관 형성을 통해 성공의 기반을 다집니다.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
