@@ -1,1 +1,32 @@
-[{"id":1,"label":"책 읽기 (30분 이상)","scoreType":"partial","scoreValue":1},{"id":2,"label":"동영상 시청","scoreType":"binary","scoreValue":1},{"id":3,"label":"제품 애용 및 후기 작성","scoreType":"partial","scoreValue":2},{"id":4,"label":"미팅 참석 및 소감 작성","scoreType":"binary","scoreValue":5},{"id":5,"label":"소비자 제품전달","scoreType":"partial","scoreValue":2}]
+[
+  {
+    "id": 1,
+    "label": "책 읽기 (30분 이상)",
+    "scoreType": "partial",
+    "scoreValue": 5
+  },
+  {
+    "id": 2,
+    "label": "영상 시청 (15분)",
+    "scoreType": "binary",
+    "scoreValue": 3
+  },
+  {
+    "id": 3,
+    "label": "제품 사용",
+    "scoreType": "binary",
+    "scoreValue": 5
+  },
+  {
+    "id": 4,
+    "label": "미팅 참석",
+    "scoreType": "binary",
+    "scoreValue": 7
+  },
+  {
+    "id": 5,
+    "label": "소비자 관리",
+    "scoreType": "count",
+    "scoreValue": 2
+  }
+]
