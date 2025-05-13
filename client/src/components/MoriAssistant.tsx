@@ -439,16 +439,16 @@ const Mori: React.FC = () => {
             <h3 className="font-bold text-lg text-gray-800 mb-1">상담 내역</h3>
             <div className="space-y-0.5">
               <div className="bg-amber-50 p-2 rounded-lg">
-                <div className="flex justify-between mb-1">
+                <div className="flex justify-start mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
-                  <span className="text-sm text-blue-600">2025.05.10</span>
+                  <span className="text-sm text-blue-600 ml-auto">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
               <div className="bg-amber-50 p-2 rounded-lg">
-                <div className="flex justify-between mb-1">
+                <div className="flex justify-start mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
-                  <span className="text-sm text-blue-600">2025.05.05</span>
+                  <span className="text-sm text-blue-600 ml-auto">2025.05.05</span>
                 </div>
                 <div className="text-sm text-gray-600">노후 설계 중요성 설명, 상품 비교 자료 전달</div>
               </div>
@@ -460,22 +460,22 @@ const Mori: React.FC = () => {
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-1">수당 시뮬레이션</h3>
             <div className="bg-amber-50 p-2 rounded-lg">
-              <div className="flex justify-between mb-2">
+              <div className="flex justify-start mb-2">
                 <span className="font-semibold">이번 달 예상 수당</span>
-                <span className="font-bold text-blue-600">1,250,000원</span>
+                <span className="font-bold text-blue-600 ml-auto">1,250,000원</span>
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-start text-sm">
                   <span>계약 수당</span>
-                  <span>850,000원</span>
+                  <span className="ml-auto">850,000원</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-start text-sm">
                   <span>유지 수당</span>
-                  <span>320,000원</span>
+                  <span className="ml-auto">320,000원</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-start text-sm">
                   <span>추가 인센티브</span>
-                  <span>80,000원</span>
+                  <span className="ml-auto">80,000원</span>
                 </div>
               </div>
             </div>
@@ -572,7 +572,7 @@ const Mori: React.FC = () => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <div className="flex flex-wrap gap-1 p-2 justify-between">
+      <div className="flex flex-wrap gap-1 p-2 justify-start">
         {categories.map((category) => (
           <button
             key={category}
