@@ -307,11 +307,6 @@ const LandingPage: React.FC = () => {
               Let's Begin
             </button>
           </div>
-          
-          {/* 홈 인디케이터 (iOS 스타일) */}
-          <div className="w-full flex justify-center mt-5">
-            <div className="w-40 h-1.5 bg-gray-400 rounded-full"></div>
-          </div>
         </div>
       </div>
     </div>
