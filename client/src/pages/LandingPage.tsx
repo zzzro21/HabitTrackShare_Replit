@@ -130,12 +130,11 @@ const LandingPage: React.FC = () => {
       setShowAnimation(true);
     }, 100);
 
-    // 긴 문장 예시를 보여주기 위해 임시로 특정 긴 문장 선택
-    // 실제 배포 시에는 날짜 기반 랜덤 선택으로 복원할 것
-    // setQuote(motivationalQuotes[quoteIndex]);
+    // 랜덤으로 명언 선택
+    const quoteIndex = Math.floor(Math.random() * motivationalQuotes.length);
     
-    // 긴 문장 예시 - 각 문장 끝에 줄바꿈 추가
-    setQuote("포기는 항상 실패보다 더 쉽습니다.\n그러나 더 어려운 길을 선택하세요.\n그것이 성공으로 가는 길입니다.");
+    // 선택된 명언 설정
+    setQuote(motivationalQuotes[quoteIndex]);
 
     return () => clearTimeout(timer);
   }, []);
