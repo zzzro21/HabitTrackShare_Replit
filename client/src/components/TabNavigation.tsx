@@ -67,8 +67,8 @@ const TabNavigation: React.FC = () => {
           className={`flex flex-col items-center justify-center w-full ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3c-1.2 0-2.4.6-3 1.7a3.6 3.6 0 0 0-3.3 5 3.6 3.6 0 0 0-.7 6.3A3.6 3.6 0 0 0 9 21.7c.6 1 1.8 1.7 3 1.7s2.4-.6 3-1.7a3.6 3.6 0 0 0 4-5.7 3.6 3.6 0 0 0-.7-6.3A3.6 3.6 0 0 0 15 4.7c-.6-1-1.8-1.7-3-1.7z" />
-            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+            <path d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M9 12h6" />
+            <path d="M3 6h18M3 18h18" />
           </svg>
           <span className="text-[10px] mt-1 truncate w-full text-center">설정</span>
         </a>
