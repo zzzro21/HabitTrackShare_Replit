@@ -28,13 +28,13 @@ const UserSelector: React.FC = () => {
 
   return (
     <div className="mb-2">
-      <h2 className="text-xs font-medium text-gray-700 mb-0.5">사용자 선택</h2>
+      <h2 className="text-xs md:text-sm font-medium text-gray-700 mb-0.5">사용자 선택</h2>
       <div className="flex flex-wrap gap-1">
         {users.map(user => (
           <button
             key={user.id}
             onClick={() => setActiveUser(user.id)}
-            className={`flex items-center px-1.5 py-0.5 rounded-full text-[10px] border transition-colors ${
+            className={`flex items-center px-1.5 py-0.5 rounded-full text-[10px] md:text-xs border transition-colors ${
               user.id === activeUser
                 ? 'bg-blue-50 border-blue-300 text-blue-700 font-medium'
                 : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
