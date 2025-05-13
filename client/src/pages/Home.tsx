@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const { activeUser } = useHabit();
 
   return (
-    <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10 overflow-hidden">
+    <div className="max-w-md mx-auto bg-white h-screen shadow-lg overflow-hidden">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="px-4 py-1">
           <h1 className="text-base font-bold text-center">자장격지 행동습관 점검표</h1>
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         </div>
       </header>
       
-      <main className="p-3">
+      <main className="p-3 overflow-hidden">
         <UserSelector />
         <ProgressSummary />
         <WeekSelector />
