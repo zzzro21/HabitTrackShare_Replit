@@ -21,32 +21,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 오로라 배경 애니메이션 */
+/* 고정 그라데이션 배경 */
 .aurora-gradient {
   background: linear-gradient(
-    -45deg,
-    #1a6985 0%,
-    #38a3a5 15%,
-    #57cc99 30%,
-    #80ffdb 45%,
-    #c8b6ff 65%,
-    #e0aaff 80%,
-    #ffc6ff 100%
+    to bottom,
+    #e0aaff 0%,   /* 보라빛 핑크 상단 */
+    #c8b6ff 25%,  /* 라이트 퍼플 */
+    #57cc99 75%,  /* 민트그린 */
+    #38a3a5 100%  /* 블루민트 하단 */
   );
-  background-size: 400% 400%;
-  animation: aurora-animation 15s ease infinite;
-}
-
-@keyframes aurora-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 @layer components {
