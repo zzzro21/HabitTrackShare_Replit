@@ -70,11 +70,11 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
 
   return (
     <Card className="rounded-3xl shadow-md border-0 bg-white overflow-hidden">
-      <div className="flex flex-col space-y-0 pt-3 px-6 pb-1">
+      <div className="flex flex-col space-y-0 pt-3 px-6 pb-0">
         <h3 className="text-xl font-bold text-gray-800">8Weeks Growth</h3>
       </div>
       
-      <CardContent className="p-3 pb-6">
+      <CardContent className="p-2 pt-0 pb-6">
         
         <div className="h-44 w-full relative">
           <div className="flex h-full items-end justify-between px-4">
