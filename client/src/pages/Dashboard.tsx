@@ -66,29 +66,29 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
-      {/* MORI AI 비서 버튼 - 타이틀 카드 내에 배치 */}
-      <div className="absolute top-8 left-[70%] z-20">
-        <button 
-          className="flex items-center justify-center bg-orange-500 text-white rounded-full px-3 py-1.5 shadow-md transition-all hover:shadow-lg hover:shadow-orange-200/50 hover:-translate-y-0.5"
-          onClick={() => {
-            toggleAssistantGender();
-            toggleAssistant();
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-            <line x1="12" y1="19" x2="12" y2="22"></line>
-          </svg>
-          <span className="text-xs font-bold">MORI</span>
-        </button>
-      </div>
+      {/* MORI AI 비서 버튼은 사용자 이름 옆에 배치 */}
       
       {/* 일주일 캘린더와 타이틀 카드 */}
       <div className="mx-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">
-        <h2 className="text-2xl font-bold mb-1">
-          Hello, {user?.name || "친구"}
-        </h2>
+        <div className="flex justify-between items-center mb-1">
+          <h2 className="text-2xl font-bold">
+            Hello, {user?.name || "친구"}
+          </h2>
+          <button 
+            className="flex items-center justify-center bg-orange-500 text-white rounded-full px-3 py-1.5 shadow-md transition-all hover:shadow-lg hover:shadow-orange-200/50 hover:-translate-y-0.5"
+            onClick={() => {
+              toggleAssistantGender();
+              toggleAssistant();
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+            <span className="text-xs font-bold">MORI</span>
+          </button>
+        </div>
         <p className="text-xl mb-4 text-gray-700">
           Manage your Tasks
         </p>
