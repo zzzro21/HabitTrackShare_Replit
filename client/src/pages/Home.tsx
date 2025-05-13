@@ -5,6 +5,7 @@ import WeekSelector from '@/components/WeekSelector';
 import HabitTracker from '@/components/HabitTracker';
 import WeekSummary from '@/components/WeekSummary';
 import GrowthGraph from '@/components/GrowthGraph';
+import MoriAssistant from '@/components/MoriAssistant';
 import AppLayout from '@/components/AppLayout';
 import { useHabit } from '@/lib/HabitContext';
 
@@ -18,6 +19,7 @@ const Home: React.FC = () => {
       showBackButton={true}
       onBackClick={() => window.location.href = '/'}
     >
+      <MoriAssistant />
       <UserSelector />
       <ProgressSummary />
       <WeekSelector />
