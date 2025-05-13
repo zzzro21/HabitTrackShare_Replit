@@ -195,7 +195,7 @@ const LandingPage: React.FC = () => {
             </div>
             <span className="text-base font-medium">Mori</span>
           </div>
-          <div className="w-full overflow-hidden bg-orange-100 shadow-xl relative" style={{ height: '360px', width: '288px', borderRadius: '50% / 38%' }}>
+          <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '360px', width: '288px', borderRadius: '50% / 38%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
             <img
               src={selectedImage}
               alt="프로필 이미지"
