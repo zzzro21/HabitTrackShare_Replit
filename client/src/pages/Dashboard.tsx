@@ -53,18 +53,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
-      {/* 상단 헤더 */}
-      <header className="flex justify-between items-center p-4">
-        <div className="w-8 h-8">
-          <svg viewBox="0 0 24 24" className="w-full h-full">
-            <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 2v2h-2V5h2zm-2 14v-2h2v2h-2zm9 0h-5v-2h5v2zm0-4h-5v-2h2v-2h-2V9h5v2h-3v2h3v2z" 
-                  fill="currentColor"/>
-          </svg>
-        </div>
-        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-          <span className="text-sm">⊙</span>
-        </div>
-      </header>
+      {/* 상단 여백 */}
+      <div className="h-4"></div>
 
       {/* 일일 리플렉션 카드 */}
       <div className="mx-4 p-5 bg-amber-50 rounded-3xl shadow-sm">
