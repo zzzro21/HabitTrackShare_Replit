@@ -15,7 +15,7 @@ const Home: React.FC = () => {
     <AppLayout 
       title="자장격지 행동습관 점검표"
       subtitle="56일(8주) 동안의 습관 형성을 통해 성공의 기반을 다집니다"
-      showBackButton={true}
+      showBackButton={false}
     >
       <UserSelector />
       <ProgressSummary />

@@ -20,7 +20,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     if (onBackClick) {
       onBackClick();
     } else {
-      window.history.back();
+      // 기본적으로 메인 페이지(홈)로 이동
+      window.location.href = '/';
     }
   };
 
