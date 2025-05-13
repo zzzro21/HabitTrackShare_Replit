@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { memStorage as storage } from "./memStorage";
 import { generateHabitInsights, classifyUserInput } from "./ai";
 import { z } from "zod";
 import { insertHabitEntrySchema, insertHabitNoteSchema, insertDailyFeedbackSchema, insertHabitInsightSchema } from "@shared/schema";
