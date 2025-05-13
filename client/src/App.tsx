@@ -66,7 +66,7 @@ function Router() {
       <Route path="/" component={isAuthenticated ? Dashboard : () => <Redirect to="/welcome" />} />
       
       {/* 인증이 필요한 습관 트래커 페이지들 */}
-      <Route path="/home">
+      <Route path="/checklist">
         <PrivateRoute component={Home} />
       </Route>
       <Route path="/friends">
