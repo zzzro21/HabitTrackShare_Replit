@@ -676,7 +676,7 @@ const Mori: React.FC = () => {
         return (
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-1">수당 시뮬레이션</h3>
-            <div className="border-b border-gray-200 p-2 rounded-lg">
+            <div className="border-b border-gray-200 p-2 rounded-lg bg-blue-50">
               <div className="flex justify-start mb-2">
                 <span className="font-semibold">이번 달 예상 수당</span>
                 <span className="font-bold text-blue-500 ml-auto">1,250,000원</span>
@@ -705,12 +705,12 @@ const Mori: React.FC = () => {
             <div className="space-y-3">
               {categorizedResults.memos.length > 0 ? (
                 categorizedResults.memos.map((memo, idx) => (
-                  <div key={idx} className="border-b border-gray-200 p-2 rounded-lg">
+                  <div key={idx} className="border-b border-gray-200 p-2 rounded-lg bg-blue-50">
                     <div className="text-sm text-gray-600">{memo.content}</div>
                   </div>
                 ))
               ) : (
-                <div className="border-b border-gray-200 p-2 rounded-lg">
+                <div className="border-b border-gray-200 p-2 rounded-lg bg-blue-50">
                   <div className="text-sm text-gray-400">메모를 추가하려면 음성버튼을 누르고 말하세요</div>
                 </div>
               )}
@@ -724,7 +724,7 @@ const Mori: React.FC = () => {
             <div className="space-y-3">
               {categorizedResults.schedules.length > 0 ? (
                 categorizedResults.schedules.map((schedule, idx) => (
-                  <div key={idx} className="border-b border-gray-200 p-2 rounded-lg">
+                  <div key={idx} className="border-b border-gray-200 p-2 rounded-lg bg-blue-50">
                     <div className="flex justify-between mb-1">
                       <span className="font-semibold">{schedule.event}</span>
                       <span className="text-sm text-blue-500">{schedule.time}</span>
@@ -733,7 +733,7 @@ const Mori: React.FC = () => {
                   </div>
                 ))
               ) : (
-                <div className="border-b border-gray-200 p-2">
+                <div className="border-b border-gray-200 p-2 bg-blue-50 rounded-lg">
                   <div className="text-sm text-gray-400">오늘 예정된 일정이 없습니다</div>
                 </div>
               )}
