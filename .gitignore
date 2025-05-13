@@ -1,6 +1,38 @@
-node_modules
-dist
+# 의존성 디렉토리
+node_modules/
+
+# 환경 변수 파일
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# 빌드 결과물
+dist/
+build/
+
+# 로그 파일
+*.log
+
+# 임시 파일
 .DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
+.cache
+.parcel-cache
+*.bak
+*~
+
+# 에디터 설정 파일
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Replit 관련 파일
+.replit
+.replit.nix
+.config/
+
+# 데이터베이스 파일
+*.sqlite
+*.db

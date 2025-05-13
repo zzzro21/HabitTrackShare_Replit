@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "황주원",
+    "username": "alpha",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+    "email": "user1@example.com"
+  },
+  {
+    "id": 2,
+    "name": "김다정",
+    "username": "beta",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
+    "email": "user2@example.com"
+  },
+  {
+    "id": 3,
+    "name": "이정석",
+    "username": "gamma",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/men/3.jpg",
+    "email": "user3@example.com"
+  },
+  {
+    "id": 4,
+    "name": "박선아",
+    "username": "delta",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/women/4.jpg",
+    "email": "user4@example.com"
+  },
+  {
+    "id": 5,
+    "name": "손영진",
+    "username": "epsilon",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/men/5.jpg",
+    "email": "user5@example.com"
+  },
+  {
+    "id": 6,
+    "name": "김유나",
+    "username": "zeta",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/women/6.jpg",
+    "email": "user6@example.com"
+  },
+  {
+    "id": 7,
+    "name": "최현우",
+    "username": "eta",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/men/7.jpg",
+    "email": "user7@example.com"
+  },
+  {
+    "id": 8,
+    "name": "정민지",
+    "username": "theta",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/women/8.jpg",
+    "email": "user8@example.com"
+  },
+  {
+    "id": 9,
+    "name": "권태영",
+    "username": "iota",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/men/9.jpg",
+    "email": "user9@example.com"
+  },
+  {
+    "id": 10,
+    "name": "김유나",
+    "username": "zzzro",
+    "password": "password123",
+    "avatar": "https://randomuser.me/api/portraits/women/10.jpg",
+    "email": "user10@example.com"
+  }
+]

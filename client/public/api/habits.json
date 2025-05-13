@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "label": "책 읽기 (30분 이상)",
+    "scoreType": "partial",
+    "scoreValue": 10
+  },
+  {
+    "id": 2,
+    "label": "동영상 시청 (지정된 콘텐츠)",
+    "scoreType": "binary",
+    "scoreValue": 5
+  },
+  {
+    "id": 3,
+    "label": "제품 사용",
+    "scoreType": "binary",
+    "scoreValue": 10
+  },
+  {
+    "id": 4,
+    "label": "미팅 참석",
+    "scoreType": "binary",
+    "scoreValue": 15
+  },
+  {
+    "id": 5,
+    "label": "제품 배송/소비자 관리",
+    "scoreType": "count",
+    "scoreValue": 5
+  }
+]
