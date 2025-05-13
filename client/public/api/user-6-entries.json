@@ -1,0 +1,20 @@
+[
+  { "userId": 6, "habitId": 1, "day": 0, "value": 30 },
+  { "userId": 6, "habitId": 1, "day": 1, "value": 25 },
+  { "userId": 6, "habitId": 1, "day": 2, "value": 40 },
+  { "userId": 6, "habitId": 1, "day": 3, "value": 15 },
+  { "userId": 6, "habitId": 1, "day": 4, "value": 20 },
+  { "userId": 6, "habitId": 1, "day": 5, "value": 35 },
+  { "userId": 6, "habitId": 1, "day": 6, "value": 45 },
+  { "userId": 6, "habitId": 2, "day": 0, "value": 1 },
+  { "userId": 6, "habitId": 2, "day": 2, "value": 1 },
+  { "userId": 6, "habitId": 2, "day": 4, "value": 1 },
+  { "userId": 6, "habitId": 2, "day": 6, "value": 1 },
+  { "userId": 6, "habitId": 3, "day": 1, "value": 1 },
+  { "userId": 6, "habitId": 3, "day": 3, "value": 1 },
+  { "userId": 6, "habitId": 3, "day": 5, "value": 1 },
+  { "userId": 6, "habitId": 4, "day": 1, "value": 1 },
+  { "userId": 6, "habitId": 4, "day": 4, "value": 1 },
+  { "userId": 6, "habitId": 5, "day": 2, "value": 2 },
+  { "userId": 6, "habitId": 5, "day": 5, "value": 3 }
+]
