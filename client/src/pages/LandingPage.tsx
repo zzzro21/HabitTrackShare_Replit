@@ -167,7 +167,7 @@ const LandingPage: React.FC = () => {
       <div className="absolute top-0 left-0 w-full h-full"></div>
 
       {/* 메인 콘텐츠 */}
-      <div className="relative flex flex-col items-center px-8 pt-10 pb-20 z-10 flex-grow">
+      <div className="relative flex flex-col items-center px-8 pt-10 pb-10 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
         <div className={`w-full max-w-[200px] relative mt-0 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
@@ -298,8 +298,8 @@ const LandingPage: React.FC = () => {
         </div>
 
         {/* 하단 버튼 영역 */}
-        <div className="w-full">
-          <div className="flex justify-center mt-8">
+        <div className="w-full mt-auto">
+          <div className="flex justify-center mt-16">
             <button
               onClick={handleBeginClick}
               className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-2xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
