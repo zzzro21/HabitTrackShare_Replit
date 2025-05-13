@@ -401,29 +401,29 @@ const MoriAssistant: React.FC = () => {
     switch (selectedCategory) {
       case '고객관리':
         return (
-          <div className="p-4 bg-yellow-50 rounded-xl">
-            <div className="flex justify-between items-start mb-2">
+          <div>
+            <div className="flex justify-between items-start mb-3">
               <h3 className="font-bold text-lg text-gray-800">고객 관리</h3>
-              <div className="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
+              <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
                 <span>3</span>
               </div>
             </div>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수</span>
                   <span className="text-sm text-gray-500">최근 연락: 3일 전</span>
                 </div>
                 <div className="text-sm text-gray-600">생명보험 상담 완료, 가입 고려 중</div>
               </div>
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">박영희</span>
                   <span className="text-sm text-gray-500">최근 연락: 오늘</span>
                 </div>
                 <div className="text-sm text-gray-600">자녀 교육보험 상담 예정</div>
               </div>
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은</span>
                   <span className="text-sm text-gray-500">최근 연락: 1주일 전</span>
@@ -435,20 +435,20 @@ const MoriAssistant: React.FC = () => {
         );
       case '상담내역':
         return (
-          <div className="p-4 bg-blue-50 rounded-xl">
-            <h3 className="font-bold text-lg text-gray-800 mb-2">상담 내역</h3>
+          <div>
+            <h3 className="font-bold text-lg text-gray-800 mb-3">상담 내역</h3>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
-                  <span className="text-sm text-blue-500">2025.05.10</span>
+                  <span className="text-sm text-blue-600">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
-                  <span className="text-sm text-blue-500">2025.05.05</span>
+                  <span className="text-sm text-blue-600">2025.05.05</span>
                 </div>
                 <div className="text-sm text-gray-600">노후 설계 중요성 설명, 상품 비교 자료 전달</div>
               </div>
@@ -457,12 +457,12 @@ const MoriAssistant: React.FC = () => {
         );
       case '수당시뮬레이션':
         return (
-          <div className="p-4 bg-green-50 rounded-xl">
-            <h3 className="font-bold text-lg text-gray-800 mb-2">수당 시뮬레이션</h3>
-            <div className="bg-white p-3 rounded-lg shadow-sm">
+          <div>
+            <h3 className="font-bold text-lg text-gray-800 mb-3">수당 시뮬레이션</h3>
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
               <div className="flex justify-between mb-2">
                 <span className="font-semibold">이번 달 예상 수당</span>
-                <span className="font-bold text-green-600">1,250,000원</span>
+                <span className="font-bold text-blue-600">1,250,000원</span>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
@@ -483,17 +483,17 @@ const MoriAssistant: React.FC = () => {
         );
       case '메모':
         return (
-          <div className="p-4 bg-purple-50 rounded-xl">
-            <h3 className="font-bold text-lg text-gray-800 mb-2">메모</h3>
+          <div>
+            <h3 className="font-bold text-lg text-gray-800 mb-3">메모</h3>
             <div className="space-y-3">
               {categorizedResults.memos.length > 0 ? (
                 categorizedResults.memos.map((memo, idx) => (
-                  <div key={idx} className="bg-white p-3 rounded-lg shadow-sm">
+                  <div key={idx} className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                     <div className="text-sm text-gray-600">{memo.content}</div>
                   </div>
                 ))
               ) : (
-                <div className="bg-white p-3 rounded-lg shadow-sm">
+                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                   <div className="text-sm text-gray-400">메모를 추가하려면 음성버튼을 누르고 말하세요</div>
                 </div>
               )}
@@ -502,21 +502,21 @@ const MoriAssistant: React.FC = () => {
         );
       case '스케쥴':
         return (
-          <div className="p-4 bg-orange-50 rounded-xl">
-            <h3 className="font-bold text-lg text-gray-800 mb-2">오늘의 스케쥴</h3>
+          <div>
+            <h3 className="font-bold text-lg text-gray-800 mb-3">오늘의 스케쥴</h3>
             <div className="space-y-3">
               {categorizedResults.schedules.length > 0 ? (
                 categorizedResults.schedules.map((schedule, idx) => (
-                  <div key={idx} className="bg-white p-3 rounded-lg shadow-sm">
+                  <div key={idx} className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                     <div className="flex justify-between mb-1">
                       <span className="font-semibold">{schedule.event}</span>
-                      <span className="text-sm text-orange-500">{schedule.time}</span>
+                      <span className="text-sm text-blue-600">{schedule.time}</span>
                     </div>
                     <div className="text-sm text-gray-600">{schedule.date}</div>
                   </div>
                 ))
               ) : (
-                <div className="bg-white p-3 rounded-lg shadow-sm">
+                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                   <div className="text-sm text-gray-400">오늘 예정된 일정이 없습니다</div>
                 </div>
               )}
@@ -525,10 +525,10 @@ const MoriAssistant: React.FC = () => {
         );
       case '상품':
         return (
-          <div className="p-4 bg-indigo-50 rounded-xl">
-            <h3 className="font-bold text-lg text-gray-800 mb-2">상품 정보</h3>
+          <div>
+            <h3 className="font-bold text-lg text-gray-800 mb-3">상품 정보</h3>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                 <div className="font-semibold mb-1">종신보험 프리미엄</div>
                 <div className="text-sm text-gray-600 mb-1">100세까지 보장, 중대질병 특약 가능</div>
                 <div className="flex justify-between text-sm">
@@ -536,7 +536,7 @@ const MoriAssistant: React.FC = () => {
                   <span className="font-semibold">15만원~</span>
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+              <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                 <div className="font-semibold mb-1">무배당 연금보험</div>
                 <div className="text-sm text-gray-600 mb-1">안정적인 노후 준비, 10년 이상 유지 시 세제혜택</div>
                 <div className="flex justify-between text-sm">
@@ -549,19 +549,17 @@ const MoriAssistant: React.FC = () => {
         );
       default:
         return (
-          <div className="p-4 bg-gray-50 rounded-xl">
-            <div className="text-center text-gray-500">
-              카테고리를 선택해주세요
-            </div>
+          <div className="text-center text-gray-500">
+            카테고리를 선택해주세요
           </div>
         );
     }
   };
   
   return (
-    <div className="bg-white p-0 rounded-xl border shadow-md">
+    <div className="bg-white p-0">
       {/* 상단 날짜 표시 */}
-      <div className="p-4 border-b">
+      <div className="p-4">
         <div className="flex items-center justify-between">
           <button className="text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -574,7 +572,7 @@ const MoriAssistant: React.FC = () => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <div className="flex flex-wrap gap-2 p-4 bg-sky-50">
+      <div className="flex flex-wrap gap-2 p-4">
         {categories.map((category) => (
           <button
             key={category}
@@ -582,7 +580,7 @@ const MoriAssistant: React.FC = () => {
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category || category === '고객관리'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white border border-sky-200 text-gray-800 hover:bg-gray-100'
+                : 'bg-white border border-gray-200 text-gray-800 hover:bg-gray-100'
             }`}
           >
             {category}
@@ -596,8 +594,10 @@ const MoriAssistant: React.FC = () => {
       </div>
       
       {/* 선택된 카테고리 내용 표시 */}
-      <div className="p-4">
-        {renderCategoryContent()}
+      <div className="px-4 pb-4">
+        <div className="bg-sky-50 p-4">
+          {renderCategoryContent()}
+        </div>
       </div>
       
       {/* 하단 음성 입력 부분 */}
