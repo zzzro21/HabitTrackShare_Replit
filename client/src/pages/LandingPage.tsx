@@ -171,7 +171,7 @@ const LandingPage: React.FC = () => {
         {/* 타원형 이미지 컨테이너 */}
         <div className={`w-full max-w-[288px] relative mt-0 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
-          <div className={`absolute -left-14 top-[60%] bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
+          <div className={`absolute -left-14 top-[60%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
             <div className="bg-purple-500 rounded-full w-10 h-10 flex items-center justify-center mr-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -180,11 +180,11 @@ const LandingPage: React.FC = () => {
                 <line x1="15" y1="9" x2="15.01" y2="9"></line>
               </svg>
             </div>
-            <span className="text-sm font-normal">Vibes</span>
+            <span className="text-base font-medium">Vibes</span>
           </div>
           
           {/* AI 비서 버블 - 우측 */}
-          <div className={`absolute -right-14 top-[30%] bg-white rounded-full shadow-lg flex items-center p-2.5 px-5 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
+          <div className={`absolute -right-14 top-[30%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
             <div className="bg-orange-400 rounded-full w-10 h-10 flex items-center justify-center mr-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
@@ -193,7 +193,7 @@ const LandingPage: React.FC = () => {
                 <line x1="8" y1="23" x2="16" y2="23" />
               </svg>
             </div>
-            <span className="text-sm font-normal">Mori</span>
+            <span className="text-base font-medium">Mori</span>
           </div>
           <div className="w-full overflow-hidden bg-orange-100 shadow-xl relative" style={{ height: '360px', width: '288px', borderRadius: '50% / 38%' }}>
             <img
