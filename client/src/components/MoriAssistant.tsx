@@ -467,21 +467,21 @@ const Mori: React.FC = () => {
               </div>
             </div>
             <div className="space-y-0.5">
-              <div className="bg-amber-50 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수</span>
                   <span className="text-sm text-gray-500">최근 연락: 3일 전</span>
                 </div>
                 <div className="text-sm text-gray-600">생명보험 상담 완료, 가입 고려 중</div>
               </div>
-              <div className="bg-amber-50 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">박영희</span>
                   <span className="text-sm text-gray-500">최근 연락: 오늘</span>
                 </div>
                 <div className="text-sm text-gray-600">자녀 교육보험 상담 예정</div>
               </div>
-              <div className="bg-amber-50 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은</span>
                   <span className="text-sm text-gray-500">최근 연락: 1주일 전</span>
@@ -496,14 +496,14 @@ const Mori: React.FC = () => {
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-1">상담 내역</h3>
             <div className="space-y-0.5">
-              <div className="bg-amber-50 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-start mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
                   <span className="text-sm text-blue-600 ml-auto">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
-              <div className="bg-amber-50 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-start mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
                   <span className="text-sm text-blue-600 ml-auto">2025.05.05</span>
@@ -517,7 +517,7 @@ const Mori: React.FC = () => {
         return (
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-1">수당 시뮬레이션</h3>
-            <div className="bg-amber-50 p-2 rounded-lg">
+            <div className="border-b border-gray-200 p-2 rounded-lg">
               <div className="flex justify-start mb-2">
                 <span className="font-semibold">이번 달 예상 수당</span>
                 <span className="font-bold text-blue-600 ml-auto">1,250,000원</span>
@@ -546,12 +546,12 @@ const Mori: React.FC = () => {
             <div className="space-y-3">
               {categorizedResults.memos.length > 0 ? (
                 categorizedResults.memos.map((memo, idx) => (
-                  <div key={idx} className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                  <div key={idx} className="border-b border-gray-200 p-2 rounded-lg">
                     <div className="text-sm text-gray-600">{memo.content}</div>
                   </div>
                 ))
               ) : (
-                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                <div className="border-b border-gray-200 p-2 rounded-lg">
                   <div className="text-sm text-gray-400">메모를 추가하려면 음성버튼을 누르고 말하세요</div>
                 </div>
               )}
@@ -565,7 +565,7 @@ const Mori: React.FC = () => {
             <div className="space-y-3">
               {categorizedResults.schedules.length > 0 ? (
                 categorizedResults.schedules.map((schedule, idx) => (
-                  <div key={idx} className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                  <div key={idx} className="border-b border-gray-200 p-2 rounded-lg">
                     <div className="flex justify-between mb-1">
                       <span className="font-semibold">{schedule.event}</span>
                       <span className="text-sm text-blue-600">{schedule.time}</span>
