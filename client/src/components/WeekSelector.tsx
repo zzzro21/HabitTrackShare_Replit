@@ -29,7 +29,7 @@ const WeekSelector: React.FC = () => {
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
             }`}
           >
-            <span className="text-xs">{index*2 + 1}-{index*2 + 2}주차</span>
+            <span className="text-xs md:text-sm">{index*2 + 1}-{index*2 + 2}주차</span>
           </button>
         ))}
       </div>

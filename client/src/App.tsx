@@ -80,7 +80,7 @@ function NavBar() {
   }
   
   return (
-    <div className="bg-blue-600 text-white p-3 flex justify-between items-center">
+    <div className="bg-blue-600 text-white p-3 flex justify-between items-center max-w-[420px] mx-auto lg:max-w-[800px]">
       <div className="flex items-center gap-2">
         <span className="text-xl font-semibold">습관 트래커</span>
       </div>
@@ -91,7 +91,7 @@ function NavBar() {
         </div>
         <button
           onClick={handleResetUser}
-          className="bg-white text-blue-600 px-3 py-1 rounded-md hover:bg-blue-50"
+          className="bg-white text-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 text-sm"
         >
           사용자 변경
         </button>
