@@ -53,27 +53,47 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
-      {/* 상단 여백 */}
-      <div className="h-4"></div>
-
-      {/* 일일 리플렉션 카드 */}
-      <div className="mx-4 p-5 bg-amber-50 rounded-3xl shadow-sm">
-        <div className="text-sm text-gray-600 mb-2">Daily reflection</div>
+      {/* 일주일 캘린더와 타이틀 카드 */}
+      <div className="mx-0 p-5 bg-blue-100/80 rounded-b-3xl shadow-sm w-[115%] -ml-[7.5%]">
         <h2 className="text-2xl font-bold mb-1">
           Hello, {user?.name || "친구"}
         </h2>
-        <p className="text-2xl mb-4">
-          How do you feel about your <span className="font-bold">current emotions?</span>
+        <p className="text-xl mb-4 text-gray-700">
+          Manage your Tasks
         </p>
         
-        <div 
-          className="bg-amber-100 p-3 rounded-xl flex justify-between items-center cursor-pointer"
-          onClick={() => setLocation('/notes')}
-        >
-          <span className="text-gray-500">Your reflection...</span>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-          </svg>
+        {/* 일주일 캘린더 */}
+        <div className="bg-white/70 p-3 rounded-xl mb-1">
+          <div className="flex justify-between items-center">
+            {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => {
+              // 오늘 날짜 계산
+              const today = new Date();
+              const currentDay = today.getDay(); // 0: 일요일, 1: 월요일, ...
+              
+              // 이번 주 시작일 (일요일)로 설정
+              const startOfWeek = new Date(today);
+              startOfWeek.setDate(today.getDate() - currentDay);
+              
+              // 표시할 날짜 계산
+              const dateToShow = new Date(startOfWeek);
+              dateToShow.setDate(startOfWeek.getDate() + index);
+              
+              // 오늘 날짜인지 확인
+              const isToday = dateToShow.getDate() === today.getDate() && 
+                            dateToShow.getMonth() === today.getMonth() &&
+                            dateToShow.getFullYear() === today.getFullYear();
+              
+              return (
+                <div key={index} className="flex flex-col items-center">
+                  <div className="text-xs font-medium mb-1">{day}</div>
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm 
+                    ${isToday ? 'bg-blue-500 text-white font-bold' : 'text-gray-700'}`}>
+                    {dateToShow.getDate()}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
