@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
       {/* MORI AI 비서 버튼 - 타이틀 카드 내에 배치 */}
-      <div className="absolute top-8 left-[42%] z-20">
+      <div className="absolute top-8 left-[55%] z-20">
         <button 
           className="flex items-center justify-center bg-orange-500 text-white rounded-full px-3 py-1.5 shadow-md transition-all hover:shadow-lg hover:shadow-orange-200/50 hover:-translate-y-0.5"
           onClick={() => {
