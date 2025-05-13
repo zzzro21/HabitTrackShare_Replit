@@ -577,11 +577,12 @@ const Mori: React.FC = () => {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
+            className={`py-2 px-1 rounded-full text-sm font-medium transition-colors w-full ${
               selectedCategory === category || category === '고객관리'
                 ? 'bg-blue-600 text-white border-0'
                 : 'bg-white border-2 border-yellow-300 text-gray-800 hover:bg-gray-100'
             }`}
+            style={{ minWidth: '82px' }}
           >
             {category}
           </button>
