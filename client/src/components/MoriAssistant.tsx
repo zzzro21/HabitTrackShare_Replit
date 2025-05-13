@@ -775,9 +775,19 @@ const Mori: React.FC = () => {
   
   return (
     <div className="bg-white p-0">
-      {/* 날짜 표시 */}
+      {/* MORI 로고 및 슬로건 */}
       <div className="p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-center mb-2">
+          <div className="flex items-center">
+            <div className="bg-orange-500 text-white font-bold text-2xl px-4 py-2 rounded-lg">
+              Mori
+            </div>
+            <span className="ml-3 text-lg text-gray-600">Make your Day Productive</span>
+          </div>
+        </div>
+        
+        {/* 날짜 표시 */}
+        <div className="flex items-center justify-between mt-2">
           <button className="text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
