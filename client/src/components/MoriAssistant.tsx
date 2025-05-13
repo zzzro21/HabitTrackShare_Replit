@@ -561,14 +561,14 @@ const MoriAssistant: React.FC = () => {
   return (
     <div className="bg-white p-0 rounded-xl border shadow-md">
       {/* 상단 날짜 표시 */}
-      <div className="bg-black text-white p-4 rounded-t-xl">
+      <div className="p-4 border-b">
         <div className="flex items-center justify-between">
-          <button className="text-white">
+          <button className="text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 className="text-xl font-bold text-center">{getCurrentDate()}</h2>
+          <h2 className="text-xl font-bold text-center text-blue-600">{getCurrentDate()}</h2>
           <div className="w-6"></div> {/* 균형을 맞추기 위한 더미 요소 */}
         </div>
       </div>
