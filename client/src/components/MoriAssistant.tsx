@@ -417,7 +417,7 @@ const Mori: React.FC = () => {
           <div>
             <div className="flex justify-between items-start mb-3">
               <h3 className="font-bold text-lg text-gray-800">고객 관리</h3>
-              <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
+              <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
                 <span>3</span>
               </div>
             </div>
@@ -499,7 +499,7 @@ const Mori: React.FC = () => {
               <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-start mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
-                  <span className="text-sm text-blue-600 ml-auto">2025.05.10</span>
+                  <span className="text-sm text-blue-500 ml-auto">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
@@ -624,7 +624,7 @@ const Mori: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 className="text-xl font-bold text-center text-blue-600">{getCurrentDate()}</h2>
+          <h2 className="text-xl font-bold text-center text-blue-500">{getCurrentDate()}</h2>
           <div className="w-6"></div> {/* 균형을 맞추기 위한 더미 요소 */}
         </div>
       </div>
@@ -637,15 +637,15 @@ const Mori: React.FC = () => {
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category || category === '고객관리'
-                ? 'bg-black text-white border-0'
-                : 'bg-white border border-yellow-300 text-gray-800 hover:bg-gray-100'
+                ? 'bg-blue-500 text-white border-0'
+                : 'bg-white border border-blue-300 text-gray-800 hover:bg-blue-50'
             }`}
           >
             {category}
           </button>
         ))}
         <button
-          className="w-10 h-10 rounded-full bg-black text-white text-xl font-medium hover:bg-gray-800 flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-blue-500 text-white text-xl font-medium hover:bg-blue-600 flex items-center justify-center"
         >
           +
         </button>
