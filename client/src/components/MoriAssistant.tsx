@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ClassifiedResponse {
   type: 'schedule' | 'memo' | 'idea' | 'task';
@@ -17,6 +19,21 @@ const MoriAssistant: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [results, setResults] = useState<ClassifiedResponse[]>([]);
+  const [showApiSettings, setShowApiSettings] = useState<boolean>(false);
+  const [geminiApiKey, setGeminiApiKey] = useState<string>('');
+  const [notionToken, setNotionToken] = useState<string>('');
+  const [notionDbId, setNotionDbId] = useState<string>('');
+  const [isLoadingApiKeys, setIsLoadingApiKeys] = useState<boolean>(false);
+  const [isSavingApiKeys, setIsSavingApiKeys] = useState<boolean>(false);
+  const [apiKeyStatus, setApiKeyStatus] = useState<{
+    hasGeminiApiKey: boolean;
+    hasNotionToken: boolean;
+    hasNotionDbId: boolean;
+  }>({
+    hasGeminiApiKey: false,
+    hasNotionToken: false,
+    hasNotionDbId: false
+  });
   const [categorizedResults, setCategorizedResults] = useState<{
     schedules: ClassifiedResponse[];
     memos: ClassifiedResponse[];
@@ -29,11 +46,87 @@ const MoriAssistant: React.FC = () => {
     tasks: []
   });
   const { toast } = useToast();
+  const { user } = useAuth();
   
   // Speech recognition
   const recognitionRef = useRef<any>(null);
   const [transcript, setTranscript] = useState('');
 
+  // API 키 상태 로드
+  useEffect(() => {
+    const loadApiKeyStatus = async () => {
+      if (!user?.id) return;
+      
+      try {
+        setIsLoadingApiKeys(true);
+        const response = await apiRequest<typeof apiKeyStatus>(`/api/users/${user.id}/api-keys`);
+        setApiKeyStatus(response);
+      } catch (error) {
+        console.error('API 키 상태 로드 실패:', error);
+        toast({
+          title: "API 키 정보 로드 실패",
+          description: "API 키 상태를 불러오는 중 오류가 발생했습니다.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoadingApiKeys(false);
+      }
+    };
+    
+    if (user?.id) {
+      loadApiKeyStatus();
+    }
+  }, [user?.id, toast]);
+  
+  // API 키 저장
+  const handleSaveApiKeys = async () => {
+    if (!user?.id) {
+      toast({
+        title: "로그인 필요",
+        description: "API 키를 저장하려면 로그인이 필요합니다.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      setIsSavingApiKeys(true);
+      const response = await apiRequest<{ success: boolean; message: string; }>(
+        'POST', 
+        `/api/users/${user.id}/api-keys`, 
+        { geminiApiKey, notionToken, notionDbId }
+      );
+      
+      if (response.success) {
+        toast({
+          title: "API 키 저장 성공",
+          description: response.message
+        });
+        setApiKeyStatus({
+          hasGeminiApiKey: !!geminiApiKey,
+          hasNotionToken: !!notionToken,
+          hasNotionDbId: !!notionDbId
+        });
+        setShowApiSettings(false); // 저장 후 설정 창 닫기
+      } else {
+        toast({
+          title: "API 키 저장 실패",
+          description: response.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('API 키 저장 실패:', error);
+      toast({
+        title: "API 키 저장 실패",
+        description: "API 키를 저장하는 중 오류가 발생했습니다.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSavingApiKeys(false);
+    }
+  };
+  
   // 음성 인식 초기화
   useEffect(() => {
     // @ts-ignore
@@ -291,12 +384,114 @@ const MoriAssistant: React.FC = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg border shadow-sm my-4">
-      <div className="flex items-center mb-3">
-        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-          <span className="text-lg">🤖</span>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center">
+          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+            <span className="text-lg">🤖</span>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-800">Mori</h2>
         </div>
-        <h2 className="text-lg font-semibold text-gray-800">Mori</h2>
+        <button 
+          onClick={() => setShowApiSettings(!showApiSettings)}
+          className="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-lg text-gray-700 flex items-center"
+        >
+          <span className="mr-1">⚙️</span> API 설정
+        </button>
       </div>
+      
+      {/* API 키 설정 UI */}
+      {showApiSettings && (
+        <div className="mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+          <h3 className="font-semibold text-gray-800 mb-2 flex items-center">
+            <span className="mr-1">🔑</span> API 키 설정
+          </h3>
+          
+          {/* Gemini API 키 설정 */}
+          <div className="mb-3">
+            <label htmlFor="geminiApiKey" className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span className="mr-1">✨</span> Gemini API 키
+              {apiKeyStatus.hasGeminiApiKey && (
+                <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">설정됨</span>
+              )}
+            </label>
+            <Input
+              id="geminiApiKey"
+              type="password"
+              placeholder="Gemini API 키를 입력하세요"
+              value={geminiApiKey}
+              onChange={(e) => setGeminiApiKey(e.target.value)}
+              className="text-sm"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              <a 
+                href="https://ai.google.dev/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                Gemini AI 사이트
+              </a>
+              에서 API 키를 발급받을 수 있습니다.
+            </p>
+          </div>
+          
+          {/* Notion 토큰 설정 */}
+          <div className="mb-3">
+            <label htmlFor="notionToken" className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span className="mr-1">📝</span> Notion 토큰
+              {apiKeyStatus.hasNotionToken && (
+                <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">설정됨</span>
+              )}
+            </label>
+            <Input
+              id="notionToken"
+              type="password"
+              placeholder="Notion 토큰을 입력하세요"
+              value={notionToken}
+              onChange={(e) => setNotionToken(e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          {/* Notion 데이터베이스 ID 설정 */}
+          <div className="mb-3">
+            <label htmlFor="notionDbId" className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span className="mr-1">🗄️</span> Notion 데이터베이스 ID
+              {apiKeyStatus.hasNotionDbId && (
+                <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">설정됨</span>
+              )}
+            </label>
+            <Input
+              id="notionDbId"
+              type="text"
+              placeholder="Notion 데이터베이스 ID를 입력하세요"
+              value={notionDbId}
+              onChange={(e) => setNotionDbId(e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          {/* 저장 버튼 */}
+          <div className="flex justify-end gap-2 mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowApiSettings(false)}
+              disabled={isSavingApiKeys}
+            >
+              취소
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleSaveApiKeys}
+              disabled={isSavingApiKeys}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              {isSavingApiKeys ? "저장 중..." : "저장"}
+            </Button>
+          </div>
+        </div>
+      )}
       
       <div className="flex items-center mb-3 bg-gradient-to-r from-blue-100 to-purple-100 p-3 rounded-lg">
         <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center mr-3">

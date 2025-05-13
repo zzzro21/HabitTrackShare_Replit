@@ -401,18 +401,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/assistant/classify", isAuthenticated, async (req, res) => {
     try {
       const { input } = req.body;
+      const userId = (req.session as any).userId;
       
       if (!input || typeof input !== 'string') {
         return res.status(400).json({ message: "유효한 입력이 필요합니다." });
       }
       
+      // 사용자별 API 키 조회
+      let customGeminiApiKey;
+      if (userId) {
+        const apiKeyData = await storage.getUserApiKey(userId);
+        if (apiKeyData && apiKeyData.geminiApiKey) {
+          customGeminiApiKey = apiKeyData.geminiApiKey;
+        }
+      }
+      
       // 입력을 분류하고 JSON 형식으로 반환
-      const classification = await classifyUserInput(input);
+      const classification = await classifyUserInput(input, userId, customGeminiApiKey);
       res.json(classification);
     } catch (error) {
       console.error("AI 비서 입력 분류 오류:", error);
       res.status(500).json({ 
         message: "입력 분류 중 오류가 발생했습니다.", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+  });
+  
+  // 사용자별 API 키 관리 엔드포인트
+  app.get("/api/users/:userId/api-keys", isAuthenticated, onlySelfModify, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "유효하지 않은 사용자 ID입니다." });
+      }
+      
+      const apiKey = await storage.getUserApiKey(userId);
+      // 보안을 위해 API 키 자체는 숨기고 존재 여부만 반환
+      res.json({
+        hasGeminiApiKey: !!apiKey?.geminiApiKey,
+        hasNotionToken: !!apiKey?.notionToken,
+        hasNotionDbId: !!apiKey?.notionDbId,
+        userId: apiKey?.userId || userId
+      });
+    } catch (error) {
+      console.error("API 키 조회 오류:", error);
+      res.status(500).json({ 
+        message: "API 키 조회 중 오류가 발생했습니다.", 
+        error: error instanceof Error ? error.message : String(error) 
+      });
+    }
+  });
+  
+  app.post("/api/users/:userId/api-keys", isAuthenticated, onlySelfModify, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const { geminiApiKey, notionToken, notionDbId } = req.body;
+      
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "유효하지 않은 사용자 ID입니다." });
+      }
+      
+      // API 키 업데이트
+      const apiKey = await storage.createOrUpdateUserApiKey({
+        userId,
+        geminiApiKey,
+        notionToken,
+        notionDbId
+      });
+      
+      res.json({ 
+        success: true, 
+        message: "API 키가 성공적으로 저장되었습니다.",
+        hasGeminiApiKey: !!apiKey.geminiApiKey,
+        hasNotionToken: !!apiKey.notionToken,
+        hasNotionDbId: !!apiKey.notionDbId
+      });
+    } catch (error) {
+      console.error("API 키 저장 오류:", error);
+      res.status(500).json({ 
+        message: "API 키 저장 중 오류가 발생했습니다.", 
         error: error instanceof Error ? error.message : String(error) 
       });
     }

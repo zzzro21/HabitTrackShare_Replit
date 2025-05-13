@@ -4,16 +4,17 @@ import OpenAI from "openai";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Gemini API 관련 함수 추가
-async function classifyWithGemini(input: string): Promise<{
+async function classifyWithGemini(input: string, customApiKey?: string): Promise<{
   type: "schedule" | "memo" | "idea" | "task";
   [key: string]: any;
 }> {
   try {
     const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
-    const apiKey = process.env.GEMINI_API_KEY;
+    // 사용자 지정 API 키가 있으면 그걸 사용하고, 없으면 환경 변수에서 가져옴
+    const apiKey = customApiKey || process.env.GEMINI_API_KEY;
     
     if (!apiKey) {
-      throw new Error('GEMINI_API_KEY is not set');
+      throw new Error('Gemini API Key가 설정되지 않았습니다');
     }
     
     const prompt = `다음 입력을 분석하여 아래 카테고리 중 하나로 분류하고 상세 정보를 JSON 형식으로 반환해주세요:
@@ -86,14 +87,14 @@ async function classifyWithGemini(input: string): Promise<{
   }
 }
 
-export async function classifyUserInput(input: string): Promise<{
+export async function classifyUserInput(input: string, userId?: number, customGeminiApiKey?: string): Promise<{
   type: "schedule" | "memo" | "idea" | "task";
   [key: string]: any;
 }> {
   try {
     // Gemini API로 먼저 시도
     try {
-      const geminiResult = await classifyWithGemini(input);
+      const geminiResult = await classifyWithGemini(input, customGeminiApiKey);
       console.log('Gemini 분류 결과:', geminiResult);
       return geminiResult;
     } catch (geminiError) {
