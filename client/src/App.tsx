@@ -15,6 +15,7 @@ import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
+import Dashboard from "@/pages/Dashboard";
 import TabNavigation from "@/components/TabNavigation";
 
 // 인증이 필요한 라우트를 위한 래퍼 컴포넌트
@@ -53,14 +54,16 @@ function PrivateRoute({ component: Component, ...rest }: any) {
 function Router() {
   return (
     <Switch>
-      {/* 메인 경로에 랜딩 페이지 표시 */}
-      <Route path="/" component={LandingPage} />
-      
-      {/* 랜딩 페이지 경로 유지 (대체 경로) */}
+      {/* 랜딩 페이지 (인트로 화면) */}
       <Route path="/landing" component={LandingPage} />
       
       {/* 로그인 페이지 */}
       <Route path="/login" component={LoginPage} />
+      
+      {/* 인증이 필요한 메인 대시보드 페이지 */}
+      <Route path="/">
+        <PrivateRoute component={Dashboard} />
+      </Route>
       
       {/* 인증이 필요한 습관 트래커 페이지들 */}
       <Route path="/home">
@@ -81,6 +84,9 @@ function Router() {
       <Route path="/notes">
         <PrivateRoute component={NotePage} />
       </Route>
+      
+      {/* 메인 경로에서 인증되지 않았을 경우 랜딩 페이지로 이동 */}
+      <Route path="/welcome" component={LandingPage} />
       
       {/* 404 페이지 */}
       <Route component={NotFound} />
