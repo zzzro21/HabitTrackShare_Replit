@@ -298,7 +298,7 @@ const LandingPage: React.FC = () => {
         </div>
 
         {/* 하단 버튼 영역 */}
-        <div className="w-full mt-4">
+        <div className="w-full mt-12">
           <div className="flex justify-center">
             <button
               onClick={handleBeginClick}
