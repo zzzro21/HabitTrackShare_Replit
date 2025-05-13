@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
       {/* 일주일 캘린더와 타이틀 카드 */}
-      <div className="mx-2 p-5 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[96%]">
+      <div className="mx-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">
         <h2 className="text-2xl font-bold mb-1">
           Hello, {user?.name || "친구"}
         </h2>
@@ -63,8 +63,8 @@ const Dashboard: React.FC = () => {
         </p>
         
         {/* 일주일 캘린더 */}
-        <div className="mb-1">
-          <div className="flex justify-between items-center">
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-3">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => {
               // 오늘 날짜 계산
               const today = new Date();
@@ -94,35 +94,73 @@ const Dashboard: React.FC = () => {
                       : 'text-gray-700'}`}>
                     {dateToShow.getDate()}
                   </div>
+                  {/* 일정 표시 점 */}
+                  {(index === 4 || index === 6) && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1"></div>
+                  )}
                 </div>
               );
             })}
           </div>
-        </div>
-      </div>
-
-      {/* 일일 감정 로그 */}
-      <div className="mt-6 mx-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="font-bold">Daily Mood Log</h3>
-          <button className="text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-            </svg>
-          </button>
-        </div>
-        
-        <div className="flex justify-between">
-          {moods.map((mood, index) => (
-            <button
-              key={index}
-              className={`w-12 h-12 rounded-full flex items-center justify-center text-xl
-                ${currentMood === index ? 'ring-2 ring-blue-500' : ''} ${mood.color}`}
-              onClick={() => handleMoodSelect(index)}
-            >
-              {mood.emoji}
-            </button>
-          ))}
+          
+          {/* 일정 목록 */}
+          <div className="space-y-3">
+            {/* 오전 8:00 일정 */}
+            <div className="flex items-center">
+              <div className="text-xs text-gray-500 w-16">8:00 AM</div>
+              <div className="flex-1 bg-red-100 rounded-xl p-3">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-red-400 w-8 h-8 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="font-medium">Meditate for 10 minutes</div>
+                    <div className="text-xs text-gray-500">Today 8:00 AM</div>
+                    <div className="text-sm mt-1">Meditation to calm your body and mind</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* 오전 9:30 일정 */}
+            <div className="flex items-center">
+              <div className="text-xs text-gray-500 w-16">9:30 AM</div>
+              <div className="flex-1 bg-purple-100 rounded-xl p-3">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-purple-500 w-8 h-8 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="font-medium">Respond to Emma</div>
+                    <div className="text-xs text-gray-500">Today 9:30 AM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* 오전 10:00 일정 */}
+            <div className="flex items-center">
+              <div className="text-xs text-gray-500 w-16">10:00 AM</div>
+              <div className="flex-1 bg-yellow-100 rounded-xl p-3">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-yellow-400 w-8 h-8 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="font-medium">Complete project</div>
+                    <div className="text-xs text-gray-500">Today 10:00 AM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
