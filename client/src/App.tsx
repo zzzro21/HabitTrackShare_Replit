@@ -19,10 +19,10 @@ import LandingPage from "@/pages/LandingPage";
 function Router() {
   return (
     <Switch>
-      {/* 메인 경로에 직접 Home 컴포넌트 표시 */}
-      <Route path="/" component={Home} />
+      {/* 메인 경로에 랜딩 페이지 표시 */}
+      <Route path="/" component={LandingPage} />
       
-      {/* 랜딩 페이지는 별도 경로로 유지 */}
+      {/* 랜딩 페이지 경로 유지 (대체 경로) */}
       <Route path="/landing" component={LandingPage} />
       
       {/* 습관 트래커 페이지들 */}
