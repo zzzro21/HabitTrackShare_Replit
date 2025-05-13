@@ -113,12 +113,7 @@ function App() {
         {!isLandingPage && <NavBar />}
         <HabitProvider>
           <Router />
-          <div className="pb-14"></div>
-          {!isLandingPage && (
-            <div className="fixed bottom-0 z-10 w-full">
-              <TabNavigation />
-            </div>
-          )}
+          {!isLandingPage && <TabNavigation />}
         </HabitProvider>
       </TooltipProvider>
     </QueryClientProvider>
