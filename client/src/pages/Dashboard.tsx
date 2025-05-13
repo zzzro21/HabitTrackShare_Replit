@@ -66,16 +66,20 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
-      {/* MORI AI 비서 버튼 - 타이틀 카드 우측 상단에 배치 */}
-      <div className="absolute top-5 right-5 z-20">
+      {/* MORI AI 비서 버튼 - 타이틀 카드 내에 배치 */}
+      <div className="absolute top-14 right-5 z-20">
         <button 
-          className="flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white rounded-full px-4 py-2 shadow-lg transition-colors"
+          className="flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-full px-4 py-2 shadow-xl transition-all hover:shadow-orange-300/50 hover:-translate-y-0.5"
           onClick={() => {
             toggleAssistantGender();
             toggleAssistant();
           }}
         >
-          <span className="mr-1">🎤</span>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
           <span className="text-base font-bold tracking-wider">MORI</span>
         </button>
       </div>
@@ -246,18 +250,18 @@ const Dashboard: React.FC = () => {
       
       {/* AI 비서 모달 */}
       {showAssistant && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
-          <div className="bg-white rounded-xl w-[90%] max-w-md p-4 relative max-h-[80vh] overflow-auto">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-20 backdrop-blur-sm transition-all duration-200">
+          <div className="bg-white rounded-2xl w-[90%] max-w-md p-5 relative max-h-[80vh] overflow-auto shadow-2xl border border-orange-200">
             <button 
-              className="absolute top-2 right-2 bg-gray-200 rounded-full p-1"
+              className="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors"
               onClick={toggleAssistant}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center mr-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 flex items-center justify-center mr-3 shadow-lg">
                 {assistantGender === 'female' ? (
                   <span className="text-2xl">👩</span>
                 ) : (
@@ -265,7 +269,14 @@ const Dashboard: React.FC = () => {
                 )}
               </div>
               <div>
-                <h3 className="font-bold text-xl"><span className="mr-1">🎤</span>MORI Assistant</h3>
+                <h3 className="font-bold text-xl flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                  </svg>
+                  MORI Assistant
+                </h3>
                 <p className="text-sm text-gray-500">AI 음성인식 및 일정관리 도우미</p>
               </div>
             </div>
