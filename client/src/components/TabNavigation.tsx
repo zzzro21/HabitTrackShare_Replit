@@ -6,7 +6,7 @@ const TabNavigation: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200 py-1 px-0 max-w-[420px] mx-auto lg:max-w-[800px]">
-      <div className="flex justify-between px-0.5 mx-0.5">
+      <div className="flex justify-between px-0 -mx-1">
         <a 
           href="/" 
           className={`flex flex-col items-center justify-center ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
