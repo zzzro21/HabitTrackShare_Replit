@@ -6,10 +6,10 @@ const TabNavigation: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200 py-1 px-0 max-w-[420px] mx-auto lg:max-w-[800px]">
-      <div className="flex justify-start items-center pl-5 pr-1 space-x-0.5">
+      <div className="grid grid-cols-6 gap-0 pl-3">
         <a 
           href="/" 
-          className={`flex flex-col items-center justify-center w-[7%] ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -19,7 +19,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/friends" 
-          className={`flex flex-col items-center justify-center w-[7%] ${location === '/friends' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center ${location === '/friends' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -32,7 +32,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/ranking" 
-          className={`flex flex-col items-center justify-center w-[7%] ${location === '/ranking' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center ${location === '/ranking' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -42,7 +42,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/insights" 
-          className={`flex flex-col items-center justify-center w-[7%] ${location === '/insights' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center ${location === '/insights' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -53,7 +53,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/notes" 
-          className={`flex flex-col items-center justify-center w-[7%] ${location === '/notes' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center ${location === '/notes' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -64,7 +64,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/settings" 
-          className={`flex flex-col items-center justify-center w-[7%] ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 21v-13a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v13" />
