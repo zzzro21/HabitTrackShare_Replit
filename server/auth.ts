@@ -67,8 +67,7 @@ export async function login(req: Request, res: Response) {
       id: user.id,
       name: user.name,
       username: user.username,
-      avatar: user.avatar,
-      hasChangedUsername: user.hasChangedUsername
+      avatar: user.avatar
     };
     
     res.status(200).json({ message: '로그인 성공', user: userData });
@@ -124,6 +123,15 @@ export async function getCurrentUser(req: Request, res: Response) {
 
 // 인증 확인 미들웨어
 export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  // 개발 모드에서는 인증 우회 (데모 목적)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('개발 모드: 인증 우회');
+    req.session.userId = 6; // 김유나 ID (기본 사용자)
+    req.session.username = 'zzzro';
+    req.session.name = '김유나';
+    return next();
+  }
+  
   if (req.session.userId) {
     return next();
   }
@@ -133,6 +141,12 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
 
 // 자신의 데이터만 수정할 수 있도록 하는 미들웨어
 export function onlySelfModify(req: Request, res: Response, next: NextFunction) {
+  // 개발 모드에서는 인증 우회 (데모 목적)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('개발 모드: 권한 체크 우회');
+    return next();
+  }
+
   if (!req.session.userId) {
     return res.status(401).json({ message: '로그인이 필요합니다.' });
   }
@@ -159,6 +173,12 @@ export function onlySelfModify(req: Request, res: Response, next: NextFunction) 
 
 // 피드백은 친구의 데이터에도 작성할 수 있도록 하는 미들웨어
 export function allowFeedbackForAny(req: Request, res: Response, next: NextFunction) {
+  // 개발 모드에서는 인증 우회 (데모 목적)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('개발 모드: 피드백 권한 체크 우회');
+    return next();
+  }
+
   if (!req.session.userId) {
     return res.status(401).json({ message: '로그인이 필요합니다.' });
   }
