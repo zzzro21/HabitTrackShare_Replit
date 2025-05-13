@@ -385,7 +385,7 @@ const MoriAssistant: React.FC = () => {
   };
 
   const getCurrentDate = () => {
-    return format(new Date(), 'yyyy년 MM월 dd일');
+    return format(new Date(), 'yyyy. MM. dd');
   };
 
   const categories = [
