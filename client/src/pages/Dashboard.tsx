@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
       {/* 일주일 캘린더와 타이틀 카드 */}
-      <div className="mx-0 p-5 bg-blue-100/80 rounded-b-3xl shadow-sm w-[115%] -ml-[7.5%]">
+      <div className="mx-2 p-5 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[96%]">
         <h2 className="text-2xl font-bold mb-1">
           Hello, {user?.name || "친구"}
         </h2>
@@ -63,9 +63,9 @@ const Dashboard: React.FC = () => {
         </p>
         
         {/* 일주일 캘린더 */}
-        <div className="bg-white/70 p-3 rounded-xl mb-1">
+        <div className="mb-1">
           <div className="flex justify-between items-center">
-            {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => {
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => {
               // 오늘 날짜 계산
               const today = new Date();
               const currentDay = today.getDay(); // 0: 일요일, 1: 월요일, ...
@@ -80,14 +80,18 @@ const Dashboard: React.FC = () => {
               
               // 오늘 날짜인지 확인
               const isToday = dateToShow.getDate() === today.getDate() && 
-                            dateToShow.getMonth() === today.getMonth() &&
-                            dateToShow.getFullYear() === today.getFullYear();
+                              dateToShow.getMonth() === today.getMonth() &&
+                              dateToShow.getFullYear() === today.getFullYear();
               
               return (
                 <div key={index} className="flex flex-col items-center">
-                  <div className="text-xs font-medium mb-1">{day}</div>
-                  <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm 
-                    ${isToday ? 'bg-blue-500 text-white font-bold' : 'text-gray-700'}`}>
+                  <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-600 font-bold' : 'text-blue-500'}`}>
+                    {day}
+                  </div>
+                  <div className={`flex items-center justify-center w-9 h-9 text-sm 
+                    ${isToday 
+                      ? 'bg-blue-500 text-white font-bold rounded-lg' 
+                      : 'text-gray-700'}`}>
                     {dateToShow.getDate()}
                   </div>
                 </div>
