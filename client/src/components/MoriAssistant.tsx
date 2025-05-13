@@ -313,7 +313,7 @@ const Mori: React.FC = () => {
       <div className="mt-4 space-y-6">
         {/* 일정 목록 */}
         {categorizedResults.schedules.length > 0 && (
-          <div className="border border-blue-200 rounded-lg p-3 bg-blue-100/70">
+          <div className="border border-blue-300 rounded-lg p-3 bg-blue-200">
             <div className="flex items-center mb-3">
               <span className="text-xl mr-2">{getTypeIcon('schedule')}</span>
               <h3 className="font-semibold">일정</h3>
@@ -334,7 +334,7 @@ const Mori: React.FC = () => {
         
         {/* 할 일 목록 */}
         {categorizedResults.tasks.length > 0 && (
-          <div className="border border-purple-200 rounded-lg p-3 bg-purple-50">
+          <div className="border border-purple-300 rounded-lg p-3 bg-purple-100">
             <div className="flex items-center mb-3">
               <span className="text-xl mr-2">{getTypeIcon('task')}</span>
               <h3 className="font-semibold">할 일</h3>
@@ -352,7 +352,7 @@ const Mori: React.FC = () => {
         
         {/* 아이디어 목록 */}
         {categorizedResults.ideas.length > 0 && (
-          <div className="border border-yellow-200 rounded-lg p-3 bg-yellow-50">
+          <div className="border border-yellow-300 rounded-lg p-3 bg-yellow-100">
             <div className="flex items-center mb-3">
               <span className="text-xl mr-2">{getTypeIcon('idea')}</span>
               <h3 className="font-semibold">아이디어</h3>
@@ -369,7 +369,7 @@ const Mori: React.FC = () => {
         
         {/* 메모 목록 */}
         {categorizedResults.memos.length > 0 && (
-          <div className="border border-green-200 rounded-lg p-3 bg-green-50">
+          <div className="border border-green-300 rounded-lg p-3 bg-green-100">
             <div className="flex items-center mb-3">
               <span className="text-xl mr-2">{getTypeIcon('memo')}</span>
               <h3 className="font-semibold">메모</h3>
