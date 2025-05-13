@@ -6,8 +6,8 @@ const UserSelector: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="mb-3">
-        <h2 className="text-sm font-medium text-gray-700 mb-1">현재 사용자</h2>
+      <div className="mb-2">
+        <h2 className="text-sm font-medium text-gray-700 mb-0.5">현재 사용자</h2>
         <div className="flex flex-wrap gap-1">
           <div className="h-7 w-24 bg-gray-200 animate-pulse rounded-full"></div>
         </div>
@@ -27,8 +27,8 @@ const UserSelector: React.FC = () => {
   }
 
   return (
-    <div className="mb-3">
-      <h2 className="text-sm font-medium text-gray-700 mb-1">사용자 선택</h2>
+    <div className="mb-2">
+      <h2 className="text-sm font-medium text-gray-700 mb-0.5">사용자 선택</h2>
       <div className="flex flex-wrap gap-1.5">
         {users.map(user => (
           <button
