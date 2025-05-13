@@ -160,9 +160,9 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       </CardContent>
       
       {/* 색상 범례 */}
-      <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 mb-2 text-[10px] text-gray-500">
+      <div className="flex flex-wrap justify-center items-center gap-x-5 gap-y-2 mb-3 mt-1 text-[10px] text-gray-500">
         {categories.map(category => (
-          <div key={category} className="flex items-center gap-2">
+          <div key={category} className="flex items-center gap-3 px-1">
             <div className="w-2 h-2 rounded-sm" style={{ 
               backgroundColor: categoryColors[category as keyof typeof categoryColors] 
             }}></div>
