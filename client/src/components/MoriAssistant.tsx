@@ -15,7 +15,7 @@ interface ClassifiedResponse {
   title?: string;
 }
 
-const MoriAssistant: React.FC = () => {
+const Mori: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -391,9 +391,9 @@ const MoriAssistant: React.FC = () => {
   const categories = [
     '고객관리', 
     '상담내역', 
+    '스케쥴', 
     '수당시뮬레이션', 
     '메모', 
-    '스케쥴', 
     '상품'
   ];
   
@@ -572,22 +572,22 @@ const MoriAssistant: React.FC = () => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <div className="flex flex-wrap gap-2 p-4">
+      <div className="grid grid-cols-3 gap-2 p-4">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
+            className={`py-2 px-2 rounded-md text-sm font-medium transition-colors ${
               selectedCategory === category || category === '고객관리'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-800 hover:bg-gray-100'
+                ? 'bg-blue-600 text-white border-2 border-yellow-500'
+                : 'bg-white border-2 border-yellow-500 text-gray-800 hover:bg-gray-100'
             }`}
           >
             {category}
           </button>
         ))}
         <button
-          className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 flex items-center justify-center"
+          className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 flex items-center justify-center mx-auto"
         >
           +
         </button>
@@ -601,7 +601,7 @@ const MoriAssistant: React.FC = () => {
       </div>
       
       {/* 하단 음성 입력 부분 */}
-      <div className="p-4 border-t">
+      <div className="p-4">
         <form onSubmit={handleSubmit} className="flex">
           <Input
             type="text"
@@ -620,8 +620,6 @@ const MoriAssistant: React.FC = () => {
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-              <line x1="12" y1="19" x2="12" y2="22"></line>
             </svg>
           </Button>
           <Button
@@ -699,4 +697,4 @@ const MoriAssistant: React.FC = () => {
   );
 };
 
-export default MoriAssistant;
+export default Mori;
