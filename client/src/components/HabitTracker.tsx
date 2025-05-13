@@ -74,7 +74,7 @@ const HabitTracker: React.FC = () => {
         <select
           value={value}
           onChange={(e) => handleValueChange(habitId, day, parseInt(e.target.value))}
-          className={`w-full text-xs py-1 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
+          className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
         >
           <option value="0">-</option>
           <option value="1">△</option>
@@ -85,7 +85,7 @@ const HabitTracker: React.FC = () => {
     
     // 다른 사용자의 데이터인 경우 읽기 전용 표시
     return (
-      <div className={`w-full h-full py-1 text-center ${bgColor}`}>
+      <div className={`w-full h-full py-0.5 text-center text-[10px] ${bgColor}`}>
         {value === 0 ? '-' : value === 1 ? '△' : '○'}
       </div>
     );
@@ -94,7 +94,7 @@ const HabitTracker: React.FC = () => {
   return (
     <div className="mb-2">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-sm font-medium text-gray-800">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 습관 기록</h3>
+        <h3 className="text-xs font-medium text-gray-800">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 습관 기록</h3>
         <div className="flex items-center">
           <Link to="/notes">
             <button className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 py-1 px-2 rounded-md mr-2">
@@ -120,16 +120,16 @@ const HabitTracker: React.FC = () => {
         <table className="w-full text-xs border-collapse mb-2">
           <thead>
             <tr>
-              <th className="border px-1 py-1 w-1/3 bg-gray-50 text-left">습관</th>
+              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-left text-[10px]">습관</th>
               {[...Array(7)].map((_, i) => (
-                <th key={i} className="border px-1 py-1 bg-gray-50 text-center">{startDay + i + 1}</th>
+                <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px]">{startDay + i + 1}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {habits.map((habit) => (
               <tr key={habit.id}>
-                <td className="border px-1 py-1 text-xs font-medium">{habit.label}</td>
+                <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
                   const day = startDay + i;
                   const value = getValue(habit.id, day);
@@ -156,16 +156,16 @@ const HabitTracker: React.FC = () => {
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="border px-1 py-1 w-1/3 bg-gray-50 text-left">습관</th>
+              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-left text-[10px]">습관</th>
               {[...Array(7)].map((_, i) => (
-                <th key={i} className="border px-1 py-1 bg-gray-50 text-center">{startDay + i + 8}</th>
+                <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px]">{startDay + i + 8}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {habits.map((habit) => (
               <tr key={habit.id}>
-                <td className="border px-1 py-1 text-xs font-medium">{habit.label}</td>
+                <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
                   const day = startDay + i + 7;
                   const value = getValue(habit.id, day);
