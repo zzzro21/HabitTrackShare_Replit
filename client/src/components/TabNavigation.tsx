@@ -9,7 +9,7 @@ const TabNavigation: React.FC = () => {
       <div className="flex justify-between -mx-2">
         <a 
           href="/" 
-          className={`flex flex-col items-center justify-center w-[13.3%] ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-[13.3%] ml-3 ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -64,7 +64,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/settings" 
-          className={`flex flex-col items-center justify-center w-[13.3%] ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-[13.3%] mr-3 ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
