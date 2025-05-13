@@ -260,26 +260,8 @@ const Dashboard: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mr-3 shadow-md">
-                {assistantGender === 'female' ? (
-                  <span className="text-2xl">👩</span>
-                ) : (
-                  <span className="text-2xl">👨</span>
-                )}
-              </div>
-              <div>
-                <h3 className="font-bold text-xl flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                    <line x1="12" y1="19" x2="12" y2="22"></line>
-                  </svg>
-                  MORI Assistant
-                </h3>
-                <p className="text-sm text-gray-500">AI 음성인식 및 일정관리 도우미</p>
-              </div>
-            </div>
+            {/* 상단 공간 유지 - 이모티콘과 타이틀 제거 */}
+            <div className="h-4 mb-4"></div>
             <MoriAssistant />
           </div>
         </div>
