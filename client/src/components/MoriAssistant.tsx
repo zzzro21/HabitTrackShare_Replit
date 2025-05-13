@@ -673,7 +673,7 @@ const Mori: React.FC = () => {
             type="button"
             onClick={toggleRecording}
             variant="ghost"
-            className={`ml-2 ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-orange-500 text-white'}`}
+            className={`ml-2 ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-blue-500 text-white'}`}
             disabled={isLoading}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
