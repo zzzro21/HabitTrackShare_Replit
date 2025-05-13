@@ -31,7 +31,7 @@ const ProgressSummary: React.FC = () => {
   const rank = calculateUserRank(activeUser);
 
   return (
-    <div className="mb-2 p-3 bg-blue-50 rounded-lg">
+    <div className="mb-2 py-2 px-3 bg-blue-50 rounded-lg">
       <div className="flex justify-between items-center mb-1">
         <div>
           <h3 className="text-sm font-medium text-gray-800">나의 습관 현황</h3>
@@ -50,18 +50,18 @@ const ProgressSummary: React.FC = () => {
         ></div>
       </div>
       
-      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-        <div className="p-2 bg-white rounded shadow-sm">
+      <div className="mt-2 grid grid-cols-3 gap-2 text-center">
+        <div className="py-1 px-2 bg-white rounded shadow-sm">
           <div className="text-xs text-gray-500">총 점수</div>
-          <div className="text-lg font-bold text-gray-800">{totalScore.toFixed(1)}</div>
+          <div className="text-base font-bold text-gray-800">{totalScore.toFixed(1)}</div>
         </div>
-        <div className="p-2 bg-white rounded shadow-sm">
+        <div className="py-1 px-2 bg-white rounded shadow-sm">
           <div className="text-xs text-gray-500">완료 습관</div>
-          <div className="text-lg font-bold text-gray-800">{completedHabits}</div>
+          <div className="text-base font-bold text-gray-800">{completedHabits}</div>
         </div>
-        <div className="p-2 bg-white rounded shadow-sm">
+        <div className="py-1 px-2 bg-white rounded shadow-sm">
           <div className="text-xs text-gray-500">현재 순위</div>
-          <div className="text-lg font-bold text-gray-800">{rank}<span className="text-sm">위</span></div>
+          <div className="text-base font-bold text-gray-800">{rank}<span className="text-xs">위</span></div>
         </div>
       </div>
     </div>
