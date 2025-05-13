@@ -110,9 +110,15 @@
     @apply border-border;
   }
 
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     @apply antialiased bg-background text-foreground;
     font-family: 'Noto Sans KR', sans-serif;
+    position: relative;
   }
 
   /* 사용 가능한 한글 폰트 클래스 */

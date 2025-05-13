@@ -116,7 +116,7 @@ const HabitTracker: React.FC = () => {
       </div>
       
       {/* First week part - days 1-7 */}
-      <div className="overflow-x-auto">
+      <div className="w-full">
         <table className="w-full text-xs border-collapse mb-2">
           <thead>
             <tr>
@@ -152,7 +152,7 @@ const HabitTracker: React.FC = () => {
       </div>
       
       {/* Second week part - days 8-14 */}
-      <div className="overflow-x-auto mt-1">
+      <div className="w-full mt-1">
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
