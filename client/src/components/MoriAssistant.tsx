@@ -796,8 +796,8 @@ const Mori: React.FC = () => {
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category
-                ? 'bg-blue-500 text-white'
-                : 'bg-white border border-blue-500 text-gray-800 hover:bg-blue-50'
+                ? 'bg-blue-600 text-white'
+                : 'bg-blue-100 border border-blue-500 text-blue-600 hover:bg-blue-200'
             }`}
           >
             {category}
