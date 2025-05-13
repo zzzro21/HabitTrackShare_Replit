@@ -3,12 +3,15 @@ import { useLocation } from 'wouter';
 import { useHabit } from '@/lib/HabitContext';
 import { useAuth } from '@/hooks/useAuth';
 import TabNavigation from '@/components/TabNavigation';
+import MoriAssistant from '@/components/MoriAssistant';
 
 const Dashboard: React.FC = () => {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
   const { calculateCompletionRate, calculateGrandTotal } = useHabit();
   const [currentMood, setCurrentMood] = useState<number | null>(null);
+  const [showAssistant, setShowAssistant] = useState(false);
+  const [assistantGender, setAssistantGender] = useState<'male' | 'female'>('female');
 
   // 현재 사용자가 로그인되어 있으면 그 ID를 가져오고, 아니면 기본값 6 사용
   const userId = user?.id || 6;
@@ -33,6 +36,16 @@ const Dashboard: React.FC = () => {
   const handleMoodSelect = (index: number) => {
     setCurrentMood(index);
   };
+  
+  // 비서 성별 전환
+  const toggleAssistantGender = () => {
+    setAssistantGender(prev => prev === 'male' ? 'female' : 'male');
+  };
+  
+  // 비서 표시 토글
+  const toggleAssistant = () => {
+    setShowAssistant(prev => !prev);
+  };
 
   // 이번 주 프로그레스 원 생성
   const renderProgressCircles = () => {
@@ -52,7 +65,27 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
+    <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
+      {/* MORI AI 비서 버튼 */}
+      <div className="absolute top-3 right-3 z-10">
+        <button 
+          className="flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full w-14 h-14 shadow-lg"
+          onClick={() => {
+            toggleAssistantGender();
+            toggleAssistant();
+          }}
+        >
+          <div className="flex flex-col items-center">
+            <span className="text-xs font-bold">MORI</span>
+            {assistantGender === 'female' ? (
+              <span className="text-xl mt-[-3px]">👩</span>
+            ) : (
+              <span className="text-xl mt-[-3px]">👨</span>
+            )}
+          </div>
+        </button>
+      </div>
+      
       {/* 일주일 캘린더와 타이틀 카드 */}
       <div className="mx-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">
         <h2 className="text-2xl font-bold mb-1">
@@ -216,6 +249,36 @@ const Dashboard: React.FC = () => {
       </div>
 
       <TabNavigation />
+      
+      {/* AI 비서 모달 */}
+      {showAssistant && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
+          <div className="bg-white rounded-xl w-[90%] max-w-md p-4 relative max-h-[80vh] overflow-auto">
+            <button 
+              className="absolute top-2 right-2 bg-gray-200 rounded-full p-1"
+              onClick={toggleAssistant}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center mr-3">
+                {assistantGender === 'female' ? (
+                  <span className="text-2xl">👩</span>
+                ) : (
+                  <span className="text-2xl">👨</span>
+                )}
+              </div>
+              <div>
+                <h3 className="font-bold text-xl">MORI Assistant</h3>
+                <p className="text-sm text-gray-500">AI 음성인식 및 일정관리 도우미</p>
+              </div>
+            </div>
+            <MoriAssistant />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
