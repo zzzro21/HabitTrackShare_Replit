@@ -14,6 +14,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
 import LandingPage from "@/pages/LandingPage";
+import TabNavigation from "@/components/TabNavigation";
 
 // 라우터 컴포넌트 - 모든 페이지는 로그인 없이 바로 접근 가능
 function Router() {
@@ -112,6 +113,12 @@ function App() {
         {!isLandingPage && <NavBar />}
         <HabitProvider>
           <Router />
+          <div className="pb-14"></div>
+          {!isLandingPage && (
+            <div className="fixed bottom-0 z-10 w-full">
+              <TabNavigation />
+            </div>
+          )}
         </HabitProvider>
       </TooltipProvider>
     </QueryClientProvider>
