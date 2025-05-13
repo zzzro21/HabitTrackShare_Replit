@@ -70,13 +70,13 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
 
   return (
     <Card className="rounded-3xl shadow-md border-0 bg-white overflow-hidden">
-      <div className="flex flex-col space-y-0 pt-3 px-6 pb-0">
-        <h3 className="text-xl font-bold text-gray-800">8Weeks Growth</h3>
+      <div className="flex flex-col space-y-0 pt-2 px-4 pb-0">
+        <h3 className="text-base font-bold text-gray-800">8Weeks Growth</h3>
       </div>
       
-      <CardContent className="p-2 pt-0 pb-6">
+      <CardContent className="p-2 pt-0 pb-3">
         
-        <div className="h-44 w-full relative">
+        <div className="h-36 w-full relative">
           <div className="flex h-full items-end justify-between px-4">
             {data.map((item, idx) => (
               <div 
@@ -150,7 +150,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 )}
                 
                 {/* X축 라벨 */}
-                <div className="absolute -bottom-6 text-xs text-gray-500">
+                <div className="absolute -bottom-4 text-[10px] text-gray-500">
                   {item.week}
                 </div>
               </div>
@@ -160,10 +160,10 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       </CardContent>
       
       {/* 색상 범례 */}
-      <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 mb-2 text-xs text-gray-500">
+      <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-0.5 mb-1 text-[10px] text-gray-500">
         {categories.map(category => (
           <div key={category} className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm" style={{ 
+            <div className="w-2 h-2 rounded-sm" style={{ 
               backgroundColor: categoryColors[category as keyof typeof categoryColors] 
             }}></div>
             <span>{category}</span>
