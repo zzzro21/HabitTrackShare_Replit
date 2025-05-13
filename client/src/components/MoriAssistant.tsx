@@ -313,15 +313,15 @@ const Mori: React.FC = () => {
       <div className="mt-4 space-y-6">
         {/* 일정 목록 */}
         {categorizedResults.schedules.length > 0 && (
-          <div className="border border-blue-300 rounded-lg p-3 bg-blue-200">
-            <div className="flex items-center mb-3">
-              <span className="text-xl mr-2">{getTypeIcon('schedule')}</span>
+          <div className="border-b border-gray-200 p-2 mb-2">
+            <div className="flex items-center mb-2">
+              <span className="text-xl mr-2 text-blue-500">{getTypeIcon('schedule')}</span>
               <h3 className="font-semibold">일정</h3>
             </div>
             <div className="space-y-2">
               {categorizedResults.schedules.map((schedule, idx) => (
                 <div key={idx} className="text-sm mb-2">
-                  <div className="font-medium text-blue-800">{schedule.event}</div>
+                  <div className="font-medium text-blue-500">{schedule.event}</div>
                   <div className="text-gray-600 flex justify-between">
                     <div>{schedule.date}</div>
                     <div>{schedule.time}</div>
@@ -506,7 +506,7 @@ const Mori: React.FC = () => {
               <div className="border-b border-gray-200 p-2 rounded-lg">
                 <div className="flex justify-start mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
-                  <span className="text-sm text-blue-600 ml-auto">2025.05.05</span>
+                  <span className="text-sm text-blue-500 ml-auto">2025.05.05</span>
                 </div>
                 <div className="text-sm text-gray-600">노후 설계 중요성 설명, 상품 비교 자료 전달</div>
               </div>
@@ -520,7 +520,7 @@ const Mori: React.FC = () => {
             <div className="border-b border-gray-200 p-2 rounded-lg">
               <div className="flex justify-start mb-2">
                 <span className="font-semibold">이번 달 예상 수당</span>
-                <span className="font-bold text-blue-600 ml-auto">1,250,000원</span>
+                <span className="font-bold text-blue-500 ml-auto">1,250,000원</span>
               </div>
               <div className="space-y-1">
                 <div className="flex justify-start text-sm">
@@ -568,13 +568,13 @@ const Mori: React.FC = () => {
                   <div key={idx} className="border-b border-gray-200 p-2 rounded-lg">
                     <div className="flex justify-between mb-1">
                       <span className="font-semibold">{schedule.event}</span>
-                      <span className="text-sm text-blue-600">{schedule.time}</span>
+                      <span className="text-sm text-blue-500">{schedule.time}</span>
                     </div>
                     <div className="text-sm text-gray-600">{schedule.date}</div>
                   </div>
                 ))
               ) : (
-                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                <div className="border-b border-gray-200 p-2">
                   <div className="text-sm text-gray-400">오늘 예정된 일정이 없습니다</div>
                 </div>
               )}
@@ -586,20 +586,20 @@ const Mori: React.FC = () => {
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-3">상품 정보</h3>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+              <div className="border-b border-gray-200 p-2">
                 <div className="font-semibold mb-1">종신보험 프리미엄</div>
                 <div className="text-sm text-gray-600 mb-1">100세까지 보장, 중대질병 특약 가능</div>
                 <div className="flex justify-between text-sm">
                   <span>월 납입금</span>
-                  <span className="font-semibold">15만원~</span>
+                  <span className="font-semibold text-blue-500">15만원~</span>
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+              <div className="border-b border-gray-200 p-2">
                 <div className="font-semibold mb-1">무배당 연금보험</div>
                 <div className="text-sm text-gray-600 mb-1">안정적인 노후 준비, 10년 이상 유지 시 세제혜택</div>
                 <div className="flex justify-between text-sm">
                   <span>월 납입금</span>
-                  <span className="font-semibold">10만원~</span>
+                  <span className="font-semibold text-blue-500">10만원~</span>
                 </div>
               </div>
             </div>
