@@ -167,9 +167,9 @@ const LandingPage: React.FC = () => {
       <div className="absolute top-0 left-0 w-full h-full"></div>
 
       {/* 메인 콘텐츠 */}
-      <div className="relative flex flex-col items-center px-8 pt-10 pb-16 z-10 flex-grow">
+      <div className="relative flex flex-col items-center px-8 pt-6 pb-12 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[288px] relative mt-2 mb-8 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className={`w-full max-w-[288px] relative mt-2 mb-4 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
           <div className={`absolute -left-14 top-[60%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
             <div className="bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center mr-3">
@@ -195,7 +195,7 @@ const LandingPage: React.FC = () => {
             </div>
             <span className="text-sm font-medium">Mori</span>
           </div>
-          <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '360px', width: '288px', borderRadius: '50% / 38%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+          <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '320px', width: '288px', borderRadius: '50% / 38%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
             <img
               src={selectedImage}
               alt="프로필 이미지"
@@ -271,21 +271,21 @@ const LandingPage: React.FC = () => {
         </div>
 
         {/* 메인 텍스트 영역 */}
-        <div className="w-full text-center mt-8">
+        <div className="w-full text-center mt-4">
           <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             "Little actions, <span className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md">Big results</span>,<br />
             <span className="text-3xl">Set it, Do it, Repeat.</span>"
           </h1>
 
-          <div className="flex items-center mt-10 justify-center relative">
+          <div className="flex items-center mt-6 justify-center relative">
             <span className={`text-red-500 mr-3 absolute -top-2 left-16 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-200`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
             {/* 명언 가이드라인 영역 */}
-            <div className="w-full max-w-[260px] mx-auto px-3 py-3">
-              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.6rem' }}>
+            <div className="w-full max-w-[260px] mx-auto px-3 py-2">
+              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.5rem' }}>
                 "{quote}"
               </p>
             </div>
@@ -298,8 +298,8 @@ const LandingPage: React.FC = () => {
         </div>
 
         {/* 하단 버튼 영역 */}
-        <div className="w-full mt-auto">
-          <div className="flex justify-center mt-16">
+        <div className="w-full mt-4">
+          <div className="flex justify-center">
             <button
               onClick={handleBeginClick}
               className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-2xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
