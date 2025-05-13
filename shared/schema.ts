@@ -115,6 +115,27 @@ export const insertHabitInsightSchema = createInsertSchema(habitInsights).pick({
 export type InsertHabitInsight = z.infer<typeof insertHabitInsightSchema>;
 export type HabitInsight = typeof habitInsights.$inferSelect;
 
+// 사용자별 API 키 설정 테이블
+export const userApiKeys = pgTable("user_api_keys", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  geminiApiKey: text("gemini_api_key"),
+  notionToken: text("notion_token"),
+  notionDbId: text("notion_db_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertUserApiKeySchema = createInsertSchema(userApiKeys).pick({
+  userId: true,
+  geminiApiKey: true,
+  notionToken: true,
+  notionDbId: true,
+});
+
+export type InsertUserApiKey = z.infer<typeof insertUserApiKeySchema>;
+export type UserApiKey = typeof userApiKeys.$inferSelect;
+
 export const predefinedHabits = [
   {
     label: "책 읽기 (30분 이상)",

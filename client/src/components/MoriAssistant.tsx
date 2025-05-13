@@ -298,58 +298,77 @@ const MoriAssistant: React.FC = () => {
         <h2 className="text-lg font-semibold text-gray-800">Mori</h2>
       </div>
       
-      <p className="text-sm text-gray-600 mb-3">
-        당신의 똑똑한 AI 비서입니다. 음성으로 명령하면 일정, 메모, 아이디어, 할 일 중 하나로 분류하여 정리해 드립니다.
-      </p>
+      <div className="flex items-center mb-3 bg-gradient-to-r from-blue-100 to-purple-100 p-3 rounded-lg">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center mr-3">
+          <span className="text-xl">🧠</span>
+        </div>
+        <div>
+          <h3 className="font-bold text-gray-800">MORI AI</h3>
+          <p className="text-xs text-gray-600">음성으로 명령하면 일정, 메모, 아이디어를 자동으로 정리해드립니다</p>
+        </div>
+      </div>
       
       {/* 음성 인식 상태 표시 */}
       {isRecording && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-2"></div>
-            <div className="text-sm font-medium">음성 인식 중...</div>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-2"></div>
+              <div className="text-sm font-bold text-red-700">음성 인식 중...</div>
+            </div>
+            <div className="text-xs bg-black text-white px-2 py-1 rounded-full">LIVE</div>
           </div>
-          <div className="text-xs text-gray-500">말하고 있는 내용: "{transcript}"</div>
+          <div className="text-sm bg-white p-2 rounded border border-gray-200 max-h-20 overflow-auto">
+            {transcript || "말씀하시면 여기에 표시됩니다..."}
+          </div>
         </div>
       )}
       
       {/* 음성 인식 버튼 또는 텍스트 입력 폼 */}
-      <div className="mb-4 flex space-x-2">
+      <div className="mb-4 space-y-3">
         <Button
           onClick={toggleRecording}
           variant={isRecording ? "destructive" : "default"}
-          className={`flex-shrink-0 ${isRecording ? 'animate-pulse' : ''}`}
+          className={`w-full py-3 ${isRecording ? 'animate-pulse bg-red-600 hover:bg-red-700' : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'}`}
           disabled={isLoading}
         >
           {isRecording ? (
-            <>
-              <span className="mr-2">◼</span> 녹음 중지
-            </>
+            <div className="flex items-center justify-center">
+              <span className="mr-2 text-lg">◼</span> 
+              <span className="font-bold">녹음 중지하기</span>
+            </div>
           ) : (
-            <>
-              <span className="mr-2">🎤</span> 음성으로 말하기
-            </>
+            <div className="flex items-center justify-center">
+              <span className="mr-2 text-lg">🎤</span> 
+              <span className="font-bold">음성으로 말하기</span>
+            </div>
           )}
         </Button>
         
-        <form onSubmit={handleSubmit} className="flex-1 flex">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="또는 여기에 직접 입력하세요"
-            className="flex-1 border rounded-l-md py-2 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-            disabled={isLoading || isRecording}
-          />
-          <Button
-            type="submit"
-            disabled={isLoading || isRecording}
-            variant="outline"
-            className="rounded-l-none"
-          >
-            {isLoading ? "처리 중..." : "분석"}
-          </Button>
-        </form>
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-200 to-purple-200 rounded-lg transform -rotate-1"></div>
+          <form onSubmit={handleSubmit} className="relative bg-white rounded-lg p-2 border border-gray-200 flex">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="예: 금요일 오후 3시 엄마랑 병원 가기"
+              className="flex-1 py-2 px-3 text-sm focus:outline-none"
+              disabled={isLoading || isRecording}
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || isRecording}
+              variant="default"
+              className="ml-2 bg-green-500 hover:bg-green-600"
+            >
+              {isLoading ? 
+                <div className="flex items-center"><span className="animate-spin mr-1">⏳</span> 처리중</div> : 
+                <div className="flex items-center"><span className="mr-1">📤</span> 전송</div>
+              }
+            </Button>
+          </form>
+        </div>
       </div>
       
       {/* 도움말 */}
