@@ -745,7 +745,7 @@ const Mori: React.FC = () => {
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-3">상품 정보</h3>
             <div className="space-y-3">
-              <div className="border-b border-gray-200 p-2">
+              <div className="border-b border-gray-200 p-2 bg-blue-50 rounded-lg">
                 <div className="font-semibold mb-1">종신보험 프리미엄</div>
                 <div className="text-sm text-gray-600 mb-1">100세까지 보장, 중대질병 특약 가능</div>
                 <div className="flex justify-between text-sm">
@@ -753,7 +753,7 @@ const Mori: React.FC = () => {
                   <span className="font-semibold text-blue-500">15만원~</span>
                 </div>
               </div>
-              <div className="border-b border-gray-200 p-2">
+              <div className="border-b border-gray-200 p-2 bg-blue-50 rounded-lg">
                 <div className="font-semibold mb-1">무배당 연금보험</div>
                 <div className="text-sm text-gray-600 mb-1">안정적인 노후 준비, 10년 이상 유지 시 세제혜택</div>
                 <div className="flex justify-between text-sm">
