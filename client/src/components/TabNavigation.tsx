@@ -54,6 +54,10 @@ const TabNavigation: React.FC = () => {
         <a 
           href="/notes" 
           className={`flex flex-col items-center justify-center w-[13.3%] ${location === '/notes' ? 'text-primary' : 'text-gray-500'}`}
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/notes'; // 페이지 새로고침하여 NotePage로 이동
+          }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
