@@ -1,4 +1,6 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import config from '../config';
+import { staticApiRequest } from './staticData';
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -37,6 +39,12 @@ export async function apiRequest<T = any>(
     bodyData = data;
   }
 
+  // GitHub Pages에서는 정적 데이터를 사용
+  if (config.isGitHubPages || config.useStaticData) {
+    return staticApiRequest(method, url, bodyData) as Promise<T>;
+  }
+
+  // 일반 API 요청
   const res = await fetch(url, {
     method,
     headers: {
@@ -57,6 +65,20 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
+    // GitHub Pages에서는 정적 데이터를 사용
+    if (config.isGitHubPages || config.useStaticData) {
+      try {
+        return await staticApiRequest('GET', queryKey[0] as string) as unknown as T;
+      } catch (error) {
+        console.error('Error in static getQueryFn:', error);
+        if (unauthorizedBehavior === "returnNull") {
+          return null as T;
+        }
+        throw error;
+      }
+    }
+    
+    // 일반 API 요청
     const res = await fetch(queryKey[0] as string, {
       credentials: "include",
       headers: {
