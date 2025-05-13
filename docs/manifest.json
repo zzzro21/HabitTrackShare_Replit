@@ -1,0 +1,16 @@
+{
+  "name": "Mori - 습관 트래킹 앱",
+  "short_name": "Mori",
+  "description": "8주(56일) 동안 습관을 추적하고 친구들과 공유하는 모바일 중심 애플리케이션",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#F97316",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

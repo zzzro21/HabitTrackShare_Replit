@@ -68,11 +68,12 @@ export const getQueryFn: <T>(options: {
     // GitHub Pages에서는 정적 데이터를 사용
     if (config.isGitHubPages || config.useStaticData) {
       try {
-        return await staticApiRequest('GET', queryKey[0] as string) as unknown as T;
+        const result = await staticApiRequest('GET', queryKey[0] as string);
+        return result as T;
       } catch (error) {
         console.error('Error in static getQueryFn:', error);
         if (unauthorizedBehavior === "returnNull") {
-          return null as T;
+          return null as unknown as T;
         }
         throw error;
       }
