@@ -20,13 +20,14 @@ const Home: React.FC = () => {
         </div>
       </header>
       
-      <main className="px-0 py-2 overflow-y-auto">
+      <main className="px-3 py-2 overflow-y-auto pb-16">
         <UserSelector />
         <ProgressSummary />
         <WeekSelector />
         <HabitTracker />
         <WeekSummary />
         <GrowthGraph userId={activeUser} />
+        <div className="h-16"></div> {/* 하단 여백 (탭 네비게이션 공간) */}
       </main>
       
       <TabNavigation />
