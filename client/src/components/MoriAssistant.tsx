@@ -408,22 +408,22 @@ const Mori: React.FC = () => {
                 <span>3</span>
               </div>
             </div>
-            <div className="space-y-3">
-              <div className="bg-amber-50 p-3 rounded-lg">
+            <div className="space-y-0.5">
+              <div className="bg-amber-50 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수</span>
                   <span className="text-sm text-gray-500">최근 연락: 3일 전</span>
                 </div>
                 <div className="text-sm text-gray-600">생명보험 상담 완료, 가입 고려 중</div>
               </div>
-              <div className="bg-amber-50 p-3 rounded-lg">
+              <div className="bg-amber-50 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">박영희</span>
                   <span className="text-sm text-gray-500">최근 연락: 오늘</span>
                 </div>
                 <div className="text-sm text-gray-600">자녀 교육보험 상담 예정</div>
               </div>
-              <div className="bg-amber-50 p-3 rounded-lg">
+              <div className="bg-amber-50 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은</span>
                   <span className="text-sm text-gray-500">최근 연락: 1주일 전</span>
@@ -436,16 +436,16 @@ const Mori: React.FC = () => {
       case '상담내역':
         return (
           <div>
-            <h3 className="font-bold text-lg text-gray-800 mb-3">상담 내역</h3>
-            <div className="space-y-3">
-              <div className="bg-amber-50 p-3 rounded-lg">
+            <h3 className="font-bold text-lg text-gray-800 mb-1">상담 내역</h3>
+            <div className="space-y-0.5">
+              <div className="bg-amber-50 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
                   <span className="text-sm text-blue-600">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
-              <div className="bg-amber-50 p-3 rounded-lg">
+              <div className="bg-amber-50 p-2 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
                   <span className="text-sm text-blue-600">2025.05.05</span>
@@ -458,13 +458,13 @@ const Mori: React.FC = () => {
       case '수당시뮬레이션':
         return (
           <div>
-            <h3 className="font-bold text-lg text-gray-800 mb-3">수당 시뮬레이션</h3>
-            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="font-bold text-lg text-gray-800 mb-1">수당 시뮬레이션</h3>
+            <div className="bg-amber-50 p-2 rounded-lg">
               <div className="flex justify-between mb-2">
                 <span className="font-semibold">이번 달 예상 수당</span>
                 <span className="font-bold text-blue-600">1,250,000원</span>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between text-sm">
                   <span>계약 수당</span>
                   <span>850,000원</span>
@@ -572,7 +572,7 @@ const Mori: React.FC = () => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <div className="flex flex-wrap gap-3 p-4 justify-between">
+      <div className="flex flex-wrap gap-1 p-2 justify-between">
         {categories.map((category) => (
           <button
             key={category}
@@ -594,8 +594,8 @@ const Mori: React.FC = () => {
       </div>
       
       {/* 선택된 카테고리 내용 표시 */}
-      <div className="px-4 pb-4">
-        <div className="bg-blue-50/60 p-4 rounded-2xl">
+      <div className="px-2 pb-2 mt-1">
+        <div className="bg-blue-50/60 p-2 rounded-2xl">
           {renderCategoryContent()}
         </div>
       </div>
