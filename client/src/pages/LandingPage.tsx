@@ -157,10 +157,10 @@ const LandingPage: React.FC = () => {
     <div 
       className="flex flex-col relative overflow-hidden px-0 font-sans mx-auto aurora-gradient"
       style={{ 
-        maxWidth: '1080px', /* FHD+ 6.2인치 화면 너비 */
-        minHeight: '90vh',
+        maxWidth: '920px', /* FHD+ 6.2인치 화면 너비를 15% 줄임 */
+        minHeight: '80vh',
         height: 'auto',
-        aspectRatio: '1080 / 2200' /* 세로 비율 약간만 줄임 */
+        aspectRatio: '1080 / 2000' /* 세로 비율도 줄임 */
       }}
     >
       {/* 배경 */}
@@ -169,7 +169,7 @@ const LandingPage: React.FC = () => {
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-12 z-10 flex-grow">
         {/* 타원형 이미지 컨테이너 */}
-        <div className={`w-full max-w-[288px] relative mt-2 mb-4 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className={`w-full max-w-[250px] relative mt-2 mb-4 transition-all duration-500 ${showAnimation ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           {/* Vibes 버블 - 좌측 */}
           <div className={`absolute -left-14 top-[60%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
             <div className="bg-purple-500 rounded-full w-8 h-8 flex items-center justify-center mr-3">
@@ -195,7 +195,7 @@ const LandingPage: React.FC = () => {
             </div>
             <span className="text-sm font-medium">Mori</span>
           </div>
-          <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '320px', width: '288px', borderRadius: '50% / 38%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+          <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '270px', width: '250px', borderRadius: '50% / 40%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
             <img
               src={selectedImage}
               alt="프로필 이미지"
@@ -272,9 +272,9 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-4">
-          <h1 className={`text-4xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h1 className={`text-3xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             "Little actions, <span className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md">Big results</span>,<br />
-            <span className="text-3xl">Set it, Do it, Repeat.</span>"
+            <span className="text-2xl">Set it, Do it, Repeat.</span>"
           </h1>
 
           <div className="flex items-center mt-6 justify-center relative">
@@ -285,7 +285,7 @@ const LandingPage: React.FC = () => {
             </span>
             {/* 명언 가이드라인 영역 */}
             <div className="w-full max-w-[260px] mx-auto px-3 py-2">
-              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.5rem' }}>
+              <p className={`text-black text-center transition-all duration-500 font-pen ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.3rem' }}>
                 "{quote}"
               </p>
             </div>
@@ -302,7 +302,7 @@ const LandingPage: React.FC = () => {
           <div className="flex justify-center">
             <button
               onClick={handleBeginClick}
-              className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-xl shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
+              className={`w-4/5 max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full text-lg shadow-xl transform transition-all duration-500 font-poppins tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
             >
               Let's Begin
             </button>
