@@ -83,21 +83,26 @@ const Dashboard: React.FC = () => {
                               dateToShow.getMonth() === today.getMonth() &&
                               dateToShow.getFullYear() === today.getFullYear();
               
+              // 일정이 있는 날짜 (예시 데이터: 수요일과 금요일에 일정이 있다고 가정)
+              const hasSchedule = index === 3 || index === 5; // 수요일(3)과 금요일(5)
+              
               return (
-                <div key={index} className="flex flex-col items-center">
-                  <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-600 font-bold' : 'text-blue-500'}`}>
+                <div key={index} className="flex flex-col items-center w-[14.28%]">
+                  <div className={`text-xs font-medium mb-1 w-full text-center ${isToday ? 'text-orange-500 font-bold' : 'text-gray-700'}`}>
                     {day}
                   </div>
-                  <div className={`flex items-center justify-center w-9 h-9 text-sm 
+                  <div className={`flex items-center justify-center w-10 h-10 text-sm 
                     ${isToday 
-                      ? 'bg-blue-500 text-white font-bold rounded-lg' 
-                      : 'text-gray-700'}`}>
+                      ? 'bg-orange-400 text-white font-bold rounded-full' 
+                      : 'bg-gray-100 text-gray-700 rounded-full'}`}>
                     {dateToShow.getDate()}
                   </div>
-                  {/* 일정 표시 점 */}
-                  {(index === 4 || index === 6) && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1"></div>
-                  )}
+                  {/* 일정 표시 점 - 일정이 있을 때만 표시 */}
+                  <div className="h-1.5 mt-1">
+                    {hasSchedule && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-400 mx-auto"></div>
+                    )}
+                  </div>
                 </div>
               );
             })}
