@@ -574,7 +574,7 @@ const MoriAssistant: React.FC = () => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <div className="flex flex-wrap gap-2 p-4 bg-gray-50">
+      <div className="flex flex-wrap gap-2 p-4 bg-sky-50">
         {categories.map((category) => (
           <button
             key={category}
@@ -582,7 +582,7 @@ const MoriAssistant: React.FC = () => {
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category || category === '고객관리'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white border border-yellow-300 text-gray-800 hover:bg-gray-100'
+                : 'bg-white border border-sky-200 text-gray-800 hover:bg-gray-100'
             }`}
           >
             {category}
