@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HabitProvider } from "@/lib/HabitContext";
-import { getCurrentUser } from "./noauth";
+import { useAuth } from "./hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import FriendsPage from "@/pages/FriendsPage";
@@ -14,9 +14,42 @@ import SettingsPage from "@/pages/SettingsPage";
 import NotePage from "@/pages/NotePage";
 import InsightsPage from "@/pages/InsightsPage";
 import LandingPage from "@/pages/LandingPage";
+import LoginPage from "@/pages/LoginPage";
 import TabNavigation from "@/components/TabNavigation";
 
-// 라우터 컴포넌트 - 모든 페이지는 로그인 없이 바로 접근 가능
+// 인증이 필요한 라우트를 위한 래퍼 컴포넌트
+function PrivateRoute({ component: Component, ...rest }: any) {
+  // 클라이언트 측 인증 확인 로직
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    // 로컬 스토리지에서 인증 정보 확인
+    const checkAuth = () => {
+      const authStr = localStorage.getItem('userAuth');
+      const auth = authStr ? JSON.parse(authStr) : null;
+      setIsAuthenticated(Boolean(auth?.isLoggedIn));
+      setIsChecking(false);
+    };
+    
+    checkAuth();
+  }, []);
+
+  // 인증 확인 중이면 로딩 표시
+  if (isChecking) {
+    return <div className="flex justify-center items-center min-h-screen">로딩 중...</div>;
+  }
+
+  // 인증되지 않았으면 로그인 페이지로 리디렉션
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />;
+  }
+
+  // 인증되었으면 요청한 컴포넌트 렌더링
+  return <Component {...rest} />;
+}
+
+// 라우터 컴포넌트
 function Router() {
   return (
     <Switch>
@@ -26,13 +59,28 @@ function Router() {
       {/* 랜딩 페이지 경로 유지 (대체 경로) */}
       <Route path="/landing" component={LandingPage} />
       
-      {/* 습관 트래커 페이지들 */}
-      <Route path="/home" component={Home} />
-      <Route path="/friends" component={FriendsPage} />
-      <Route path="/ranking" component={RankingPage} />
-      <Route path="/insights" component={InsightsPage} />
-      <Route path="/settings" component={SettingsPage} />
-      <Route path="/notes" component={NotePage} />
+      {/* 로그인 페이지 */}
+      <Route path="/login" component={LoginPage} />
+      
+      {/* 인증이 필요한 습관 트래커 페이지들 */}
+      <Route path="/home">
+        <PrivateRoute component={Home} />
+      </Route>
+      <Route path="/friends">
+        <PrivateRoute component={FriendsPage} />
+      </Route>
+      <Route path="/ranking">
+        <PrivateRoute component={RankingPage} />
+      </Route>
+      <Route path="/insights">
+        <PrivateRoute component={InsightsPage} />
+      </Route>
+      <Route path="/settings">
+        <PrivateRoute component={SettingsPage} />
+      </Route>
+      <Route path="/notes">
+        <PrivateRoute component={NotePage} />
+      </Route>
       
       {/* 404 페이지 */}
       <Route component={NotFound} />
@@ -40,44 +88,86 @@ function Router() {
   );
 }
 
-// 네비게이션 바 컴포넌트 - 로그인 없이 사용
+// 네비게이션 바 컴포넌트 - 로그인 사용자 표시
 function NavBar() {
+  // 로컬 스토리지에서 사용자 정보 가져오기 
   const [user, setUser] = useState<{ id: number; name: string; username: string; avatar: string } | null>(null);
+  const [, setLocation] = useLocation();
   
-  // 사용자 정보 불러오기 - 항상 최신 데이터로 초기화
+  // 로그인 정보 불러오기
   useEffect(() => {
-    try {
-      // 로컬 스토리지 기존 데이터 삭제
-      localStorage.removeItem('userAuth');
-      
-      // 강제로 새 데이터 생성
-      import('./noauth').then(({ setupNoAuth }) => {
-        const defaultUser = setupNoAuth();
-        setUser(defaultUser);
-        console.log('사용자 정보 초기화:', defaultUser.name);
-      });
-    } catch (err) {
-      console.error('사용자 정보 초기화 오류:', err);
-    }
+    const checkUserAuth = () => {
+      const authStr = localStorage.getItem('userAuth');
+      if (authStr) {
+        try {
+          const auth = JSON.parse(authStr);
+          if (auth?.isLoggedIn && auth?.user) {
+            setUser(auth.user);
+          } else {
+            // 인증 정보가 없으면 null 설정
+            setUser(null);
+          }
+        } catch (error) {
+          console.error('인증 정보 파싱 오류:', error);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+    
+    // 초기 로드 시 확인
+    checkUserAuth();
+    
+    // 로컬 스토리지 변경 감지 (다른 탭에서 로그인/로그아웃 시)
+    const handleStorageChange = () => {
+      checkUserAuth();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
   
-  // 사용자 리셋 기능
-  const handleResetUser = () => {
-    try {
-      // 기본 사용자로 다시 설정
-      import('./noauth').then(({ setupNoAuth }) => {
-        const defaultUser = setupNoAuth();
-        setUser(defaultUser);
-        window.location.reload(); // 앱 새로고침
-      });
-    } catch (error) {
-      console.error('사용자 재설정 실패:', error);
-    }
+  // 로그아웃 처리
+  const handleLogout = () => {
+    // 로컬 스토리지에서 인증 정보 제거
+    localStorage.removeItem('userAuth');
+    sessionStorage.removeItem('userAuth');
+    
+    // 사용자 상태 초기화
+    setUser(null);
+    
+    // 서버에 로그아웃 요청 (실패해도 계속 진행)
+    fetch('/api/auth/logout', { 
+      method: 'POST',
+      credentials: 'include'
+    }).catch(err => {
+      console.error('로그아웃 요청 실패:', err);
+    }).finally(() => {
+      // 로그인 페이지로 리디렉션
+      setLocation('/login');
+    });
   };
   
-  // 사용자 정보 없으면 빈 화면
+  // 사용자 정보 없으면 빈 화면 또는 로그인 버튼 표시
   if (!user) {
-    return null;
+    return (
+      <div className="bg-blue-600 text-white p-3 flex justify-between items-center max-w-[420px] mx-auto lg:max-w-[800px]">
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-semibold">습관 트래커</span>
+        </div>
+        <div>
+          <button
+            onClick={() => setLocation('/login')}
+            className="bg-white text-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 text-sm"
+          >
+            로그인
+          </button>
+        </div>
+      </div>
+    );
   }
   
   return (
@@ -91,10 +181,10 @@ function NavBar() {
           <span className="text-2xl">{user.avatar}</span>
         </div>
         <button
-          onClick={handleResetUser}
+          onClick={handleLogout}
           className="bg-white text-blue-600 px-3 py-1 rounded-md hover:bg-blue-50 text-sm"
         >
-          사용자 변경
+          로그아웃
         </button>
       </div>
     </div>
@@ -103,17 +193,19 @@ function NavBar() {
 
 function App() {
   const [location] = useLocation();
-  const isLandingPage = location === '/landing';
+  const isLandingPage = location === '/' || location === '/landing';
+  const isLoginPage = location === '/login';
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        {/* 랜딩 페이지에서는 네비게이션 바를 표시하지 않음 */}
-        {!isLandingPage && <NavBar />}
+        {/* 랜딩 페이지와 로그인 페이지에서는 네비게이션 바를 표시하지 않음 */}
+        {!isLandingPage && !isLoginPage && <NavBar />}
         <HabitProvider>
           <Router />
-          {!isLandingPage && <TabNavigation />}
+          {/* 랜딩 페이지와 로그인 페이지에서는 탭 네비게이션을 표시하지 않음 */}
+          {!isLandingPage && !isLoginPage && <TabNavigation />}
         </HabitProvider>
       </TooltipProvider>
     </QueryClientProvider>
