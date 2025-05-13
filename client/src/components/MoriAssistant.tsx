@@ -47,6 +47,19 @@ const Mori: React.FC = () => {
     ideas: [],
     tasks: []
   });
+  
+  // 고객 검색 관련 상태
+  const [searchCustomer, setSearchCustomer] = useState<string>("");
+  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
+  const [customers, setCustomers] = useState<{ name: string; type: string }[]>([
+    { name: "김철수", type: "생명보험" },
+    { name: "이지은", type: "연금보험" },
+    { name: "박민지", type: "손해보험" },
+    { name: "정우성", type: "화재보험" },
+    { name: "송지효", type: "자동차보험" },
+    { name: "강하늘", type: "펀드" },
+    { name: "황정민", type: "건강보험" },
+  ]);
   const { toast } = useToast();
   const { user } = useAuth();
   
@@ -300,7 +313,7 @@ const Mori: React.FC = () => {
       <div className="mt-4 space-y-6">
         {/* 일정 목록 */}
         {categorizedResults.schedules.length > 0 && (
-          <div className="border border-blue-200 rounded-lg p-3 bg-blue-50">
+          <div className="border border-blue-200 rounded-lg p-3 bg-blue-100/70">
             <div className="flex items-center mb-3">
               <span className="text-xl mr-2">{getTypeIcon('schedule')}</span>
               <h3 className="font-semibold">일정</h3>
@@ -406,6 +419,51 @@ const Mori: React.FC = () => {
               <h3 className="font-bold text-lg text-gray-800">고객 관리</h3>
               <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
                 <span>3</span>
+              </div>
+            </div>
+            
+            {/* 고객 검색창 */}
+            <div className="mb-3">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchCustomer}
+                  onChange={(e) => {
+                    setSearchCustomer(e.target.value);
+                    setShowSearchResults(e.target.value.length > 0);
+                  }}
+                  placeholder="고객 이름 검색"
+                  className="w-full p-2 pl-8 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute left-2 top-2.5 text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                
+                {/* 검색 결과 */}
+                {showSearchResults && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
+                    {customers
+                      .filter(c => c.name.includes(searchCustomer) || c.type.includes(searchCustomer))
+                      .map((customer, idx) => (
+                        <div 
+                          key={idx} 
+                          className="p-2 hover:bg-blue-50 cursor-pointer flex justify-between"
+                          onClick={() => {
+                            setSearchCustomer("");
+                            setShowSearchResults(false);
+                          }}
+                        >
+                          <span className="font-medium">{customer.name}</span>
+                          <span className="text-sm text-gray-600">{customer.type}</span>
+                        </div>
+                      ))}
+                    {customers.filter(c => c.name.includes(searchCustomer) || c.type.includes(searchCustomer)).length === 0 && (
+                      <div className="p-2 text-gray-500 text-center">검색 결과가 없습니다</div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             <div className="space-y-0.5">
