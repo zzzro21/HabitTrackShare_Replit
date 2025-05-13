@@ -489,7 +489,7 @@ const Mori: React.FC = () => {
   const categories = [
     '고객관리', 
     '상담내역', 
-    '스케쥴', 
+    'Binary Tree', 
     '수당시뮬레이션', 
     '메모', 
     '상품'
@@ -717,10 +717,10 @@ const Mori: React.FC = () => {
             </div>
           </div>
         );
-      case '스케쥴':
+      case 'Binary Tree':
         return (
           <div>
-            <h3 className="font-bold text-lg text-gray-800 mb-3">오늘의 스케쥴</h3>
+            <h3 className="font-bold text-lg text-gray-800 mb-3">Binary Tree</h3>
             <div className="space-y-3">
               {categorizedResults.schedules.length > 0 ? (
                 categorizedResults.schedules.map((schedule, idx) => (
