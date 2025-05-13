@@ -554,7 +554,7 @@ const Mori: React.FC = () => {
             </div>
             {selectedCustomer ? (
               // 고객 상세 정보 표시
-              <div className="bg-white rounded-lg">
+              <div className="bg-blue-50 rounded-lg">
                 {customers.filter(c => c.id === selectedCustomer).map(customer => (
                   <div key={customer.id} className="p-2">
                     <div className="flex justify-between items-center mb-4">
@@ -655,14 +655,14 @@ const Mori: React.FC = () => {
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-1">상담 내역</h3>
             <div className="space-y-0.5">
-              <div className="border-b border-gray-200 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg bg-blue-50">
                 <div className="flex justify-start mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
                   <span className="text-sm text-blue-500 ml-auto">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
-              <div className="border-b border-gray-200 p-2 rounded-lg">
+              <div className="border-b border-gray-200 p-2 rounded-lg bg-blue-50">
                 <div className="flex justify-start mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
                   <span className="text-sm text-blue-500 ml-auto">2025.05.05</span>
@@ -796,8 +796,8 @@ const Mori: React.FC = () => {
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category
-                ? 'bg-blue-600 text-white'
-                : 'bg-blue-100 border border-blue-500 text-blue-600 hover:bg-blue-200'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white border border-blue-500 text-gray-800 hover:bg-blue-50'
             }`}
           >
             {category}
