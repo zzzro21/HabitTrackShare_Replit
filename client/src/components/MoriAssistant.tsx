@@ -51,14 +51,95 @@ const Mori: React.FC = () => {
   // 고객 검색 관련 상태
   const [searchCustomer, setSearchCustomer] = useState<string>("");
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<{ name: string; type: string }[]>([
-    { name: "김철수", type: "생명보험" },
-    { name: "이지은", type: "연금보험" },
-    { name: "박민지", type: "손해보험" },
-    { name: "정우성", type: "화재보험" },
-    { name: "송지효", type: "자동차보험" },
-    { name: "강하늘", type: "펀드" },
-    { name: "황정민", type: "건강보험" },
+  const [selectedCustomer, setSelectedCustomer] = useState<number | null>(null);
+  const [customers, setCustomers] = useState<{ 
+    id: number;
+    name: string; 
+    type: string;
+    phone: string;
+    email: string;
+    address: string;
+    lastContact: string;
+    notes: string;
+    status: string;
+  }[]>([
+    { 
+      id: 1,
+      name: "김철수", 
+      type: "생명보험", 
+      phone: "010-1234-5678", 
+      email: "kimcs@example.com", 
+      address: "서울시 강남구 테헤란로 123", 
+      lastContact: "3일 전",
+      notes: "생명보험 상담 완료, 가입 고려 중",
+      status: "상담 중"
+    },
+    { 
+      id: 2,
+      name: "이지은", 
+      type: "연금보험", 
+      phone: "010-2345-6789", 
+      email: "leejieun@example.com", 
+      address: "서울시 서초구 서초대로 456", 
+      lastContact: "1주일 전",
+      notes: "연금보험 추가 설명 필요",
+      status: "상담 예정"
+    },
+    { 
+      id: 3,
+      name: "박민지", 
+      type: "손해보험", 
+      phone: "010-3456-7890", 
+      email: "park.minji@example.com", 
+      address: "서울시 마포구 월드컵로 789", 
+      lastContact: "2주일 전",
+      notes: "손해보험 관련 자료 요청함",
+      status: "자료 검토 중"
+    },
+    { 
+      id: 4,
+      name: "정우성", 
+      type: "화재보험", 
+      phone: "010-4567-8901", 
+      email: "jung.woosung@example.com", 
+      address: "경기도 성남시 분당구 판교로 111", 
+      lastContact: "1개월 전",
+      notes: "화재보험 만기 임박, 갱신 여부 확인 필요",
+      status: "만기 임박"
+    },
+    { 
+      id: 5,
+      name: "송지효", 
+      type: "자동차보험", 
+      phone: "010-5678-9012", 
+      email: "song.jihyo@example.com", 
+      address: "경기도 고양시 일산동구 중앙로 222", 
+      lastContact: "오늘",
+      notes: "자녀 교육보험 상담 예정",
+      status: "계약 완료"
+    },
+    { 
+      id: 6,
+      name: "강하늘", 
+      type: "펀드", 
+      phone: "010-6789-0123", 
+      email: "kang.haneul@example.com", 
+      address: "인천시 연수구 센트럴로 333", 
+      lastContact: "2일 전",
+      notes: "펀드 운용 현황 설명, 추가 가입 관심 있음",
+      status: "계약 완료"
+    },
+    { 
+      id: 7,
+      name: "황정민", 
+      type: "건강보험", 
+      phone: "010-7890-1234", 
+      email: "hwang.jm@example.com", 
+      address: "서울시 송파구 올림픽로 444", 
+      lastContact: "5일 전",
+      notes: "건강보험 보장내용 문의, 비교 자료 전달",
+      status: "상담 중"
+    },
   ]);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -446,12 +527,13 @@ const Mori: React.FC = () => {
                   <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
                     {customers
                       .filter(c => c.name.includes(searchCustomer) || c.type.includes(searchCustomer))
-                      .map((customer, idx) => (
+                      .map((customer) => (
                         <div 
-                          key={idx} 
+                          key={customer.id} 
                           className="p-2 hover:bg-blue-50 cursor-pointer flex justify-between"
                           onClick={() => {
-                            setSearchCustomer("");
+                            setSearchCustomer(customer.name);
+                            setSelectedCustomer(customer.id);
                             setShowSearchResults(false);
                           }}
                         >
@@ -466,29 +548,102 @@ const Mori: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="space-y-0.5">
-              <div className="border-b border-gray-200 p-2 rounded-lg">
-                <div className="flex justify-between mb-1">
-                  <span className="font-semibold">김철수</span>
-                  <span className="text-sm text-gray-500">최근 연락: 3일 전</span>
-                </div>
-                <div className="text-sm text-gray-600">생명보험 상담 완료, 가입 고려 중</div>
+            {selectedCustomer ? (
+              // 고객 상세 정보 표시
+              <div className="bg-white rounded-lg">
+                {customers.filter(c => c.id === selectedCustomer).map(customer => (
+                  <div key={customer.id} className="p-2">
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center">
+                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mr-3">
+                          <span className="text-lg font-semibold">{customer.name.charAt(0)}</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold">{customer.name}</h3>
+                          <div className="text-sm text-gray-600">{customer.type}</div>
+                        </div>
+                      </div>
+                      <div>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          customer.status === '계약 완료' ? 'bg-green-100 text-green-700' : 
+                          customer.status === '상담 중' ? 'bg-blue-100 text-blue-700' :
+                          customer.status === '만기 임박' ? 'bg-orange-100 text-orange-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {customer.status}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3 mb-4">
+                      <div className="flex items-center">
+                        <a href={`tel:${customer.phone}`} className="flex items-center px-3 py-2 border border-blue-500 rounded-lg text-blue-500 hover:bg-blue-50 mr-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          전화하기
+                        </a>
+                        <a href={`mailto:${customer.email}`} className="flex items-center px-3 py-2 border border-blue-500 rounded-lg text-blue-500 hover:bg-blue-50">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          이메일 보내기
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex border-b border-gray-200 py-2">
+                        <div className="w-24 text-gray-500">연락처</div>
+                        <div className="flex-1 font-medium">{customer.phone}</div>
+                      </div>
+                      <div className="flex border-b border-gray-200 py-2">
+                        <div className="w-24 text-gray-500">이메일</div>
+                        <div className="flex-1 font-medium">{customer.email}</div>
+                      </div>
+                      <div className="flex border-b border-gray-200 py-2">
+                        <div className="w-24 text-gray-500">주소</div>
+                        <div className="flex-1 font-medium">{customer.address}</div>
+                      </div>
+                      <div className="flex border-b border-gray-200 py-2">
+                        <div className="w-24 text-gray-500">최근 연락</div>
+                        <div className="flex-1 font-medium">{customer.lastContact}</div>
+                      </div>
+                      <div className="flex border-b border-gray-200 py-2">
+                        <div className="w-24 text-gray-500">메모</div>
+                        <div className="flex-1 font-medium">{customer.notes}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 flex justify-end">
+                      <button 
+                        className="text-gray-500 hover:text-gray-700" 
+                        onClick={() => setSelectedCustomer(null)}
+                      >
+                        <span className="text-sm">목록으로 돌아가기</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="border-b border-gray-200 p-2 rounded-lg">
-                <div className="flex justify-between mb-1">
-                  <span className="font-semibold">박영희</span>
-                  <span className="text-sm text-gray-500">최근 연락: 오늘</span>
-                </div>
-                <div className="text-sm text-gray-600">자녀 교육보험 상담 예정</div>
+            ) : (
+              // 고객 목록 표시
+              <div className="space-y-0.5">
+                {customers.slice(0, 3).map(customer => (
+                  <div 
+                    key={customer.id} 
+                    className="border-b border-gray-200 p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+                    onClick={() => setSelectedCustomer(customer.id)}
+                  >
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold">{customer.name}</span>
+                      <span className="text-sm text-gray-500">최근 연락: {customer.lastContact}</span>
+                    </div>
+                    <div className="text-sm text-gray-600">{customer.notes}</div>
+                  </div>
+                ))}
               </div>
-              <div className="border-b border-gray-200 p-2 rounded-lg">
-                <div className="flex justify-between mb-1">
-                  <span className="font-semibold">이지은</span>
-                  <span className="text-sm text-gray-500">최근 연락: 1주일 전</span>
-                </div>
-                <div className="text-sm text-gray-600">연금보험 추가 설명 필요</div>
-              </div>
-            </div>
+            )}
           </div>
         );
       case '상담내역':
