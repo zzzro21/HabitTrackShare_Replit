@@ -272,9 +272,9 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-4">
-          <h1 className={`text-3xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            "Little actions, <span className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md">Big results</span>,<br />
-            <span className="text-2xl">Set it, Do it, Repeat.</span>"
+          <h1 className={`text-2xl font-bold leading-tight transition-all duration-500 font-poppins tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            "Little actions, <span className="inline-block bg-blue-500 px-2 py-0.5 text-white rounded-md">Big results</span>,<br />
+            <span className="text-xl">Set it, Do it, Repeat.</span>"
           </h1>
 
           <div className="flex items-center mt-6 justify-center relative">
