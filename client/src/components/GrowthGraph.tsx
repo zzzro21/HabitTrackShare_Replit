@@ -74,7 +74,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         <h3 className="text-base font-bold text-gray-800">8Weeks Growth</h3>
       </div>
       
-      <CardContent className="p-2 pt-0 pb-3">
+      <CardContent className="p-2 pt-0 pb-4">
         
         <div className="h-36 w-full relative">
           <div className="flex h-full items-end justify-between px-4">
@@ -160,9 +160,9 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       </CardContent>
       
       {/* 색상 범례 */}
-      <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-0.5 mb-1 text-[10px] text-gray-500">
+      <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 mb-2 text-[10px] text-gray-500">
         {categories.map(category => (
-          <div key={category} className="flex items-center gap-1.5">
+          <div key={category} className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-sm" style={{ 
               backgroundColor: categoryColors[category as keyof typeof categoryColors] 
             }}></div>
