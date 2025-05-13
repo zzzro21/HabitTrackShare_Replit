@@ -70,8 +70,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16">
-      {/* 상단 프로필 영역 - 푸른색 배경 */}
-      <div className="bg-blue-500 text-white p-4 rounded-b-3xl flex items-center justify-between">
+      {/* 상단 프로필 영역 - 반투명 하늘색 배경 */}
+      <div className="bg-blue-500/80 text-white p-5 rounded-b-3xl flex items-center justify-between">
         <div className="flex items-center">
           <div className="w-10 h-10 rounded-full bg-white overflow-hidden mr-3">
             <img 
@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
             <p className="text-sm text-blue-100">Welcome back!</p>
           </div>
         </div>
-        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full bg-blue-600/70 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
           </svg>
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
       </div>
       
       {/* Manage your tasks 영역 */}
-      <div className="mx-4 mt-4 p-5 bg-blue-500 text-white rounded-3xl shadow-sm">
+      <div className="mx-4 mt-4 p-5 bg-blue-500/80 text-white rounded-3xl shadow-sm">
         <h1 className="text-3xl font-bold mb-6">Manage<br/>your tasks</h1>
         
         {/* 주간 캘린더 */}
@@ -118,7 +118,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* 원형 스코어 영역 */}
-      <div className="mt-6 mx-4">
+      <div className="mt-4 mx-4 p-5 bg-white rounded-3xl shadow-sm">
         <div className="flex justify-between items-center">
           {[3, 4, 5].map((num, index) => (
             <div 
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
       </div>
       
       {/* Annual Growth 차트 */}
-      <div className="mt-6 mx-4 bg-white p-5 rounded-3xl shadow-sm">
+      <div className="mt-4 mx-4 bg-white p-5 rounded-3xl shadow-sm">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Annual Growth</h2>
           <span className="bg-yellow-300 text-xs px-2 py-1 rounded-full font-bold">+19%</span>
