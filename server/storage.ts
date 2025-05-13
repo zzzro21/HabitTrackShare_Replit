@@ -55,6 +55,10 @@ export interface IStorage {
   getUserHabitInsight(userId: number): Promise<HabitInsight | undefined>;
   createOrUpdateHabitInsight(insight: InsertHabitInsight): Promise<HabitInsight>;
   
+  // User API keys methods
+  getUserApiKey(userId: number): Promise<UserApiKey | undefined>;
+  createOrUpdateUserApiKey(apiKey: InsertUserApiKey): Promise<UserApiKey>;
+  
   // Initialize predefined data
   initializePredefinedData(): Promise<void>;
 }
