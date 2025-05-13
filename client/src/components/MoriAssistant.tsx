@@ -409,21 +409,21 @@ const Mori: React.FC = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-amber-50 p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수</span>
                   <span className="text-sm text-gray-500">최근 연락: 3일 전</span>
                 </div>
                 <div className="text-sm text-gray-600">생명보험 상담 완료, 가입 고려 중</div>
               </div>
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-amber-50 p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">박영희</span>
                   <span className="text-sm text-gray-500">최근 연락: 오늘</span>
                 </div>
                 <div className="text-sm text-gray-600">자녀 교육보험 상담 예정</div>
               </div>
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-amber-50 p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은</span>
                   <span className="text-sm text-gray-500">최근 연락: 1주일 전</span>
@@ -438,14 +438,14 @@ const Mori: React.FC = () => {
           <div>
             <h3 className="font-bold text-lg text-gray-800 mb-3">상담 내역</h3>
             <div className="space-y-3">
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-amber-50 p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">김철수 (생명보험)</span>
                   <span className="text-sm text-blue-600">2025.05.10</span>
                 </div>
                 <div className="text-sm text-gray-600">월 보험료 15만원 제안, 추가 검토 요청</div>
               </div>
-              <div className="bg-white p-3 rounded-lg">
+              <div className="bg-amber-50 p-3 rounded-lg">
                 <div className="flex justify-between mb-1">
                   <span className="font-semibold">이지은 (연금보험)</span>
                   <span className="text-sm text-blue-600">2025.05.05</span>
@@ -572,23 +572,22 @@ const Mori: React.FC = () => {
       </div>
       
       {/* 카테고리 버튼 */}
-      <div className="grid grid-cols-3 gap-2 p-4">
+      <div className="flex flex-wrap gap-3 p-4 justify-between">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`py-2 px-1 rounded-full text-sm font-medium transition-colors w-full ${
+            className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === category || category === '고객관리'
-                ? 'bg-blue-600 text-white border-0'
-                : 'bg-white border-2 border-yellow-300 text-gray-800 hover:bg-gray-100'
+                ? 'bg-black text-white border-0'
+                : 'bg-white border border-yellow-300 text-gray-800 hover:bg-gray-100'
             }`}
-            style={{ minWidth: '82px' }}
           >
             {category}
           </button>
         ))}
         <button
-          className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 flex items-center justify-center mx-auto"
+          className="w-10 h-10 rounded-full bg-black text-white text-xl font-medium hover:bg-gray-800 flex items-center justify-center"
         >
           +
         </button>
@@ -596,7 +595,7 @@ const Mori: React.FC = () => {
       
       {/* 선택된 카테고리 내용 표시 */}
       <div className="px-4 pb-4">
-        <div className="bg-sky-50 p-4">
+        <div className="bg-blue-50/60 p-4 rounded-2xl">
           {renderCategoryContent()}
         </div>
       </div>
