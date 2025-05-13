@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
 
 interface ClassifiedResponse {
-  type: 'schedule' | 'memo' | 'idea' | 'task';
+  type: 'binary_tree' | 'memo' | 'idea' | 'task';
   date?: string;
   time?: string;
   event?: string;
@@ -326,7 +326,7 @@ const Mori: React.FC = () => {
       
       // 카테고리별로 결과 정리
       const newCategorized = {...categorizedResults};
-      if (response.type === 'schedule') newCategorized.schedules.push(response);
+      if (response.type === 'binary_tree') newCategorized.schedules.push(response);
       else if (response.type === 'memo') newCategorized.memos.push(response);
       else if (response.type === 'idea') newCategorized.ideas.push(response);
       else if (response.type === 'task') newCategorized.tasks.push(response);
@@ -359,6 +359,8 @@ const Mori: React.FC = () => {
   // 결과 타입에 따른 아이콘 선택
   const getTypeIcon = (type: string) => {
     switch (type) {
+      case 'binary_tree':
+        return '🌳';
       case 'schedule':
         return '📅';
       case 'memo':
@@ -375,6 +377,8 @@ const Mori: React.FC = () => {
   // 결과 타입에 따른 배경색 선택
   const getTypeColor = (type: string) => {
     switch (type) {
+      case 'binary_tree':
+        return 'bg-blue-50 border-blue-200';
       case 'schedule':
         return 'bg-blue-50 border-blue-200';
       case 'memo':
@@ -392,12 +396,12 @@ const Mori: React.FC = () => {
   const renderCategorizedResults = () => {
     return (
       <div className="mt-4 space-y-6">
-        {/* 일정 목록 */}
+        {/* Binary Tree 목록 */}
         {categorizedResults.schedules.length > 0 && (
           <div className="border-b border-gray-200 p-2 mb-2">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2 text-blue-500">{getTypeIcon('schedule')}</span>
-              <h3 className="font-semibold">일정</h3>
+              <span className="text-xl mr-2 text-blue-500">{getTypeIcon('binary_tree')}</span>
+              <h3 className="font-semibold">Binary Tree</h3>
             </div>
             <div className="space-y-2">
               {categorizedResults.schedules.map((schedule, idx) => (
