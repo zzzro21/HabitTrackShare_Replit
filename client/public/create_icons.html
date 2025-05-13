@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Icons</title>
+</head>
+<body>
+  <div id="iconOutput" style="display: none;"></div>
+  
+  <canvas id="canvas192" width="192" height="192" style="display: none;"></canvas>
+  <canvas id="canvas512" width="512" height="512" style="display: none;"></canvas>
+  
+  <div>
+    <h1>Icon Generator</h1>
+    <button onclick="generateIcons()">Generate Icons</button>
+    <div id="links"></div>
+  </div>
+  
+  <script>
+    function generateIcons() {
+      // 192x192 icon
+      const canvas192 = document.getElementById('canvas192');
+      const ctx192 = canvas192.getContext('2d');
+      
+      // Background
+      ctx192.fillStyle = '#007BFF';
+      ctx192.fillRect(0, 0, 192, 192);
+      
+      // White circle
+      ctx192.fillStyle = '#ffffff';
+      ctx192.beginPath();
+      ctx192.arc(96, 96, 60, 0, Math.PI * 2);
+      ctx192.fill();
+      
+      // Checkmark
+      ctx192.strokeStyle = '#007BFF';
+      ctx192.lineWidth = 12;
+      ctx192.lineCap = 'round';
+      ctx192.lineJoin = 'round';
+      ctx192.beginPath();
+      ctx192.moveTo(65, 100);
+      ctx192.lineTo(85, 120);
+      ctx192.lineTo(130, 75);
+      ctx192.stroke();
+      
+      // 512x512 icon
+      const canvas512 = document.getElementById('canvas512');
+      const ctx512 = canvas512.getContext('2d');
+      
+      // Background
+      ctx512.fillStyle = '#007BFF';
+      ctx512.fillRect(0, 0, 512, 512);
+      
+      // White circle
+      ctx512.fillStyle = '#ffffff';
+      ctx512.beginPath();
+      ctx512.arc(256, 256, 160, 0, Math.PI * 2);
+      ctx512.fill();
+      
+      // Checkmark
+      ctx512.strokeStyle = '#007BFF';
+      ctx512.lineWidth = 30;
+      ctx512.lineCap = 'round';
+      ctx512.lineJoin = 'round';
+      ctx512.beginPath();
+      ctx512.moveTo(175, 260);
+      ctx512.lineTo(230, 320);
+      ctx512.lineTo(340, 200);
+      ctx512.stroke();
+      
+      // Create download links
+      const linksDiv = document.getElementById('links');
+      linksDiv.innerHTML = '';
+      
+      const link192 = document.createElement('a');
+      link192.href = canvas192.toDataURL('image/png');
+      link192.download = 'icon-192.png';
+      link192.textContent = 'Download 192x192 icon';
+      linksDiv.appendChild(link192);
+      linksDiv.appendChild(document.createElement('br'));
+      
+      const link512 = document.createElement('a');
+      link512.href = canvas512.toDataURL('image/png');
+      link512.download = 'icon-512.png';
+      link512.textContent = 'Download 512x512 icon';
+      linksDiv.appendChild(link512);
+      
+      // Automatically download
+      setTimeout(() => {
+        link192.click();
+        setTimeout(() => {
+          link512.click();
+        }, 100);
+      }, 100);
+    }
+    
+    // Auto-generate on load
+    window.onload = generateIcons;
+  </script>
+</body>
+</html>
