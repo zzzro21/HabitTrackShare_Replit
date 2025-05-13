@@ -795,7 +795,7 @@ const Mori: React.FC = () => {
             key={category}
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-3 rounded-full text-sm font-medium transition-colors ${
-              selectedCategory === category || category === '고객관리'
+              selectedCategory === category
                 ? 'bg-blue-500 text-white'
                 : 'bg-white border border-blue-500 text-gray-800 hover:bg-blue-50'
             }`}
