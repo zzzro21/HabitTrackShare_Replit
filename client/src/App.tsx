@@ -19,8 +19,11 @@ import LandingPage from "@/pages/LandingPage";
 function Router() {
   return (
     <Switch>
-      {/* 메인 경로에 랜딩 페이지 표시 */}
-      <Route path="/" component={LandingPage} />
+      {/* 메인 경로에 직접 Home 컴포넌트 표시 */}
+      <Route path="/" component={Home} />
+      
+      {/* 랜딩 페이지는 별도 경로로 유지 */}
+      <Route path="/landing" component={LandingPage} />
       
       {/* 습관 트래커 페이지들 */}
       <Route path="/home" component={Home} />
@@ -99,7 +102,7 @@ function NavBar() {
 
 function App() {
   const [location] = useLocation();
-  const isLandingPage = location === '/';
+  const isLandingPage = location === '/landing';
 
   return (
     <QueryClientProvider client={queryClient}>
