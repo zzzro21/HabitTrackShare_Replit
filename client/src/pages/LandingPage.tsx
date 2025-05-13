@@ -141,7 +141,15 @@ const LandingPage: React.FC = () => {
 
   // 습관 트래커로 이동
   const handleBeginClick = () => {
-    navigate('/home'); // 홈 페이지 경로로 이동
+    // 인증 상태 확인
+    const authStr = localStorage.getItem('userAuth');
+    const auth = authStr ? JSON.parse(authStr) : null;
+    
+    if (auth?.isLoggedIn) {
+      navigate('/home'); // 로그인된 경우 홈으로 이동
+    } else {
+      navigate('/login'); // 로그인되지 않은 경우 로그인 페이지로 이동
+    }
   };
   
   // 프로필 이미지 선택 함수
