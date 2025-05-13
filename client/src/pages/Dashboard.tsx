@@ -67,20 +67,19 @@ const Dashboard: React.FC = () => {
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
       {/* MORI AI 비서 버튼 - 타이틀 카드 내에 배치 */}
-      <div className="absolute top-14 right-5 z-20">
+      <div className="absolute top-8 right-5 z-20">
         <button 
-          className="flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-full px-4 py-2 shadow-xl transition-all hover:shadow-orange-300/50 hover:-translate-y-0.5"
+          className="flex items-center justify-center bg-orange-500 text-white rounded-full w-10 h-10 shadow-md transition-all hover:shadow-lg hover:shadow-orange-200/50 hover:-translate-y-0.5"
           onClick={() => {
             toggleAssistantGender();
             toggleAssistant();
           }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
             <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
             <line x1="12" y1="19" x2="12" y2="22"></line>
           </svg>
-          <span className="text-base font-bold tracking-wider">MORI</span>
         </button>
       </div>
       
@@ -261,7 +260,7 @@ const Dashboard: React.FC = () => {
               </svg>
             </button>
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 flex items-center justify-center mr-3 shadow-lg">
+              <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mr-3 shadow-md">
                 {assistantGender === 'female' ? (
                   <span className="text-2xl">👩</span>
                 ) : (
