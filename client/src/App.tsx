@@ -52,18 +52,18 @@ function PrivateRoute({ component: Component, ...rest }: any) {
 
 // 라우터 컴포넌트
 function Router() {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <Switch>
-      {/* 랜딩 페이지 (인트로 화면) */}
-      <Route path="/landing" component={LandingPage} />
+      {/* 인트로 화면 (메인 랜딩 페이지) */}
+      <Route path="/welcome" component={LandingPage} />
       
       {/* 로그인 페이지 */}
       <Route path="/login" component={LoginPage} />
       
-      {/* 인증이 필요한 메인 대시보드 페이지 */}
-      <Route path="/">
-        <PrivateRoute component={Dashboard} />
-      </Route>
+      {/* 메인 대시보드 페이지 (인증 필요) */}
+      <Route path="/" component={isAuthenticated ? Dashboard : () => <Redirect to="/welcome" />} />
       
       {/* 인증이 필요한 습관 트래커 페이지들 */}
       <Route path="/home">
@@ -84,9 +84,6 @@ function Router() {
       <Route path="/notes">
         <PrivateRoute component={NotePage} />
       </Route>
-      
-      {/* 메인 경로에서 인증되지 않았을 경우 랜딩 페이지로 이동 */}
-      <Route path="/welcome" component={LandingPage} />
       
       {/* 404 페이지 */}
       <Route component={NotFound} />
