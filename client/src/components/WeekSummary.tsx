@@ -8,7 +8,7 @@ const WeekSummary: React.FC = () => {
     return (
       <div className="mb-5 p-3 bg-gray-50 rounded-lg animate-pulse">
         <h3 className="text-sm font-medium text-gray-800 mb-2">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 점수 요약</h3>
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-5 gap-1">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="h-12 bg-gray-200 rounded"></div>
           ))}
@@ -21,9 +21,9 @@ const WeekSummary: React.FC = () => {
   const totalWeekScore = weekScores.reduce((sum, score) => sum + score, 0);
 
   return (
-    <div className="mb-5 p-3 bg-gray-50 rounded-lg">
-      <h3 className="text-sm font-medium text-gray-800 mb-2">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 점수 요약</h3>
-      <div className="grid grid-cols-5 gap-2">
+    <div className="mb-2 p-2 bg-gray-50 rounded-lg">
+      <h3 className="text-sm font-medium text-gray-800 mb-1">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 점수 요약</h3>
+      <div className="grid grid-cols-5 gap-1">
         {habits.map((habit, index) => (
           <div key={habit.id} className="text-center">
             <div 
