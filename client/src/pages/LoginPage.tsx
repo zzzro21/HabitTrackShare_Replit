@@ -132,15 +132,6 @@ export default function LoginPage() {
             {isLoading ? '로그인 중...' : '로그인'}
           </button>
         </form>
-        
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 mb-2">
-            계정 아이디: <span className="font-medium">user1</span>부터 <span className="font-medium">user8</span>까지 이용 가능합니다.
-          </p>
-          <p className="text-gray-600 mb-4">
-            (기본 비밀번호: <span className="font-medium">password123</span>)
-          </p>
-        </div>
       </div>
     </div>
   );
