@@ -48,7 +48,7 @@ const TabNavigation: React.FC = () => {
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
           </svg>
-          <span className="text-[7px] mt-0.5 truncate text-center">인사이트</span>
+          <span className="text-[6px] mt-0.5 truncate text-center">인사이트</span>
         </a>
         
         <a 
@@ -59,7 +59,7 @@ const TabNavigation: React.FC = () => {
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
-          <span className="text-[7px] mt-0.5 truncate text-center">일지</span>
+          <span className="text-[6px] mt-0.5 truncate text-center">일지</span>
         </a>
         
         <a 
@@ -72,7 +72,7 @@ const TabNavigation: React.FC = () => {
             <path d="M8 3v4" />
             <path d="M16 3v4" />
           </svg>
-          <span className="text-[7px] mt-0.5 truncate text-center">설정</span>
+          <span className="text-[6px] mt-0.5 truncate text-center">설정</span>
         </a>
       </div>
     </nav>
