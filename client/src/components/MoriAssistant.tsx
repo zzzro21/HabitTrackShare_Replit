@@ -320,7 +320,7 @@ const Mori: React.FC = () => {
             </div>
             <div className="space-y-2">
               {categorizedResults.schedules.map((schedule, idx) => (
-                <div key={idx} className="text-sm p-2 bg-white rounded-lg">
+                <div key={idx} className="text-sm mb-2">
                   <div className="font-medium text-blue-800">{schedule.event}</div>
                   <div className="text-gray-600 flex justify-between">
                     <div>{schedule.date}</div>
@@ -341,7 +341,7 @@ const Mori: React.FC = () => {
             </div>
             <div className="space-y-2">
               {categorizedResults.tasks.map((task, idx) => (
-                <div key={idx} className="flex items-center text-sm p-2 bg-white rounded-lg">
+                <div key={idx} className="flex items-center text-sm mb-2">
                   <input type="checkbox" className="mr-2 h-4 w-4" />
                   <div className="font-medium">{task.title}</div>
                 </div>
@@ -359,7 +359,7 @@ const Mori: React.FC = () => {
             </div>
             <div className="space-y-2">
               {categorizedResults.ideas.map((idea, idx) => (
-                <div key={idx} className="text-sm p-2 bg-white rounded-lg">
+                <div key={idx} className="text-sm mb-2">
                   <div className="font-medium text-amber-800">{idea.content}</div>
                 </div>
               ))}
@@ -376,7 +376,7 @@ const Mori: React.FC = () => {
             </div>
             <div className="space-y-2">
               {categorizedResults.memos.map((memo, idx) => (
-                <div key={idx} className="text-sm p-2 bg-white rounded-lg">
+                <div key={idx} className="text-sm mb-2">
                   <div className="font-medium text-green-800">{memo.content}</div>
                 </div>
               ))}
