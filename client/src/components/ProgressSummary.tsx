@@ -31,7 +31,7 @@ const ProgressSummary: React.FC = () => {
   const rank = calculateUserRank(activeUser);
 
   return (
-    <div className="mb-5 p-3 bg-blue-50 rounded-lg">
+    <div className="mb-2 p-3 bg-blue-50 rounded-lg">
       <div className="flex justify-between items-center mb-1">
         <div>
           <h3 className="text-sm font-medium text-gray-800">나의 습관 현황</h3>

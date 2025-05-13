@@ -92,7 +92,7 @@ const HabitTracker: React.FC = () => {
   };
 
   return (
-    <div className="mb-5">
+    <div className="mb-2">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-sm font-medium text-gray-800">{activeWeek*2 + 1}-{activeWeek*2 + 2}주차 습관 기록</h3>
         <div className="flex items-center">

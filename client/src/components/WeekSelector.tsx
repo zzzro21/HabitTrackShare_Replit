@@ -17,7 +17,7 @@ const WeekSelector: React.FC = () => {
   }
 
   return (
-    <div className="mb-4">
+    <div className="mb-2">
       <div className="flex border rounded-lg overflow-hidden">
         {[...Array(4)].map((_, index) => (
           <button
