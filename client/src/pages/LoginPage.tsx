@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
@@ -19,13 +19,20 @@ const defaultUsers = [
 const LoginPage: React.FC = () => {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [apiKey, setApiKey] = useState<string>('');
   const [notionToken, setNotionToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  // 이미 로그인된 경우 체크리스트 페이지로 리디렉션
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLocation('/checklist');
+    }
+  }, [isAuthenticated, setLocation]);
   
   // 초기 비밀번호는 모두 'password123'으로 설정
   const handleLogin = async () => {
@@ -66,8 +73,8 @@ const LoginPage: React.FC = () => {
         description: `환영합니다, ${user.name}님!`
       });
       
-      // 메인 페이지로 리다이렉트
-      setLocation('/');
+      // 체크리스트 페이지로 리다이렉트 (메인 페이지 대신)
+      setLocation('/checklist');
     } catch (error) {
       console.error('로그인 오류:', error);
       toast({
