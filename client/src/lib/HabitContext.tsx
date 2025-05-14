@@ -189,32 +189,30 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${value}`);
       
-      // 서버 측 habitId는 10부터 시작하지만 클라이언트에서는 1부터 시작할 수 있음
-      // 따라서 실제 서버 ID로 변환 필요 (1->10, 2->11, 3->12, 4->13, 5->14)
-      const serverHabitId = habitId < 10 ? habitId + 9 : habitId;
-      
+      // 서버로 원래 habitId 그대로 전송 (서버에서 필요시 매핑)
       const requestData = {
         userId: currentUserId,
-        habitId: serverHabitId, // 서버 ID로 변환
+        habitId: habitId, // 클라이언트 ID 그대로 전송 (서버에서 매핑)
         day,
         value
       };
       
-      console.log('요청 데이터:', requestData);
+      console.log('서버 요청 데이터:', requestData);
       
       const response = await apiRequest<HabitEntry>('POST', '/api/entries', requestData);
       
       console.log('서버 응답:', response);
       
+      // 서버 응답에서 항상 클라이언트 ID 사용하도록 변환
+      const clientResponse = {
+        ...response,
+        habitId: habitId // 항상 원래 habitId 사용 (서버 응답의 ID와 상관없이)
+      };
+      
+      console.log('로컬 상태에 저장될 데이터:', clientResponse);
+      
       // Update local state with the new entry
-      // response에는 서버 ID가 포함되어 있지만, 클라이언트에서는 원래 ID 사용
       setHabitEntries(prev => {
-        // 클라이언트에 표시될 로컬 상태는 원래 ID 사용
-        const clientResponse = {
-          ...response,
-          habitId: habitId // 원래 habitId 사용 (서버에서 온 ID 대신)
-        };
-        
         // 기존 항목이 있는지 확인
         const existingIndex = prev.findIndex(
           entry => entry.userId === currentUserId && entry.habitId === habitId && entry.day === day
