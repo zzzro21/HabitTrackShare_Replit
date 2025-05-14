@@ -66,25 +66,24 @@ const Dashboard: React.FC = () => {
 
   return (
     <AppLayout title="" showBackButton={false} hideHeader={true}>
-      {/* 인트로 화면으로 이동하는 버튼 추가 */}
-      <div className="absolute top-1 left-3 z-10">
-        <button 
-          onClick={() => setLocation('/welcome')}
-          className="flex items-center justify-center bg-white/80 backdrop-blur-sm text-gray-700 rounded-full p-2 shadow-sm hover:bg-white transition-all"
-          aria-label="인트로 화면으로 이동"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
-          </svg>
-        </button>
-      </div>
-      
       {/* 일주일 캘린더와 타이틀 카드 - 여백 60% 줄임 */}
       <div className="mx-2 mt-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">
         <div className="flex justify-between items-center mb-1">
-          <h2 className="text-2xl font-bold">
-            Hello, {user?.name || "친구"}
-          </h2>
+          <div className="flex items-center gap-2">
+            {/* 인트로 화면으로 이동하는 버튼 */}
+            <button 
+              onClick={() => setLocation('/welcome')}
+              className="flex items-center justify-center bg-white/80 backdrop-blur-sm text-gray-700 rounded-full p-1.5 shadow-sm hover:bg-white transition-all"
+              aria-label="인트로 화면으로 이동"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <h2 className="text-2xl font-bold">
+              Hello, {user?.name || "친구"}
+            </h2>
+          </div>
           <button 
             className="flex items-center justify-center bg-orange-500 text-white rounded-full px-3 py-1.5 shadow-md transition-all hover:shadow-lg hover:shadow-orange-200/50 hover:-translate-y-0.5"
             onClick={() => {
