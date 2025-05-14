@@ -115,14 +115,13 @@ const HabitTracker: React.FC = () => {
         </div>
       </div>
       
-      {/* First week part - days 1-7 */}
       <div className="w-full">
-        <table className="w-full text-xs border-collapse mb-2">
+        <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-left text-[10px]">습관</th>
+              <th className="border px-0.5 py-0.5 w-28 bg-gray-50 text-left text-[10px]">습관</th>
               {[...Array(7)].map((_, i) => (
-                <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px]">{startDay + i + 1}</th>
+                <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px] w-[5%]">{startDay + i + 1}</th>
               ))}
             </tr>
           </thead>
@@ -153,13 +152,13 @@ const HabitTracker: React.FC = () => {
       </div>
       
       {/* Second week part - days 8-14 */}
-      <div className="w-full mt-2">
+      <div className="w-full mt-4">
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-left text-[10px]">습관</th>
+              <th className="border px-0.5 py-0.5 w-28 bg-gray-50 text-left text-[10px]">습관</th>
               {[...Array(7)].map((_, i) => (
-                <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px]">{startDay + i + 8}</th>
+                <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px] w-[5%]">{startDay + i + 8}</th>
               ))}
             </tr>
           </thead>
