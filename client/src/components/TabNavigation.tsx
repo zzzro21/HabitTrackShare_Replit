@@ -6,10 +6,10 @@ const TabNavigation: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-1 px-0">
-      <div className="flex justify-between -mx-2">
+      <div className="flex justify-between mx-auto max-w-[390px]">
         <a 
           href="/" 
-          className={`flex flex-col items-center justify-center w-[16%] ml-3 ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-1/5 ${location === '/' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -19,7 +19,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/friends" 
-          className={`flex flex-col items-center justify-center w-[16%] ${location === '/friends' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-1/5 ${location === '/friends' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -32,7 +32,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/insights" 
-          className={`flex flex-col items-center justify-center w-[16%] ${location === '/insights' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-1/5 ${location === '/insights' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -43,7 +43,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/checklist" 
-          className={`flex flex-col items-center justify-center w-[16%] ${location === '/checklist' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-1/5 ${location === '/checklist' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 11l3 3L22 4"></path>
@@ -54,7 +54,7 @@ const TabNavigation: React.FC = () => {
         
         <a 
           href="/settings" 
-          className={`flex flex-col items-center justify-center w-[16%] mr-3 ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
+          className={`flex flex-col items-center justify-center w-1/5 ${location === '/settings' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
