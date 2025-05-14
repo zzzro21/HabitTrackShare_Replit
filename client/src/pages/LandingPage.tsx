@@ -4,7 +4,14 @@ import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { useAuth } from '@/hooks/useAuth';
 
-// 동기부여 문장은 이제 하드코딩됨
+// 동기부여 문장
+const motivationalQuotes = [
+  "작은 습관이 인생을 바꿉니다.\n오늘 한 마음이 결과 세상입니다.\n그것이 성공의 가장 큽니다.",
+  "작은 행동을 시작하고 인내하면,\n그것이 큰 미래를 만들어냅니다.",
+  "오늘 하루, 미래를 위한 투자입니다.\n작은 시작이 큰 변화를 만듭니다.",
+  "꾸준함이 천재를 이깁니다.\n매일의 작은 행동이 미래를 결정합니다.",
+  // 추가 명언들을 여기에 넣을 수 있습니다
+];
 
 // 프로필 이미지 갤러리
 const profileImages = [
@@ -220,7 +227,16 @@ const LandingPage: React.FC = () => {
     }
   };
 
-  // 고정 문구 사용
+  // 현재 날짜를 기준으로 명언 선택
+  const [quote] = useState(() => {
+    const today = new Date();
+    const startOfYear = new Date(today.getFullYear(), 0, 0);
+    const diff = today.getTime() - startOfYear.getTime();
+    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const quoteIndex = dayOfYear % motivationalQuotes.length;
+    
+    return motivationalQuotes[quoteIndex];
+  });
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-50 max-w-[390px] mx-auto">
@@ -422,9 +438,7 @@ const LandingPage: React.FC = () => {
                   fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive',
                   lineHeight: '1.4'
                 }}>
-                "Little actions,
-                    Big results,
-                Set it, Do it, Repeat."
+                "{quote}"
               </p>
             </div>
             <span className={`text-gray-800 ml-3 absolute -top-2 right-6 transition-opacity duration-500 ${showAnimation ? 'opacity-100' : 'opacity-0'} delay-400`}>
