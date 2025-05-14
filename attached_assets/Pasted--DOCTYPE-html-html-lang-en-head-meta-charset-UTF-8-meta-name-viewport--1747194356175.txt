@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Success Me - 8Weeks 성공 습관</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #60a5fa;
+        --primary-foreground: #ffffff;
+        --secondary: #e11d48;
+        --secondary-foreground: #ffffff;
+        --accent: #a855f7;
+        --accent-foreground: #ffffff;
+        --destructive: #ef4444;
+        --destructive-foreground: #ffffff;
+        --muted: #f3f4f6;
+        --muted-foreground: #6b7280;
+        --success: #10b981;
+        --success-foreground: #ffffff;
+        --warning: #f59e0b;
+        --warning-foreground: #ffffff;
+      }
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자장격지 행동습관 트래커</title>
+  <style>
+    /* 기본 스타일 (모바일 기준) */
+    html {
+      font-size: 14px;
+    }
+    
+    body {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow-x: hidden;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    
+    /* 모바일 기준 너비 제한 (Galaxy S 시리즈 기준) */
+    .container {
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      min-height: 100vh;
+    }
+    
+    /* 한글 폰트 사이즈 증가 */
+    .korean-text {
+      font-size: 140%;
+    }
+    
+    header {
+      background-color: white;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    h1 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 0;
+    }
+    
+    p.subtitle {
+      font-size: 0.75rem;
+      text-align: center;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    nav.tabs {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border-top: 1px solid #e5e5e5;
+      padding: 8px 0;
+      display: flex;
+      justify-content: space-around;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #666;
+      font-size: 0.75rem;
+    }
+    
+    .tab.active {
+      color: #3b82f6;
+    }
+    
+    .tab-icon {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+    
+    .section {
+      margin-bottom: 16px;
+    }
+    
+    .section-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+    
+    .user-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .user-button {
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #e5e5e5;
+      background-color: white;
+      font-size: 0.75rem;
+    }
+    
+    .user-button.active {
+      background-color: #ebf5ff;
+      border-color: #93c5fd;
+      color: #2563eb;
+      font-weight: 500;
+    }
+    
+    .user-avatar {
+      margin-right: 4px;
+    }
+    
+    .week-selector {
+      display: flex;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    
+    .week-button {
+      flex-grow: 1;
+      padding: 8px 0;
+      text-align: center;
+      border: none;
+      background-color: white;
+      font-size: 0.75rem;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .week-button.active {
+      border-color: #3b82f6;
+      color: #3b82f6;
+      font-weight: 500;
+    }
+    
+    .habit-tracker {
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    
+    .habit-row {
+      display: flex;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    
+    .habit-row:last-child {
+      border-bottom: none;
+    }
+    
+    .habit-label {
+      width: 120px;
+      padding: 8px;
+      font-size: 0.75rem;
+      background-color: #f9fafb;
+      border-right: 1px solid #e5e5e5;
+    }
+    
+    .habit-days {
+      display: flex;
+      flex-grow: 1;
+    }
+    
+    .habit-day {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.75rem;
+      border-right: 1px solid #e5e5e5;
+    }
+    
+    .habit-day:last-child {
+      border-right: none;
+    }
+    
+    .habit-day.completed {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: #e5e5e5;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #3b82f6;
+      border-radius: 4px;
+    }
+    
+    /* 태블릿 (768px 이상) */
+    @media (min-width: 768px) {
+      html {
+        font-size: 16px;
+      }
+      
+      body {
+        font-family: 'Poppins', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: #334155;
+        line-height: 1.5;
+        background-color: #f8fafc;
+      }
+      
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        font-size: 18px;
+        padding-top: 32px;
+      }
+      
+      .container {
+        border-radius: 8px;
+        max-width: 420px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      
+      nav.tabs {
+        max-width: 420px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+    }
+    
+    /* 데스크톱 (1024px 이상) */
+    @media (min-width: 1024px) {
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+      
+      header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      
+      .subtitle {
+        font-size: 1.25rem;
+        color: var(--muted-foreground);
+      }
+      
+      .button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary);
+        color: var(--primary-foreground);
+        border-radius: 0.375rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 0.2s;
+      }
+      
+      .button:hover {
+        background-color: #3b82f6;
+      }
+      
+      .content {
+        margin-top: 3rem;
+      }
+      
+      .users {
+      }
+      
+      nav.tabs {
+        max-width: 800px;
+      }
+      
+      .habit-tracker {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+      
+      .user-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 1rem;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .user-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      }
+      
+      .avatar {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .name {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      
+      .username {
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+      }
+      
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 2rem;
+        }
+        
+        .subtitle {
+          font-size: 1rem;
+        }
+        
+        .users {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>8Weeks 성공 습관</h1>
+        <p class="subtitle">8주간의 습관 형성 여정에 동참하세요</p>
+        <p style="margin-top: 1rem">
+          <a href="https://successme.replit.app" class="button">앱으로 바로가기</a>
+        </p>
+      </header>
+      
+      <div class="content">
+        <h2>참여자</h2>
+        <div class="users" id="users-container">
+          <!-- 사용자 정보가 여기에 동적으로 로드됩니다 -->
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>자장격지 행동습관 점검표</h1>
+      <p class="subtitle">56일(8주) 동안의 습관 형성을 통해 성공의 기반을 다집니다</p>
+    </header>
+    
+    <main>
+      <div class="section">
+        <div class="section-title">사용자 선택</div>
+        <div class="user-selector">
+          <button class="user-button active"><span class="user-avatar">👩‍🦰</span> 김유나</button>
+          <button class="user-button"><span class="user-avatar">👨‍💼</span> 곽완신</button>
+          <button class="user-button"><span class="user-avatar">👩‍💼</span> 전채린</button>
+          <button class="user-button"><span class="user-avatar">🧑‍💼</span> 박지원</button>
+          <button class="user-button"><span class="user-avatar">👩‍🦱</span> 이수진</button>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      // 데이터 로드 함수
+      async function loadUsers() {
+        try {
+          const response = await fetch('./data/users.json');
+          if (!response.ok) {
+            throw new Error('Failed to load users');
+          }
+          
+          const users = await response.json();
+          const usersContainer = document.getElementById('users-container');
+          
+          users.forEach(user => {
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            
+            userCard.innerHTML = `
+              <div class="avatar">${user.avatar}</div>
+              <div class="name">${user.name}</div>
+              <div class="username">@${user.username}</div>
+            `;
+            
+            usersContainer.appendChild(userCard);
+          });
+        } catch (error) {
+          console.error('Error loading users:', error);
+          document.getElementById('users-container').innerHTML = 
+            '<p style="color: var(--destructive); grid-column: 1/-1; text-align: center;">사용자 정보를 불러올 수 없습니다.</p>';
+        }
+      }
+      
+      // 페이지 로드 시 데이터 불러오기
+      document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+  </body>
+      
+      <div class="section">
+        <div class="section-title">진행 상황</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 65%;"></div>
+        </div>
+        <p class="text-center" style="font-size: 0.875rem; text-align: center;">총 진행률: 65% (28일차)</p>
+      </div>
+      
+      <div class="section">
+        <div class="week-selector">
+          <button class="week-button active">1-2주차</button>
+          <button class="week-button">3-4주차</button>
+          <button class="week-button">5-6주차</button>
+          <button class="week-button">7-8주차</button>
+        </div>
+      </div>
+      
+      <div class="habit-tracker">
+        <div class="habit-row">
+          <div class="habit-label">책 읽기 (30분 이상)</div>
+          <div class="habit-days">
+            <div class="habit-day completed">✓</div>
+            <div class="habit-day completed">✓</div>
+            <div class="habit-day">-</div>
+            <div class="habit-day completed">✓</div>
+            <div class="habit-day completed">✓</div>
+            <div class="habit-day">-</div>
+            <div class="habit-day completed">✓</div>
+          </div>
+        </div>
+        <div class="habit-row">
+          ...
+[truncated]
+[truncated]
