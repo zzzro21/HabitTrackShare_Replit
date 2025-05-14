@@ -96,7 +96,7 @@ function NavBar() {
     return (
       <div className="bg-blue-600 text-white p-2 flex justify-between items-center max-w-[390px] mx-auto">
         <div className="flex items-center gap-1">
-          <span className="text-lg font-semibold">습관 트래커</span>
+          <span className="text-lg font-semibold">Habit Tracker</span>
         </div>
         <div>
           <button
@@ -113,7 +113,7 @@ function NavBar() {
   return (
     <div className="bg-blue-600 text-white p-2 flex justify-between items-center max-w-[390px] mx-auto">
       <div className="flex items-center gap-1">
-        <span className="text-lg font-semibold">습관 트래커</span>
+        <span className="text-lg font-semibold">Habit Tracker</span>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
