@@ -64,9 +64,9 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         
         {/* 그래프 영역 */}
         <div className="h-36 relative mb-0">
-          <div className="flex h-full items-end justify-between">
+          <div className="flex h-full items-end justify-between px-1">
             {weekData.map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center w-[11%]">
+              <div key={idx} className="flex flex-col items-center" style={{ width: '13%' }}>
                 {/* 배경 막대 */}
                 <div className="w-full h-32 bg-white rounded-lg relative">
                   {/* 데이터 막대 */}
