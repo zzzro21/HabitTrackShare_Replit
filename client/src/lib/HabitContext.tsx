@@ -379,6 +379,16 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       .sort((a, b) => b.totalScore - a.totalScore);
   };
   
+  // 클라이언트 습관 ID를 서버 습관 ID로 변환 (1 -> 10, 2 -> 11, ...)
+  const clientToServerHabitId = (clientId: number): number => {
+    return clientId + 9; // 클라이언트 ID에 9를 더하여 서버 ID로 변환
+  };
+  
+  // 서버 습관 ID를 클라이언트 습관 ID로 변환 (10 -> 1, 11 -> 2, ...)
+  const serverToClientHabitId = (serverId: number): number => {
+    return serverId - 9; // 서버 ID에서 9를 빼서 클라이언트 ID로 변환
+  };
+  
   // 사용자 데이터를 수정할 수 있는지 확인 (자신의 데이터만)
   const canModifyUserData = (userId: number): boolean => {
     return currentUserId === userId;
