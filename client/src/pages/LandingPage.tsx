@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
+import { useAuth } from '@/hooks/useAuth';
 
 // 동기부여 문장
 const motivationalQuotes = [
@@ -33,12 +34,71 @@ const LandingPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
+  const { user, isAuthenticated, isLoading } = useAuth();
   
+  // API 키 설정 모달 상태
+  const [showApiSettings, setShowApiSettings] = useState(false);
+  const [geminiApiKey, setGeminiApiKey] = useState('');
+  const [notionToken, setNotionToken] = useState('');
+  const [notionPageUrl, setNotionPageUrl] = useState('');
+  
+  // API 키 저장 처리 함수
+  const handleSaveApiKeys = async () => {
+    if (!user?.id) {
+      toast({
+        title: "로그인 필요",
+        description: "API 키를 저장하려면 로그인이 필요합니다.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      const response = await apiRequest(
+        'POST', 
+        `/api/users/${user.id}/api-keys`, 
+        { geminiApiKey, notionToken, notionPageUrl }
+      );
+      
+      toast({
+        title: "API 키 저장 성공",
+        description: "API 키와 노션 토큰이 저장되었습니다."
+      });
+      setShowApiSettings(false);
+    } catch (error) {
+      console.error('API 키 저장 실패:', error);
+      toast({
+        title: "API 키 저장 실패",
+        description: "API 키를 저장하는 중 오류가 발생했습니다.",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
     // 초기 애니메이션 표시
     setTimeout(() => {
       setShowAnimation(true);
     }, 300);
+    
+    // 로그인 상태 확인 후 API 키 설정 필요 여부 체크
+    if (isAuthenticated && user?.id) {
+      // API 키 설정 상태 확인
+      apiRequest(`/api/users/${user.id}/api-keys`)
+        .then(response => {
+          // API 키나 노션 토큰이 없으면 설정 모달 표시
+          if (!response.hasGeminiApiKey || !response.hasNotionToken) {
+            setShowApiSettings(true);
+            toast({
+              title: "API 키 설정 필요",
+              description: "Gemini API 키와 Notion 토큰을 설정해주세요.",
+            });
+          }
+        })
+        .catch(error => {
+          console.error('API 키 상태 확인 실패:', error);
+        });
+    }
     
     // 음성 인식 초기화
     // @ts-ignore
@@ -91,7 +151,17 @@ const LandingPage: React.FC = () => {
   }, [isRecording, toast]);
 
   const handleBeginClick = () => {
-    setLocation('/');
+    if (isAuthenticated) {
+      // 이미 로그인된 상태라면 메인 페이지로 이동
+      setLocation('/');
+    } else {
+      // 로그인이 필요한 상태라면 로그인 페이지로 이동
+      setLocation('/login');
+      toast({
+        title: "로그인 필요",
+        description: "서비스를 이용하려면 로그인이 필요합니다.",
+      });
+    }
   };
 
   const handleChangeProfileImage = (imageUrl: string) => {
@@ -170,6 +240,68 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-50 max-w-[390px] mx-auto">
+      
+      {/* API 키 설정 모달 */}
+      {showApiSettings && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-[90%] max-w-md">
+            <h2 className="text-xl font-bold mb-4">API 설정</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              음성 기능과 인사이트 기능을 사용하려면 다음 API 키를 설정해주세요.
+            </p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Gemini API 키</label>
+                <input
+                  type="password"
+                  value={geminiApiKey}
+                  onChange={(e) => setGeminiApiKey(e.target.value)}
+                  placeholder="sk-..."
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Notion 통합 토큰</label>
+                <input
+                  type="password"
+                  value={notionToken}
+                  onChange={(e) => setNotionToken(e.target.value)}
+                  placeholder="secret_..."
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Notion 페이지 URL</label>
+                <input
+                  type="text"
+                  value={notionPageUrl}
+                  onChange={(e) => setNotionPageUrl(e.target.value)}
+                  placeholder="https://www.notion.so/..."
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  onClick={() => setShowApiSettings(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  취소
+                </button>
+                <button
+                  onClick={handleSaveApiKeys}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                >
+                  저장
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
       
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-12 z-10 flex-grow">
@@ -319,12 +451,12 @@ const LandingPage: React.FC = () => {
           </div>
         )}
         
-        {/* 시작하기 버튼 */}
+        {/* 시작하기 버튼 - Let's Begin으로 변경 및 파란색 적용 */}
         <button 
           onClick={handleBeginClick}
-          className={`w-full max-w-sm bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-md transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} mt-6 delay-500`}
+          className={`w-full max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-md transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} mt-6 delay-500`}
         >
-          시작하기
+          Let's Begin
         </button>
       </div>
     </div>
