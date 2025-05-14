@@ -53,14 +53,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-50 max-w-[390px] mx-auto">
-      {/* 상단 네비게이션 바 */}
-      <header className="bg-blue-600 text-white p-3 flex justify-between items-center">
-        <div className="text-xl font-semibold">습관 트래커</div>
-        <div className="flex space-x-2">
-          <div className="text-xs px-2 py-1 bg-blue-700 rounded-md">김유나 님 🔔</div>
-          <div className="text-xs px-2 py-1 bg-blue-500 rounded-md">사용자 변경</div>
-        </div>
-      </header>
       
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-12 z-10 flex-grow">
