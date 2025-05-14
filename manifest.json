@@ -1,0 +1,16 @@
+{
+  "name": "Atomy MORI",
+  "short_name": "MORI",
+  "description": "8주간의 습관 점검 및 트래킹으로 성공의 8단계를 밟아보세요.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./generated-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
