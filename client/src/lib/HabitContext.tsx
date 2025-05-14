@@ -229,10 +229,12 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${valueToSave}, habitType=${habitType}`);
       
-      // 서버로 원래 habitId 그대로 전송 (서버에서 필요시 매핑)
+      // 클라이언트 ID를 서버 ID로 변환하여 전송
+      const serverHabitId = clientToServerHabitId(habitId);
+      
       const requestData = {
         userId: currentUserId,
-        habitId: habitId, // 클라이언트 ID 그대로 전송 (서버에서 매핑)
+        habitId: serverHabitId, // 서버 ID로 변환하여 전송
         day,
         value: valueToSave
       };
@@ -379,12 +381,15 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   
   // 클라이언트 습관 ID를 서버 습관 ID로 변환 (1 -> 10, 2 -> 11, ...)
   const clientToServerHabitId = (clientId: number): number => {
-    return clientId + 9; // 클라이언트 ID에 9를 더하여 서버 ID로 변환
+    console.log(`클라이언트 ID를 서버 ID로 변환: ${clientId} -> ${clientId >= 1 && clientId <= 5 ? clientId + 9 : clientId}`);
+    return clientId >= 1 && clientId <= 5 ? clientId + 9 : clientId; // 클라이언트 ID가 1~5 범위에 있는 경우에만 변환
   };
   
   // 서버 습관 ID를 클라이언트 습관 ID로 변환 (10 -> 1, 11 -> 2, ...)
   const serverToClientHabitId = (serverId: number): number => {
-    return serverId - 9; // 서버 ID에서 9를 빼서 클라이언트 ID로 변환
+    // 음수가 나오는 경우를 방지하기 위해 ID 매핑 확인
+    console.log(`서버 ID를 클라이언트 ID로 변환: ${serverId} -> ${serverId > 9 ? serverId - 9 : serverId}`);
+    return serverId > 9 ? serverId - 9 : serverId; // 서버 ID에서 9를 빼서 클라이언트 ID로 변환 (단, 음수가 나오지 않도록)
   };
   
   // 사용자 데이터를 수정할 수 있는지 확인 (자신의 데이터만)
