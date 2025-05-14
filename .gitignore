@@ -8,9 +8,10 @@ node_modules/
 .env.test
 .env.production
 
-# 빌드 결과물
+# 빌드 결과물 (GitHub Pages 배포에는 docs/ 폴더가 필요하므로 제외하지 않음)
 dist/
 build/
+# docs/ # GitHub Pages 배포에 필요
 
 # 로그 파일
 *.log

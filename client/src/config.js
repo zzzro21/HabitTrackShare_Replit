@@ -3,12 +3,10 @@ const config = {
   apiUrl: '/api', // 기본 API 경로
   
   // GitHub Pages 배포를 감지하여 상대 경로 사용
-  // Replit에서 테스트할 때는 강제로 false로 설정
-  isGitHubPages: false, // 실제 배포 시에는 window.location.hostname.includes('github.io')로 변경
+  isGitHubPages: window.location.hostname.includes('github.io'), // GitHub Pages에서 자동 감지
   
   // 정적 배포에 사용할 예시 데이터 활성화 여부
-  // Replit에서 테스트할 때는 강제로 false로 설정
-  useStaticData: false, // GitHub Pages 배포에서는 이 값을 true로 설정
+  useStaticData: false, // 기본적으로 false, GitHub Pages에서는 true로 자동 설정
 };
 
 // GitHub Pages에 배포된 경우 상대 경로 설정
