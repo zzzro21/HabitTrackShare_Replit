@@ -98,12 +98,12 @@ const HabitTracker: React.FC = () => {
         console.log(`Binary 타입 셀렉트박스 렌더링: value=${value}, habitId=${habitId}`);
         return (
           <select
-            value={value > 0 ? 2 : 0} // 값이 있으면(1이상) 무조건 2로 처리해서 동그라미 표시
+            value={value === 1 ? 1 : 0} // 값이 1이면 완료(○) 표시
             onChange={handleChange}
             className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${value > 0 ? 'bg-green-100' : 'bg-white'}`}
           >
             <option value="0">-</option>
-            <option value="2">○</option>
+            <option value="1">○</option>
           </select>
         );
       } else {
