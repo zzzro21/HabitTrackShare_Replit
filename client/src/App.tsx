@@ -52,6 +52,9 @@ function Router() {
       <Route path="/" component={Dashboard} />
       
       {/* 인증이 필요한 습관 트래커 페이지들 */}
+      <Route path="/home">
+        <PrivateRoute component={Home} />
+      </Route>
       <Route path="/checklist">
         <PrivateRoute component={Home} />
       </Route>
@@ -148,7 +151,7 @@ function App() {
           if (parsedData?.state?.isAuthenticated && parsedData?.state?.user) {
             // 이미 인증된 상태면 메인 페이지로
             if (location === '/') {
-              setLocation('/checklist');
+              setLocation('/home');
             }
             return;
           }
