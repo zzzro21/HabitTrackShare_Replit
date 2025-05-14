@@ -8,6 +8,7 @@ import { HabitProvider } from "@/lib/HabitContext";
 import { useAuth } from "./hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import Checklist from "@/pages/Checklist";
 import FriendsPage from "@/pages/FriendsPage";
 import RankingPage from "@/pages/RankingPage";
 import SettingsPage from "@/pages/SettingsPage";
@@ -56,7 +57,7 @@ function Router() {
         <PrivateRoute component={Home} />
       </Route>
       <Route path="/checklist">
-        <PrivateRoute component={Home} />
+        <PrivateRoute component={Checklist} />
       </Route>
       <Route path="/friends">
         <PrivateRoute component={FriendsPage} />
