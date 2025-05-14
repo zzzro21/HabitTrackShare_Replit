@@ -3,48 +3,64 @@
     "id": 1,
     "name": "곽완신",
     "avatar": "👨‍💼",
-    "username": "kwakwansin"
+    "username": "user1",
+    "password": "password123",
+    "email": "user1@example.com"
   },
   {
     "id": 2,
-    "name": "전채린",
+    "name": "유은옥",
     "avatar": "👩‍💼",
-    "username": "jeon_cr"
+    "username": "user2",
+    "password": "password123",
+    "email": "user2@example.com"
   },
   {
     "id": 3,
-    "name": "박지원",
-    "avatar": "🧑‍💼",
-    "username": "jiwon_park"
+    "name": "이경희",
+    "avatar": "👨‍🦱",
+    "username": "user3",
+    "password": "password123",
+    "email": "user3@example.com"
   },
   {
     "id": 4,
-    "name": "이수진",
-    "avatar": "👩‍🦱",
-    "username": "sujin_lee"
+    "name": "임용녀",
+    "avatar": "👩‍🦰",
+    "username": "user4",
+    "password": "password123",
+    "email": "user4@example.com"
   },
   {
     "id": 5,
-    "name": "현승민",
-    "avatar": "👨‍🦰",
-    "username": "seungmin_hyun"
+    "name": "박혜경",
+    "avatar": "👱‍♀️",
+    "username": "user5",
+    "password": "password123",
+    "email": "user5@example.com"
   },
   {
     "id": 6,
     "name": "김유나",
-    "avatar": "👩‍🦰",
-    "username": "yuna_kim"
+    "avatar": "👩‍🦳",
+    "username": "user6",
+    "password": "password123",
+    "email": "user6@example.com"
   },
   {
     "id": 7,
-    "name": "최동훈",
-    "avatar": "👨‍🦱",
-    "username": "donghoon_choi"
+    "name": "최지혜",
+    "avatar": "👩‍🦱",
+    "username": "user7",
+    "password": "$2b$10$ti/kqdiC20/LrV96R9yN6OIVOULW9DW0zk9uaaO2s7z297UOkgD2m",
+    "email": "user7@example.com"
   },
   {
     "id": 8,
-    "name": "강민주",
-    "avatar": "👱‍♀️",
-    "username": "minju_kang"
+    "name": "김미희",
+    "avatar": "👧",
+    "username": "user8",
+    "password": "password123",
+    "email": "user8@example.com"
   }
 ]
