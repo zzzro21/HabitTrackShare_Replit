@@ -198,17 +198,18 @@ function App() {
   const [location] = useLocation();
   const isLandingPage = location === '/' || location === '/landing';
   const isLoginPage = location === '/login';
+  const isWelcomePage = location === '/welcome';
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        {/* 랜딩 페이지와 로그인 페이지에서는 네비게이션 바를 표시하지 않음 */}
-        {!isLandingPage && !isLoginPage && <NavBar />}
+        {/* 랜딩 페이지, 웰컴 페이지, 로그인 페이지에서는 네비게이션 바를 표시하지 않음 */}
+        {!isLandingPage && !isLoginPage && !isWelcomePage && <NavBar />}
         <HabitProvider>
           <Router />
-          {/* 랜딩 페이지와 로그인 페이지에서는 탭 네비게이션을 표시하지 않음 */}
-          {!isLandingPage && !isLoginPage && <TabNavigation />}
+          {/* 랜딩 페이지, 웰컴 페이지, 로그인 페이지에서는 탭 네비게이션을 표시하지 않음 */}
+          {!isLandingPage && !isLoginPage && !isWelcomePage && <TabNavigation />}
         </HabitProvider>
       </TooltipProvider>
     </QueryClientProvider>
