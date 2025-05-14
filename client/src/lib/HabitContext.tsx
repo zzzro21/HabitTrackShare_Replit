@@ -102,8 +102,8 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         
         // Set user if not set from local storage
         if (!localUser && usersData.length > 0) {
-          // 기본 사용자로 김유나 (ID: 6) 사용
-          const defaultUser = usersData.find((u: User) => u.id === 6) || usersData[0];
+          // 기본 사용자로 김유나 (ID: 15) 사용
+          const defaultUser = usersData.find((u: User) => u.id === 15) || usersData[0];
           setActiveUser(defaultUser.id);
           setCurrentUserId(defaultUser.id);
           
@@ -127,6 +127,10 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // 활성 사용자의 기록 가져오기
         if (localUser) {
           await fetchEntriesForUser(localUser.id);
+        } else if (usersData.length > 0) {
+          // 로컬 사용자가 없으면 기본 사용자(김유나)의 기록 가져오기
+          const defaultId = usersData.find((u: User) => u.id === 15)?.id || usersData[0].id;
+          await fetchEntriesForUser(defaultId);
         }
       } catch (error) {
         console.error('데이터 로드 오류:', error);
@@ -176,12 +180,20 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return;
       }
       
-      const response = await apiRequest<HabitEntry>('POST', '/api/entries', {
+      console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${value}`);
+      
+      const requestData = {
         userId: currentUserId,
         habitId,
         day,
         value
-      });
+      };
+      
+      console.log('요청 데이터:', requestData);
+      
+      const response = await apiRequest<HabitEntry>('POST', '/api/entries', requestData);
+      
+      console.log('서버 응답:', response);
       
       // Update local state with the new entry
       setHabitEntries(prev => {
@@ -198,13 +210,20 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
       });
     } catch (error) {
-      const err = error as { response?: { status: number } };
+      const err = error as any;
       if (err?.response?.status === 401) {
         console.info('로그인이 필요합니다');
       } else if (err?.response?.status === 403) {
         console.info('다른 사용자의 데이터를 수정할 권한이 없습니다');
       } else {
-        console.error('Error updating habit entry:', error);
+        console.error('습관 항목 업데이트 오류:', error);
+        // 자세한 오류 정보 출력
+        if (error instanceof Error) {
+          console.error('오류 메시지:', error.message);
+          console.error('오류 스택:', error.stack);
+        } else {
+          console.error('알 수 없는 오류 형식:', error);
+        }
       }
     }
   };

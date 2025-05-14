@@ -158,19 +158,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create or update a habit entry (인증 불필요)
   app.post("/api/entries", async (req, res) => {
     try {
+      console.log("습관 항목 업데이트 요청 받음:", req.body);
+      
       const validatedData = insertHabitEntrySchema.parse(req.body);
+      console.log("유효성 검사 통과한 데이터:", validatedData);
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
       if (!user) {
+        console.error(`사용자를 찾을 수 없음 (ID: ${validatedData.userId})`);
         return res.status(404).json({ message: "User not found" });
       }
+      
+      console.log("사용자 확인됨:", user.name);
       
       // Validate that habit exists
       const habit = await storage.getHabit(validatedData.habitId);
       if (!habit) {
+        console.error(`습관을 찾을 수 없음 (ID: ${validatedData.habitId})`);
         return res.status(404).json({ message: "Habit not found" });
       }
+      
+      console.log("습관 확인됨:", habit.label);
       
       // Validate day is within range (0-55)
       if (validatedData.day < 0 || validatedData.day > 55) {
@@ -182,10 +191,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Value must be 0, 1, or 2" });
       }
       
+      console.log("데이터 저장 시도:", validatedData);
+      
       const entry = await storage.createOrUpdateHabitEntry(validatedData);
+      console.log("항목 저장 완료:", entry);
       res.status(201).json(entry);
     } catch (error) {
+      console.error("습관 업데이트 오류:", error);
+      
       if (error instanceof z.ZodError) {
+        console.error("Zod 유효성 검사 오류:", error.errors);
         return res.status(400).json({ message: "Invalid data format", errors: error.errors });
       }
       throw error;
