@@ -66,7 +66,18 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
-      {/* MORI AI 비서 버튼은 사용자 이름 옆에 배치 */}
+      {/* 인트로 화면으로 이동하는 버튼 추가 */}
+      <div className="absolute top-3 left-3 z-10">
+        <button 
+          onClick={() => setLocation('/welcome')}
+          className="flex items-center justify-center bg-white/80 backdrop-blur-sm text-gray-700 rounded-full p-2 shadow-sm hover:bg-white transition-all"
+          aria-label="인트로 화면으로 이동"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
+      </div>
       
       {/* 일주일 캘린더와 타이틀 카드 */}
       <div className="mx-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">

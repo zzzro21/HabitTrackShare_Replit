@@ -2,7 +2,7 @@ import React from 'react';
 import { useHabit } from '@/lib/HabitContext';
 
 const UserSelector: React.FC = () => {
-  const { users, activeUser, setActiveUser, isLoading } = useHabit();
+  const { users, activeUser, setActiveUser, isLoading, currentUserId } = useHabit();
 
   if (isLoading) {
     return (
@@ -15,15 +15,25 @@ const UserSelector: React.FC = () => {
     );
   }
 
-  // 로그인한 사용자 정보 가져오기
-  const currentUser = users.find(u => u.id === activeUser);
-
-  if (!currentUser) {
+  // 사용자 목록이 비어 있는 경우 처리
+  if (!users || users.length === 0) {
     return (
       <div className="mb-3 px-2 py-1 bg-yellow-50 text-yellow-700 rounded">
-        로그인이 필요합니다
+        데이터를 불러오는 중입니다...
       </div>
     );
+  }
+
+  // 자동 로그인 강제 설정 (로컬 스토리지 확인)
+  if (!currentUserId && typeof window !== 'undefined') {
+    try {
+      const { setupNoAuth } = require('../noauth');
+      setupNoAuth();
+      // 페이지 새로고침
+      window.location.reload();
+    } catch (e) {
+      console.error('자동 로그인 설정 실패:', e);
+    }
   }
 
   return (
