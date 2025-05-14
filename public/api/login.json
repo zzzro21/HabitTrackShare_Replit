@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "message": "로그인 성공",
+  "user": {
+    "id": 15,
+    "name": "김유나",
+    "username": "kim",
+    "avatar": "👧🏻"
+  }
+}
