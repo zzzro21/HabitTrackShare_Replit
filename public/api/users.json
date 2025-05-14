@@ -1,0 +1,58 @@
+[
+  {
+    "id": 10,
+    "name": "곽완신",
+    "username": "gwak",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👨‍🦱"
+  },
+  {
+    "id": 11,
+    "name": "유은옥",
+    "username": "yoo",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👩‍🦰"
+  },
+  {
+    "id": 12,
+    "name": "이경희",
+    "username": "lee",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👩"
+  },
+  {
+    "id": 13,
+    "name": "임용녀",
+    "username": "im",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👩‍🦳"
+  },
+  {
+    "id": 14,
+    "name": "박혜경",
+    "username": "park",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👱‍♀️"
+  },
+  {
+    "id": 15,
+    "name": "김유나",
+    "username": "kim",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👧🏻"
+  },
+  {
+    "id": 16,
+    "name": "최지혜",
+    "username": "choi",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👩‍🦱"
+  },
+  {
+    "id": 17,
+    "name": "김미희",
+    "username": "kim2",
+    "password": "$2b$10$3dPKA0VZz94jkR.UUhRP7OB9FOclLrHygAOmpVl72G9Mvxd4MYOq.",
+    "avatar": "👩‍🎓"
+  }
+]
