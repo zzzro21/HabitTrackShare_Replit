@@ -166,7 +166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
       if (!user) {
-        console.error(`사용자를 찾을 수 없음 (ID: ${validatedData.userId})`);
+        console.error(`사용자를 찾을 수 없음 (ID: ${validatedData.userId}). 서버에는 ID 10-17까지의 사용자만 있습니다.`);
         return res.status(404).json({ message: "User not found" });
       }
       

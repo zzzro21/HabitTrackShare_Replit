@@ -79,6 +79,14 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       try {
         setIsLoading(true);
         
+        // Fetch users first to get valid user IDs
+        const usersResponse = await fetch('/api/users');
+        const usersData = await usersResponse.json();
+        setUsers(usersData);
+        
+        // 유효한 사용자 ID 목록 추출 (10부터 17까지)
+        const validUserIds = usersData.map((u: User) => u.id);
+        
         // 로컬 스토리지/noauth에서 사용자 정보 가져오기
         let localUser;
         try {
@@ -87,23 +95,26 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           localUser = getCurrentUser();
           
           if (localUser && localUser.id) {
-            console.log('사용자 정보 로드:', localUser.name);
-            setCurrentUserId(localUser.id);
-            setActiveUser(localUser.id);
+            // 서버의 유효한 사용자 ID인지 확인
+            if (validUserIds.includes(localUser.id)) {
+              console.log('사용자 정보 로드:', localUser.name);
+              setCurrentUserId(localUser.id);
+              setActiveUser(localUser.id);
+            } else {
+              console.warn('로컬 스토리지에 저장된 사용자 ID가 유효하지 않습니다:', localUser.id);
+              localUser = null; // 유효하지 않은 ID는 무시하고 기본값 사용
+              localStorage.removeItem('user-auth-storage'); // 잘못된 정보 삭제
+            }
           }
         } catch (e) {
           console.error('사용자 정보 액세스 오류:', e);
         }
         
-        // Fetch users
-        const usersResponse = await fetch('/api/users');
-        const usersData = await usersResponse.json();
-        setUsers(usersData);
-        
-        // Set user if not set from local storage
+        // Set user if not set from local storage or if local user is invalid
         if (!localUser && usersData.length > 0) {
           // 기본 사용자로 김유나 (ID: 15) 사용
           const defaultUser = usersData.find((u: User) => u.id === 15) || usersData[0];
+          console.log('기본 사용자로 설정:', defaultUser.name, defaultUser.id);
           setActiveUser(defaultUser.id);
           setCurrentUserId(defaultUser.id);
           
@@ -125,13 +136,9 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setHabits(habitsWithScoring);
         
         // 활성 사용자의 기록 가져오기
-        if (localUser) {
-          await fetchEntriesForUser(localUser.id);
-        } else if (usersData.length > 0) {
-          // 로컬 사용자가 없으면 기본 사용자(김유나)의 기록 가져오기
-          const defaultId = usersData.find((u: User) => u.id === 15)?.id || usersData[0].id;
-          await fetchEntriesForUser(defaultId);
-        }
+        const activeUserId = localUser?.id || (usersData.find((u: User) => u.id === 15)?.id || usersData[0].id);
+        console.log('활성 사용자의 기록 가져오기:', activeUserId);
+        await fetchEntriesForUser(activeUserId);
       } catch (error) {
         console.error('데이터 로드 오류:', error);
       } finally {

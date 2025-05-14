@@ -4,16 +4,16 @@ import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { useAuth } from '@/hooks/useAuth';
 
-// 8명의 고정 사용자 목록
+// 8명의 고정 사용자 목록 (ID는 서버 데이터베이스와 일치)
 const defaultUsers = [
-  { id: 1, name: '곽완신', username: 'user1', avatar: '👨‍💼' },
-  { id: 2, name: '유은옥', username: 'user2', avatar: '👩‍💼' },
-  { id: 3, name: '이경희', username: 'user3', avatar: '👩‍🦰' },
-  { id: 4, name: '임용녀', username: 'user4', avatar: '👩‍🦳' },
-  { id: 5, name: '박혜경', username: 'user5', avatar: '👱‍♀️' },
-  { id: 6, name: '김유나', username: 'user6', avatar: '👧' },
-  { id: 7, name: '최지혜', username: 'user7', avatar: '👩‍🦱' },
-  { id: 8, name: '김미희', username: 'user8', avatar: '👧' }
+  { id: 10, name: '곽완신', username: 'gwak', avatar: '👨🏻' },
+  { id: 11, name: '유은옥', username: 'yoo', avatar: '👩🏻' },
+  { id: 12, name: '이경희', username: 'lee', avatar: '👩🏻' },
+  { id: 13, name: '임용녀', username: 'lim', avatar: '👩🏻' },
+  { id: 14, name: '박혜경', username: 'park', avatar: '👩🏻' },
+  { id: 15, name: '김유나', username: 'kim', avatar: '👧🏻' },
+  { id: 16, name: '최지혜', username: 'choi', avatar: '👩🏻' },
+  { id: 17, name: '김미희', username: 'mihi', avatar: '👩🏻' }
 ];
 
 const LoginPage: React.FC = () => {
@@ -154,6 +154,25 @@ const LoginPage: React.FC = () => {
             <p className="text-xs text-gray-500 mt-4 text-center">
               모든 사용자의 기본 비밀번호는 'password123'입니다.
             </p>
+            
+            <div className="mt-4 border-t pt-4">
+              <p className="text-xs text-gray-500 mb-2 text-center">
+                로그인에 문제가 있나요?
+              </p>
+              <button
+                onClick={() => {
+                  localStorage.clear();
+                  toast({
+                    title: "초기화 완료",
+                    description: "로컬 스토리지를 초기화했습니다. 페이지를 새로고침합니다."
+                  });
+                  setTimeout(() => window.location.reload(), 1000);
+                }}
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm py-2 px-4 rounded-md transition-colors"
+              >
+                로컬 스토리지 초기화
+              </button>
+            </div>
           </div>
         </div>
       </div>
