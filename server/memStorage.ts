@@ -282,71 +282,71 @@ export class MemStorage implements IStorage {
       return;
     }
 
-    // 샘플 사용자 추가
+    // 샘플 사용자 추가 (곽완신, 유은옥, 이경희, 임용녀, 박혜경, 김유나, 최지혜, 김미희)
     const sampleUsers: InsertUser[] = [
       { 
         id: 1, 
-        name: "김유나", 
-        username: "zzzro", 
-        password: "1234", 
-        email: "kim@example.com", 
-        avatar: "👧🏻" 
+        name: "곽완신", 
+        username: "gwak", 
+        password: "password123", 
+        email: "gwak@example.com", 
+        avatar: "👨🏻" 
       },
       { 
         id: 2, 
-        name: "이민준", 
-        username: "minj", 
-        password: "1234", 
-        email: "lee@example.com", 
-        avatar: "👦🏻" 
+        name: "유은옥", 
+        username: "yoo", 
+        password: "password123", 
+        email: "yoo@example.com", 
+        avatar: "👩🏻" 
       },
       { 
         id: 3, 
-        name: "박지아", 
-        username: "jia", 
-        password: "1234", 
-        email: "park@example.com", 
+        name: "이경희", 
+        username: "lee", 
+        password: "password123", 
+        email: "lee@example.com", 
         avatar: "👩🏻" 
       },
       { 
         id: 4, 
-        name: "최서준", 
-        username: "seojun", 
-        password: "1234", 
-        email: "choi@example.com", 
-        avatar: "👨🏻" 
-      },
-      { 
-        id: 5, 
-        name: "정소율", 
-        username: "soyul", 
-        password: "1234", 
-        email: "jung@example.com", 
-        avatar: "👧🏻" 
-      },
-      { 
-        id: 6, 
-        name: "현지영", 
-        username: "jiyoung", 
-        password: "1234", 
-        email: "hyun@example.com", 
+        name: "임용녀", 
+        username: "lim", 
+        password: "password123", 
+        email: "lim@example.com", 
         avatar: "👩🏻" 
       },
       { 
+        id: 5, 
+        name: "박혜경", 
+        username: "park", 
+        password: "password123", 
+        email: "park@example.com", 
+        avatar: "👩🏻" 
+      },
+      { 
+        id: 6, 
+        name: "김유나", 
+        username: "kim", 
+        password: "password123", 
+        email: "kim@example.com", 
+        avatar: "👧🏻" 
+      },
+      { 
         id: 7, 
-        name: "강현우", 
-        username: "hyunwoo", 
-        password: "1234", 
-        email: "kang@example.com", 
-        avatar: "👨🏻" 
+        name: "최지혜", 
+        username: "choi", 
+        password: "password123", 
+        email: "choi@example.com", 
+        avatar: "👩🏻" 
       },
       { 
         id: 8, 
-        name: "윤우진", 
-        username: "woojin", 
-        password: "1234", 
-        email: "yoon@example.com", 
-        avatar: "👦🏻" 
+        name: "김미희", 
+        username: "mihi", 
+        password: "password123", 
+        email: "mihi@example.com", 
+        avatar: "👩🏻" 
       }
     ];
 
