@@ -1,0 +1,153 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+
+/**
+ * AuthContext: 로그인 상태 및 사용자 정보, API Key/Notion Token 관리
+ */
+const AuthContext = createContext(null);
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+/**
+ * 8명 고정 사용자 목록
+ */
+const defaultUsers = [
+  { id: 1, name: '곽완신', username: 'user1', avatar: '👨‍💼' },
+  { id: 2, name: '유은옥', username: 'user2', avatar: '👩‍💼' },
+  { id: 3, name: '이경희', username: 'user3', avatar: '👩‍🦰' },
+  { id: 4, name: '임용녀', username: 'user4', avatar: '👩‍🦳' },
+  { id: 5, name: '박혜경', username: 'user5', avatar: '👱‍♀️' },
+  { id: 6, name: '김유나', username: 'user6', avatar: '👧' },
+  { id: 7, name: '최지혜', username: 'user7', avatar: '👩‍🦱' },
+  { id: 8, name: '김미희', username: 'user8', avatar: '👧' }
+];
+
+/**
+ * AuthProvider: 로그인 상태 관리
+ */
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [keys, setKeys] = useState({ apiKey: '', notionToken: '' });
+
+  // 로컬스토리지에서 로그인 상태 복원
+  useEffect(() => {
+    const stored = localStorage.getItem('authUser');
+    if (stored) setUser(JSON.parse(stored));
+    const savedKeys = localStorage.getItem('authKeys');
+    if (savedKeys) setKeys(JSON.parse(savedKeys));
+  }, []);
+
+  // 로그인 함수
+  const login = (u) => {
+    localStorage.setItem('authUser', JSON.stringify(u));
+    setUser(u);
+  };
+
+  // 로그아웃 함수
+  const logout = () => {
+    localStorage.removeItem('authUser');
+    setUser(null);
+  };
+
+  // API Key/Notion Token 설정
+  const saveKeys = (apiKey, notionToken) => {
+    const k = { apiKey, notionToken };
+    localStorage.setItem('authKeys', JSON.stringify(k));
+    setKeys(k);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, keys, saveKeys, defaultUsers }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+/**
+ * EmergencyLogin: 고정 사용자 8명으로 로그인
+ */
+const EmergencyLogin = () => {
+  const { defaultUsers, login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = (u) => {
+    login(u);
+    navigate('/main');
+  };
+
+  return (
+    <div style={{ padding: 20, textAlign: 'center' }}>
+      <h1>긴급 로그인</h1>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        {defaultUsers.map(u => (
+          <button key={u.id}
+                  onClick={() => handleLogin(u)}
+                  style={{ padding: 15, borderRadius: 8, border: '1px solid #ccc' }}>
+            <div style={{ fontSize: 32 }}>{u.avatar}</div>
+            <div>{u.name}</div>
+            <div style={{ fontSize: 12, color: '#666' }}>{u.username}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/**
+ * MainPage: 로그인 후 보여줄 메인 페이지
+ */
+const MainPage = () => {
+  const { user, logout } = useAuth();
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>환영합니다, {user.name}님!</h2>
+      <button onClick={logout} style={{ marginTop: 20 }}>로그아웃</button>
+    </div>
+  );
+};
+
+/**
+ * SettingsPage: API Key, Notion Token 입력
+ */
+const SettingsPage = () => {
+  const { keys, saveKeys } = useAuth();
+  const [apiKey, setApiKey] = useState(keys.apiKey);
+  const [notionToken, setNotionToken] = useState(keys.notionToken);
+
+  const handleSave = () => saveKeys(apiKey, notionToken);
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>설정</h2>
+      <div>
+        <label>API Key</label>
+        <input value={apiKey} onChange={e => setApiKey(e.target.value)} />
+      </div>
+      <div>
+        <label>Notion Token</label>
+        <input value={notionToken} onChange={e => setNotionToken(e.target.value)} />
+      </div>
+      <button onClick={handleSave} style={{ marginTop: 10 }}>저장</button>
+    </div>
+  );
+};
+
+/**
+ * App: 라우팅 및 전체 구조
+ */
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<EmergencyLogin />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/*" element={<EmergencyLogin />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
