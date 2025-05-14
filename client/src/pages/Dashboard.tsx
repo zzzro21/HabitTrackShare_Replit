@@ -239,32 +239,30 @@ const Dashboard: React.FC = () => {
               </div>
               {num === 1 && (
                 <div className="absolute w-full text-[10px] text-yellow-700 font-medium mt-16">
-                  행복
+                  꿈
                 </div>
               )}
               {num === 2 && (
                 <div className="absolute w-full text-[10px] text-green-700 font-medium mt-16">
-                  평온
+                  습관
                 </div>
               )}
               {num === 3 && (
                 <div className="absolute w-full text-[10px] text-red-700 font-medium mt-16">
-                  슬픔
+                  명단
                 </div>
               )}
               {num === 4 && (
                 <div className="absolute w-full text-[10px] text-blue-700 font-medium mt-16">
-                  즐거움
+                  만남
                 </div>
               )}
             </button>
           ))}
         </div>
         
-        {/* 숫자 일러스트 그리드 - 두 번째 줄 제목 */}
-        <div className="mt-6 mb-3 text-center">
-          <h4 className="text-sm font-bold text-gray-700">The 8 Steps to Success</h4>
-        </div>
+        {/* 두 번째 줄 여백 */}
+        <div className="mt-6 mb-3"></div>
         
         {/* 숫자 일러스트 그리드 - 두 번째 줄 */}
         <div className="grid grid-cols-4 gap-2 mb-6">
@@ -288,22 +286,22 @@ const Dashboard: React.FC = () => {
               </div>
               {num === 5 && (
                 <div className="absolute w-full text-[10px] text-purple-700 font-medium mt-16">
-                  단계 5
+                  사업설명
                 </div>
               )}
               {num === 6 && (
                 <div className="absolute w-full text-[10px] text-teal-700 font-medium mt-16">
-                  단계 6
+                  후속관리
                 </div>
               )}
               {num === 7 && (
                 <div className="absolute w-full text-[10px] text-orange-700 font-medium mt-16">
-                  단계 7
+                  상담
                 </div>
               )}
               {num === 8 && (
                 <div className="absolute w-full text-[10px] text-indigo-700 font-medium mt-16">
-                  단계 8
+                  복제
                 </div>
               )}
             </button>
