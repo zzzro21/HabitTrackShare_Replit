@@ -30,6 +30,10 @@ const HabitTracker: React.FC = () => {
         return;
       }
       
+      // 디버깅용 로그
+      console.log(`HabitTracker에서 업데이트 시도: habitId=${habitId}, day=${day}, value=${value}`);
+      
+      // 서버로 요청 전송 (ID 변환은 HabitContext의 updateHabitEntry에서 처리)
       await updateHabitEntry(habitId, day, value);
     } catch (error) {
       console.error("습관 업데이트 중 오류 발생:", error);
