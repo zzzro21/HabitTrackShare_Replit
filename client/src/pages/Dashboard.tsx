@@ -308,22 +308,12 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
         
-        {/* 숫자 2 클릭 안내 메시지 */}
-        <div className="text-center mt-4 mb-8">
-          <div className="bg-green-100 rounded-lg p-3 shadow-sm border border-green-200 inline-flex items-center">
-            <div className="bg-green-200 w-8 h-8 rounded-full flex items-center justify-center mr-3 border border-green-300">
-              <span className="text-xl font-bold text-green-700">2</span>
-            </div>
-            <span className="text-sm text-green-800">
-              숫자 <strong>2</strong>를 클릭하면 습관 점검표로 이동합니다
-            </span>
-          </div>
-        </div>
+        {/* 습관 점검표로 이동 안내 텍스트 제거됨 */}
         
         {/* 진행 상황 */}
         <div className="mt-8">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-bold">Your progress</h3>
+            <h3 className="font-bold">My Progress</h3>
             <button className="text-gray-400">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
