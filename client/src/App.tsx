@@ -49,7 +49,7 @@ function Router() {
       <Route path="/login" component={LoginPage} />
       
       {/* 메인 대시보드 페이지 (인증 필요) */}
-      <Route path="/" component={isAuthenticated ? Dashboard : () => <Redirect to="/welcome" />} />
+      <Route path="/" component={Dashboard} />
       
       {/* 인증이 필요한 습관 트래커 페이지들 */}
       <Route path="/checklist">
