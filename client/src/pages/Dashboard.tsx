@@ -210,18 +210,10 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* 성공의 8단계 섹션 */}
+      {/* The 8 Steps to Success 섹션 */}
       <div className="mt-8 mx-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="font-bold text-xl text-gray-800">성공의 8단계</h3>
-          <div className="text-sm text-blue-600 font-medium">
-            The 8 Steps to Success
-          </div>
-        </div>
-        
-        {/* Daily Mood Log 라벨 */}
-        <div className="mb-3 text-center">
-          <h4 className="text-sm font-bold text-gray-700">Daily Mood Log</h4>
+        <div className="text-center mb-4">
+          <h3 className="font-bold text-xl text-gray-800">The 8 Steps to Success</h3>
         </div>
         
         {/* 숫자 일러스트 그리드 - 첫 번째 줄 */}
