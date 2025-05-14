@@ -59,8 +59,8 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
 
   return (
     <div className="bg-blue-50 rounded-2xl shadow-md mb-4">
-      <div className="p-4 pb-2">
-        <h3 className="text-base font-bold text-gray-800">8Weeks Growth</h3>
+      <div className="pt-3 px-4 pb-2">
+        <h3 className="text-base font-bold text-gray-800 mb-3 text-center">8Weeks Growth</h3>
         
         {/* 그래프 영역 */}
         <div className="h-36 relative mb-4">
