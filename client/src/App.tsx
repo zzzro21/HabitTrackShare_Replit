@@ -57,7 +57,7 @@ function Router() {
         <PrivateRoute component={Home} />
       </Route>
       <Route path="/checklist">
-        <PrivateRoute component={Checklist} />
+        <PrivateRoute component={Home} />
       </Route>
       <Route path="/friends">
         <PrivateRoute component={FriendsPage} />

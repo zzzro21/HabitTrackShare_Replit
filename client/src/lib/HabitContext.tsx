@@ -189,11 +189,13 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${value}`);
       
-      // 서버 측 habitId는 10부터 시작합니다
-      // 클라이언트에서 로드된 실제 habit.id 값을 사용하기
+      // 서버 측 habitId는 10부터 시작하지만 클라이언트에서는 1부터 시작할 수 있음
+      // 따라서 실제 서버 ID로 변환 필요 (1->10, 2->11, 3->12, 4->13, 5->14)
+      const serverHabitId = habitId < 10 ? habitId + 9 : habitId;
+      
       const requestData = {
         userId: currentUserId,
-        habitId, // 실제 서버 ID로 이미 로드되어 있음
+        habitId: serverHabitId, // 서버 ID로 변환
         day,
         value
       };
