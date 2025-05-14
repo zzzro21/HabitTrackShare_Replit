@@ -7,6 +7,7 @@ const motivationalQuotes = [
   "\"작은 행동을 시작하고 인내하면,\n그것이 큰 미래를 만들어냅니다.\"",
   "\"오늘 하루, 미래를 위한 투자입니다.\n작은 시작이 큰 변화를 만듭니다.\"",
   "\"꾸준함이 천재를 이깁니다.\n매일의 작은 행동이 미래를 결정합니다.\"",
+  // 추가 명언들을 여기에 넣을 수 있습니다
 ];
 
 const LandingPage: React.FC = () => {
@@ -20,13 +21,18 @@ const LandingPage: React.FC = () => {
     }, 300);
   }, []);
 
-  const handleGetStarted = () => {
+  const handleBeginClick = () => {
     setLocation('/');
   };
 
-  // 랜덤 명언 가져오기
+  // 현재 날짜를 기준으로 명언 선택
   const [quote] = useState(() => {
-    const quoteIndex = Math.floor(Math.random() * motivationalQuotes.length);
+    const today = new Date();
+    const startOfYear = new Date(today.getFullYear(), 0, 0);
+    const diff = today.getTime() - startOfYear.getTime();
+    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const quoteIndex = dayOfYear % motivationalQuotes.length;
+    
     return motivationalQuotes[quoteIndex];
   });
 
@@ -93,12 +99,12 @@ const LandingPage: React.FC = () => {
           </button>
         </div>
 
-        {/* 시작하기 버튼 */}
+        {/* 시작하기 버튼 - 원하시는 디자인으로 업데이트 */}
         <button 
-          onClick={handleGetStarted}
-          className="w-full bg-black text-white py-4 rounded-xl text-lg font-bold mb-4"
+          onClick={handleBeginClick}
+          className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg shadow-xl transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
         >
-          시작하기
+          Let's Begin
         </button>
       </div>
       
