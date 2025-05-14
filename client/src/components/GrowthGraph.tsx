@@ -112,7 +112,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         </div>
         
         {/* 범례 섹션 - 심플한 인라인 표시 */}
-        <div className="pt-0 pb-2 px-1 mt-0">
+        <div className="pt-0 pb-2 px-1 mt-2">
           <div className="grid grid-cols-5 gap-1">
             {categories.map(category => (
               <div key={category} className="flex flex-col items-center">
