@@ -1,8 +1,27 @@
 import React from 'react';
 import { useHabit } from '@/lib/HabitContext';
 
+// 사용자 타입 정의
+interface FixedUser {
+  id: number;
+  name: string;
+  avatar: string;
+}
+
 const UserSelector: React.FC = () => {
-  const { users, activeUser, setActiveUser, isLoading, currentUserId } = useHabit();
+  const { activeUser, setActiveUser, isLoading, currentUserId } = useHabit();
+
+  // 8명의 사용자를 하드코딩 (곽완신, 유은옥, 이경희, 임용녀, 박혜경, 김유나, 최지혜, 김미희)
+  const fixedUsers: FixedUser[] = [
+    { id: 1, name: "곽완신", avatar: "👨🏻" },
+    { id: 2, name: "유은옥", avatar: "👩🏻" },
+    { id: 3, name: "이경희", avatar: "👩🏻" },
+    { id: 4, name: "임용녀", avatar: "👩🏻" },
+    { id: 5, name: "박혜경", avatar: "👩🏻" },
+    { id: 6, name: "김유나", avatar: "👧🏻" },
+    { id: 7, name: "최지혜", avatar: "👩🏻" },
+    { id: 8, name: "김미희", avatar: "👩🏻" },
+  ];
 
   if (isLoading) {
     return (
@@ -11,15 +30,6 @@ const UserSelector: React.FC = () => {
         <div className="flex flex-wrap gap-1">
           <div className="h-7 w-24 bg-gray-200 animate-pulse rounded-full"></div>
         </div>
-      </div>
-    );
-  }
-
-  // 사용자 목록이 비어 있는 경우 처리
-  if (!users || users.length === 0) {
-    return (
-      <div className="mb-3 px-2 py-1 bg-yellow-50 text-yellow-700 rounded">
-        데이터를 불러오는 중입니다...
       </div>
     );
   }
@@ -36,14 +46,11 @@ const UserSelector: React.FC = () => {
     }
   }
 
-  // 사용자를 ID 순으로 정렬 (곽완신, 유은옥, 이경희, 임용녀, 박혜경, 김유나, 최지혜, 김미희 순서)
-  const sortedUsers = [...users].sort((a, b) => a.id - b.id).filter(user => user.id >= 1 && user.id <= 8);
-
   return (
     <div className="mb-1">
       <h2 className="text-xs font-medium text-gray-700 mb-0.5">사용자 선택</h2>
       <div className="flex flex-wrap gap-1">
-        {sortedUsers.map(user => (
+        {fixedUsers.map(user => (
           <button
             key={user.id}
             onClick={() => setActiveUser(user.id)}
