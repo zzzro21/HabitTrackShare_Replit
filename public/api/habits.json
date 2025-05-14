@@ -1,0 +1,47 @@
+[
+  {
+    "id": 10,
+    "label": "책 읽기 (30분 이상)",
+    "scoreType": "partial",
+    "category": "독서",
+    "description": "하루 30분 이상 책을 읽는 습관",
+    "points": 10,
+    "icon": "📚"
+  },
+  {
+    "id": 11,
+    "label": "영상 시청 (1개 이상)",
+    "scoreType": "binary",
+    "category": "영상",
+    "description": "회사 교육 영상 시청하기",
+    "points": 10,
+    "icon": "🎬"
+  },
+  {
+    "id": 12,
+    "label": "제품 사용 (아침/저녁)",
+    "scoreType": "binary",
+    "category": "제품",
+    "description": "아침과 저녁에 제품 사용하기",
+    "points": 10,
+    "icon": "🧴"
+  },
+  {
+    "id": 13,
+    "label": "미팅 참석 (온/오프라인)",
+    "scoreType": "binary",
+    "category": "미팅",
+    "description": "온라인 또는 오프라인 미팅 참석하기",
+    "points": 10,
+    "icon": "👥"
+  },
+  {
+    "id": 14,
+    "label": "소비자 관리 (1명 이상)",
+    "scoreType": "partial",
+    "category": "소비자",
+    "description": "소비자 한 명 이상과 소통하기",
+    "points": 10,
+    "icon": "🤝"
+  }
+]
