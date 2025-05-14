@@ -69,20 +69,20 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   };
 
   return (
-    <Card className="rounded-3xl shadow-md border-0 bg-white overflow-hidden">
+    <Card className="rounded-3xl shadow-md border-0 bg-white overflow-hidden mb-2">
       <div className="flex flex-col space-y-0 pt-2 px-4 pb-0">
         <h3 className="text-base font-bold text-gray-800">8Weeks Growth</h3>
       </div>
       
-      <CardContent className="p-2 pt-0 pb-4">
+      <CardContent className="p-2 pt-0 pb-6">
         
-        <div className="h-36 w-full relative">
+        <div className="h-48 w-full relative">
           <div className="flex h-full items-end justify-between px-4">
             {data.map((item, idx) => (
               <div 
                 key={idx} 
                 className="relative flex flex-col items-center justify-end h-full"
-                style={{ width: `${100 / data.length - 3}%` }}
+                style={{ width: `${100 / data.length - 2}%` }}
                 onMouseEnter={() => showTooltip(idx)}
                 onMouseLeave={hideTooltip}
               >
@@ -90,7 +90,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 <div 
                   className="absolute bottom-0 w-full rounded-full bg-gray-100"
                   style={{ 
-                    height: '90%',
+                    height: '80%',
                     backgroundColor: backgroundBarColor,
                     borderRadius: '20px',
                   }}
@@ -99,7 +99,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 {/* 점수가 있을 때만 컬러 막대 표시 */}
                 {item.displayMode === 'bar' && item.score > 0 && (
                   <div className="absolute bottom-0 w-full z-10 overflow-hidden" style={{ 
-                    height: `${Math.min(100, (item.score / MAX_SCORE) * 90)}%`,
+                    height: `${Math.min(100, (item.score / MAX_SCORE) * 80)}%`,
                     borderRadius: '20px',
                   }}>
                     {/* 카테고리별로 쌓인 스택 막대 구현 */}
@@ -150,7 +150,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 )}
                 
                 {/* X축 라벨 */}
-                <div className="absolute -bottom-4 text-[10px] text-gray-500">
+                <div className="relative text-[10px] text-gray-500 mt-2">
                   {item.week}
                 </div>
               </div>
@@ -160,7 +160,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       </CardContent>
       
       {/* 색상 범례 */}
-      <div className="flex flex-wrap justify-center items-center gap-x-5 gap-y-2 mb-3 mt-1 text-[10px] text-gray-500">
+      <div className="flex flex-wrap justify-center items-center gap-x-5 gap-y-2 mb-4 text-[10px] text-gray-500">
         {categories.map(category => (
           <div key={category} className="flex items-center gap-3 px-1">
             <div className="w-2 h-2 rounded-sm" style={{ 
