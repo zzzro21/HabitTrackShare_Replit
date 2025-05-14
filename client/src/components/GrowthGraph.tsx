@@ -113,14 +113,14 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         
         {/* 범례 섹션 */}
         <div className="border-t pt-2 pb-1">
-          <div className="flex justify-center items-center gap-2">
+          <div className="flex flex-nowrap justify-between px-1 overflow-x-auto whitespace-nowrap">
             {categories.map(category => (
-              <div key={category} className="flex items-center gap-1">
+              <div key={category} className="flex items-center gap-1 mx-1">
                 <div 
-                  className="w-3 h-3 rounded-sm" 
+                  className="w-3 h-3 rounded-sm flex-shrink-0" 
                   style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
                 />
-                <span className="text-xs text-gray-700">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</span>
+                <span className="text-xs text-gray-800 font-medium">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</span>
               </div>
             ))}
           </div>
