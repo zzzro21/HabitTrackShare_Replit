@@ -37,8 +37,8 @@ const UserSelector: React.FC = () => {
   }
 
   return (
-    <div className="mb-2">
-      <h2 className="text-xs md:text-sm font-medium text-gray-700 mb-0.5">사용자 선택</h2>
+    <div className="mb-1">
+      <h2 className="text-xs font-medium text-gray-700 mb-0.5">사용자 선택</h2>
       <div className="flex flex-wrap gap-1">
         {users.map(user => (
           <button
@@ -51,7 +51,7 @@ const UserSelector: React.FC = () => {
             }`}
           >
             <span className="mr-1">{user.avatar}</span>
-            {user.name}
+            {user.username}
           </button>
         ))}
       </div>

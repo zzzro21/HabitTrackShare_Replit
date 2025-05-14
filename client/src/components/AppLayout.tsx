@@ -30,8 +30,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   return (
     <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[390px] lg:max-w-[800px] flex flex-col">
       {!hideHeader && (
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[56px] flex items-center">
-          <div className="w-full pb-1 pt-1 relative">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[46px] flex items-center">
+          <div className="w-full relative">
             {showBackButton && (
               <button 
                 onClick={handleBackClick} 
@@ -45,14 +45,14 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             )}
             <h1 className="text-base font-bold text-center">{title}</h1>
             {subtitle && (
-              <p className="text-xs text-center text-gray-500 -mt-0.5">{subtitle}</p>
+              <p className="text-xs text-center text-gray-500 -mt-1">{subtitle}</p>
             )}
           </div>
         </header>
       )}
       
-      <main className={`flex-1 px-3 overflow-y-auto ${hideHeader ? 'pt-1' : 'py-2'}`} 
-        style={{ height: hideHeader ? 'calc(100vh - 60px)' : 'calc(100vh - 116px)' }}>
+      <main className={`flex-1 px-3 overflow-y-auto ${hideHeader ? 'pt-1' : 'pt-1 pb-2'}`} 
+        style={{ height: hideHeader ? 'calc(100vh - 60px)' : 'calc(100vh - 106px)' }}>
         {children}
       </main>
       
