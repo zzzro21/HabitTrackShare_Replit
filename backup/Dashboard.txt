@@ -331,6 +331,7 @@ const Dashboard: React.FC = () => {
           
           {/* 진행 상황 원과 하단 버튼 제거됨 */}
         </div>
+        </div>
       </div>
 
       {/* AI 비서 모달 */}
