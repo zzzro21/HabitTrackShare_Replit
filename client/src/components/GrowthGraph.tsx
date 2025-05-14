@@ -63,7 +63,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         <h3 className="text-base font-bold text-gray-800 mb-3 text-center">8Weeks Growth</h3>
         
         {/* 그래프 영역 */}
-        <div className="h-36 relative mb-4">
+        <div className="h-36 relative mb-0">
           <div className="flex h-full items-end justify-between">
             {weekData.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center w-[10%]">
@@ -105,19 +105,19 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
                 </div>
                 
                 {/* 주차 라벨 */}
-                <div className="text-xs text-gray-500 mt-2">{item.week}</div>
+                <div className="text-xs text-gray-500 mt-1">{item.week}</div>
               </div>
             ))}
           </div>
         </div>
         
         {/* 범례 섹션 - 심플한 인라인 표시 */}
-        <div className="pt-3 pb-2 px-1">
+        <div className="pt-0 pb-2 px-1 mt-0">
           <div className="grid grid-cols-5 gap-1">
             {categories.map(category => (
               <div key={category} className="flex flex-col items-center">
                 <div 
-                  className="w-3 h-3 rounded-sm flex-shrink-0 mb-1" 
+                  className="w-3 h-3 rounded-sm flex-shrink-0 mb-0.5" 
                   style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
                 />
                 <p className="text-[10px] font-medium text-gray-600">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</p>
