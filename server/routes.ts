@@ -273,19 +273,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create or update a habit note (인증 필요 + 자신의 데이터만 수정 가능)
   app.post("/api/notes", isAuthenticated, onlySelfModify, async (req, res) => {
     try {
+      console.log("습관 노트 업데이트 요청 받음:", req.body);
+      
       const validatedData = insertHabitNoteSchema.parse(req.body);
+      console.log("유효성 검사 통과한 노트 데이터:", validatedData);
       
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
       if (!user) {
+        console.error(`사용자를 찾을 수 없음 (ID: ${validatedData.userId})`);
         return res.status(404).json({ message: "User not found" });
       }
+      console.log("노트 사용자 확인됨:", user.name);
+      
+      // 습관 ID를 클라이언트 ID (1-5)에서 서버 ID (10-14)로 매핑
+      const clientHabitId = validatedData.habitId;
+      const serverHabitId = clientHabitId >= 10 ? clientHabitId : clientHabitId + 9;
+      
+      console.log(`노트 - 습관 ID 매핑: 클라이언트 ID ${clientHabitId} -> 서버 ID ${serverHabitId}`);
+      
+      // 매핑된 서버 ID로 데이터 업데이트
+      validatedData.habitId = serverHabitId;
       
       // Validate that habit exists
       const habit = await storage.getHabit(validatedData.habitId);
       if (!habit) {
+        console.error(`노트 - 습관을 찾을 수 없음 (ID: ${validatedData.habitId}). 서버 습관 ID는 10-14입니다.`);
         return res.status(404).json({ message: "Habit not found" });
       }
+      console.log("노트 - 습관 확인됨:", habit.label);
       
       // Validate day is within range (0-55)
       if (validatedData.day < 0 || validatedData.day > 55) {
