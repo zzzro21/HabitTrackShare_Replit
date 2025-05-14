@@ -14,6 +14,15 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   // 카테고리 정의
   const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
   
+  // 카테고리 표시명 간소화
+  const categoryDisplayNames = {
+    독서: '독서',
+    동영상: '동영상',
+    제품애용: '제품애용',
+    미팅참석: '미팅',
+    소비자관리: '소비자'
+  };
+  
   // 카테고리별 블루→민트 그라데이션 색상
   const categoryColors = {
     독서: '#3B82F6', // 밝은 블루
@@ -49,17 +58,17 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   }, [userId, calculateWeekScores]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-md mb-4">
+    <div className="bg-blue-50 rounded-2xl shadow-md mb-4">
       <div className="p-4 pb-2">
-        <h3 className="text-base font-bold text-gray-800 mb-2">8Weeks Growth</h3>
+        <h3 className="text-base font-bold text-gray-800">8Weeks Growth</h3>
         
         {/* 그래프 영역 */}
-        <div className="h-36 relative mb-6">
+        <div className="h-36 relative mb-4">
           <div className="flex h-full items-end justify-between">
             {weekData.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center w-[10%]">
                 {/* 배경 막대 */}
-                <div className="w-full h-32 bg-gray-100 rounded-lg relative">
+                <div className="w-full h-32 bg-white rounded-lg relative">
                   {/* 데이터 막대 */}
                   {item.score > 0 && (
                     <div 
@@ -103,16 +112,15 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         </div>
         
         {/* 범례 섹션 */}
-        <div className="border-t pt-3 pb-1 mt-2">
-          <p className="text-xs text-center text-gray-500 mb-2">카테고리 범례:</p>
-          <div className="flex flex-wrap justify-center gap-3 bg-gray-50 py-2 px-1 rounded-lg">
+        <div className="border-t pt-2 pb-1">
+          <div className="flex justify-center items-center gap-2">
             {categories.map(category => (
-              <div key={category} className="flex items-center gap-1.5 px-1 py-0.5 border border-gray-100 bg-white rounded">
+              <div key={category} className="flex items-center gap-1">
                 <div 
-                  className="w-4 h-4 rounded-sm border border-gray-200 shadow-sm" 
+                  className="w-3 h-3 rounded-sm" 
                   style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
                 />
-                <span className="text-xs font-medium text-gray-700">{category}</span>
+                <span className="text-xs text-gray-700">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</span>
               </div>
             ))}
           </div>
