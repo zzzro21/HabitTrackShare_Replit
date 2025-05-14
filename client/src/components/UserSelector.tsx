@@ -36,11 +36,14 @@ const UserSelector: React.FC = () => {
     }
   }
 
+  // 사용자를 ID 순으로 정렬 (곽완신, 유은옥, 이경희, 임용녀, 박혜경, 김유나, 최지혜, 김미희 순서)
+  const sortedUsers = [...users].sort((a, b) => a.id - b.id).filter(user => user.id >= 1 && user.id <= 8);
+
   return (
     <div className="mb-1">
       <h2 className="text-xs font-medium text-gray-700 mb-0.5">사용자 선택</h2>
       <div className="flex flex-wrap gap-1">
-        {users.map(user => (
+        {sortedUsers.map(user => (
           <button
             key={user.id}
             onClick={() => setActiveUser(user.id)}

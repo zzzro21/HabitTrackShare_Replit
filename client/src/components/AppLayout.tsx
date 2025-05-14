@@ -30,8 +30,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   return (
     <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[390px] lg:max-w-[800px] flex flex-col">
       {!hideHeader && (
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[36px] flex items-center pt-0">
-          <div className="w-full relative -mt-1">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[28px] flex items-center pt-0">
+          <div className="w-full relative -mt-3">
             {showBackButton && (
               <button 
                 onClick={handleBackClick} 
@@ -43,9 +43,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 <span className="sr-only">뒤로 가기</span>
               </button>
             )}
-            <h1 className="text-base font-bold text-center">{title}</h1>
+            <h1 className="text-sm font-bold text-center -mt-1">{title}</h1>
             {subtitle && (
-              <p className="text-xs text-center text-gray-500 -mt-1">{subtitle}</p>
+              <p className="text-[10px] text-center text-gray-500 -mt-1">{subtitle}</p>
             )}
           </div>
         </header>
