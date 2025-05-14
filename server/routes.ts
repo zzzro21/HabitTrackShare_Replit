@@ -163,6 +163,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertHabitEntrySchema.parse(req.body);
       console.log("유효성 검사 통과한 데이터:", validatedData);
       
+      // 서버에서 모든 습관 리스트를 가져와 ID 확인
+      const allHabits = await storage.getAllHabits();
+      console.log("서버의 모든 습관:", allHabits.map(h => ({ id: h.id, label: h.label })));
+      
       // Validate that user exists
       const user = await storage.getUser(validatedData.userId);
       if (!user) {
@@ -172,10 +176,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("사용자 확인됨:", user.name);
       
+      // 습관 ID를 클라이언트 ID (1-5)에서 서버 ID (10-14)로 매핑
+      // 참고: 클라이언트에서 이미 변환된 ID가 올 수도 있음
+      const clientHabitId = validatedData.habitId;
+      const serverHabitId = clientHabitId >= 10 ? clientHabitId : clientHabitId + 9;
+      
+      console.log(`습관 ID 매핑: 클라이언트 ID ${clientHabitId} -> 서버 ID ${serverHabitId}`);
+      
+      // 매핑된 서버 ID로 데이터 업데이트
+      validatedData.habitId = serverHabitId;
+      
       // Validate that habit exists
       const habit = await storage.getHabit(validatedData.habitId);
       if (!habit) {
-        console.error(`습관을 찾을 수 없음 (ID: ${validatedData.habitId})`);
+        console.error(`습관을 찾을 수 없음 (ID: ${validatedData.habitId}). 서버 습관 ID는 10-14입니다.`);
         return res.status(404).json({ message: "Habit not found" });
       }
       
