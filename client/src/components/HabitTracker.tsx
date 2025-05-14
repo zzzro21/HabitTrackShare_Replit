@@ -77,59 +77,31 @@ const HabitTracker: React.FC = () => {
     
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newValue = parseInt(e.target.value);
-      console.log(`값 변경: habitId=${habitId}, day=${day}, value=${newValue} (원래값: ${value}, 타입: ${habitScoreType})`);
+      console.log(`값 변경: habitId=${habitId}, day=${day}, value=${newValue} (원래값: ${value})`);
       
-      // 모든 값을 그대로 서버에 저장 (binary 타입은 0 또는 1만 가능)
       // 습관 ID는 현재 그대로 전달 (HabitContext에서 서버 ID로 변환됨)
       handleValueChange(habitId, day, newValue);
     };
     
     // 자신의 데이터인 경우 수정 가능한 셀렉트 박스 표시
     if (canModifyUserData(activeUser)) {
-      // 동영상 시청과 미팅 참석은 binary로 설정되어 있고, 세모(△) 옵션이 없고 동그라미(○)만 표시
-      if (habitScoreType === 'binary') {
-        console.log(`Binary 타입 셀렉트박스 렌더링: value=${value}, habitId=${habitId}`);
-        return (
-          <select
-            value={value === 1 ? 1 : 0} // 값이 1이면 완료(○) 표시
-            onChange={handleChange}
-            className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${value > 0 ? 'bg-green-100' : 'bg-white'}`}
-          >
-            <option value="0">-</option>
-            <option value="1">○</option> {/* 1점으로 저장됨 */}
-          </select>
-        );
-      } else {
-        // 그 외 습관은 기존대로 세모(△)와 동그라미(○) 옵션 모두 사용
-        return (
-          <select
-            value={value}
-            onChange={handleChange}
-            className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
-          >
-            <option value="0">-</option>
-            <option value="1">△</option>
-            <option value="2">○</option>
-          </select>
-        );
-      }
+      return (
+        <select
+          value={value}
+          onChange={handleChange}
+          className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
+        >
+          <option value="0">-</option>
+          <option value="1">△</option>
+          {habitScoreType !== 'binary' && <option value="2">○</option>}
+        </select>
+      );
     } 
     
     // 다른 사용자의 데이터인 경우 읽기 전용 표시
-    const displayValue = value === 0 ? '-' : 
-                        (habitScoreType === 'binary' && value > 0) ? '○' : // binary 타입은 값이 있으면 무조건 동그라미
-                        (value === 1) ? '△' : '○'; // 일반 타입은 값에 따라 세모/동그라미
-    
-    // binary 타입은 값이 있으면 녹색 배경, 일반 타입은 기존과 동일
-    const cellColor = value === 0 ? 'bg-white' : 
-                     (habitScoreType === 'binary' && value > 0) ? 'bg-green-100' :
-                     (value === 1) ? 'bg-blue-50' : 'bg-green-100';
-    
-    console.log(`읽기 전용 셀 렌더링: habitId=${habitId}, value=${value}, display=${displayValue}, color=${cellColor}`);
-    
     return (
-      <div className={`w-full h-full py-0.5 text-center text-[10px] ${cellColor}`}>
-        {displayValue}
+      <div className={`w-full h-full py-0.5 text-center text-[10px] ${bgColor}`}>
+        {value === 0 ? '-' : value === 1 ? '△' : '○'}
       </div>
     );
   };

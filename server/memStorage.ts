@@ -283,10 +283,9 @@ export class MemStorage implements IStorage {
     }
 
     // 샘플 사용자 추가 (곽완신, 유은옥, 이경희, 임용녀, 박혜경, 김유나, 최지혜, 김미희)
-    // ID는 10~17로 설정 (클라이언트와 서버 ID 통일)
     const sampleUsers: InsertUser[] = [
       { 
-        id: 10, 
+        id: 1, 
         name: "곽완신", 
         username: "gwak", 
         password: "password123", 
@@ -294,7 +293,7 @@ export class MemStorage implements IStorage {
         avatar: "👨🏻" 
       },
       { 
-        id: 11, 
+        id: 2, 
         name: "유은옥", 
         username: "yoo", 
         password: "password123", 
@@ -302,7 +301,7 @@ export class MemStorage implements IStorage {
         avatar: "👩🏻" 
       },
       { 
-        id: 12, 
+        id: 3, 
         name: "이경희", 
         username: "lee", 
         password: "password123", 
@@ -310,7 +309,7 @@ export class MemStorage implements IStorage {
         avatar: "👩🏻" 
       },
       { 
-        id: 13, 
+        id: 4, 
         name: "임용녀", 
         username: "lim", 
         password: "password123", 
@@ -318,7 +317,7 @@ export class MemStorage implements IStorage {
         avatar: "👩🏻" 
       },
       { 
-        id: 14, 
+        id: 5, 
         name: "박혜경", 
         username: "park", 
         password: "password123", 
@@ -326,7 +325,7 @@ export class MemStorage implements IStorage {
         avatar: "👩🏻" 
       },
       { 
-        id: 15, 
+        id: 6, 
         name: "김유나", 
         username: "kim", 
         password: "password123", 
@@ -334,7 +333,7 @@ export class MemStorage implements IStorage {
         avatar: "👧🏻" 
       },
       { 
-        id: 16, 
+        id: 7, 
         name: "최지혜", 
         username: "choi", 
         password: "password123", 
@@ -342,7 +341,7 @@ export class MemStorage implements IStorage {
         avatar: "👩🏻" 
       },
       { 
-        id: 17, 
+        id: 8, 
         name: "김미희", 
         username: "mihi", 
         password: "password123", 
@@ -360,9 +359,9 @@ export class MemStorage implements IStorage {
       await this.createHabit(habitData);
     }
 
-    // 샘플 습관 항목 생성 (사용자 ID 10~17, 습관 ID 10~14 사용)
-    for (let userId = 10; userId <= 17; userId++) {
-      for (let habitId = 10; habitId <= 14; habitId++) {
+    // 샘플 습관 항목 생성
+    for (let userId = 1; userId <= 8; userId++) {
+      for (let habitId = 1; habitId <= 5; habitId++) {
         for (let day = 0; day < 56; day++) {
           // 랜덤 값 (0: 미완료, 1: 부분 완료, 2: 완료)
           const value = Math.floor(Math.random() * 3);
@@ -379,9 +378,9 @@ export class MemStorage implements IStorage {
       }
     }
 
-    // 기본 API 키 추가 (김유나 사용자에게만 Gemini API 키 설정, ID는 15)
+    // 기본 API 키 추가 (김유나 사용자에게만 Gemini API 키 설정)
     await this.createOrUpdateUserApiKey({
-      userId: 15,
+      userId: 1,
       geminiApiKey: process.env.GEMINI_API_KEY || "",
       notionToken: "",
       notionDbId: ""
