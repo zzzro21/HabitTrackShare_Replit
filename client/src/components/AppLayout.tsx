@@ -51,7 +51,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         </header>
       )}
       
-      <main className={`flex-1 px-3 py-2 overflow-y-auto ${hideHeader ? 'pt-4' : ''}`} 
+      <main className={`flex-1 px-3 overflow-y-auto ${hideHeader ? 'pt-1' : 'py-2'}`} 
         style={{ height: hideHeader ? 'calc(100vh - 60px)' : 'calc(100vh - 116px)' }}>
         {children}
       </main>

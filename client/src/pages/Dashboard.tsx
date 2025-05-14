@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
   return (
     <AppLayout title="" showBackButton={false} hideHeader={true}>
       {/* 인트로 화면으로 이동하는 버튼 추가 */}
-      <div className="absolute top-3 left-3 z-10">
+      <div className="absolute top-1 left-3 z-10">
         <button 
           onClick={() => setLocation('/welcome')}
           className="flex items-center justify-center bg-white/80 backdrop-blur-sm text-gray-700 rounded-full p-2 shadow-sm hover:bg-white transition-all"
@@ -79,8 +79,8 @@ const Dashboard: React.FC = () => {
         </button>
       </div>
       
-      {/* 일주일 캘린더와 타이틀 카드 */}
-      <div className="mx-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">
+      {/* 일주일 캘린더와 타이틀 카드 - 여백 60% 줄임 */}
+      <div className="mx-2 mt-2 p-5 pb-6 bg-blue-100/80 rounded-3xl border border-blue-200 shadow-sm w-[98%]">
         <div className="flex justify-between items-center mb-1">
           <h2 className="text-2xl font-bold">
             Hello, {user?.name || "친구"}
