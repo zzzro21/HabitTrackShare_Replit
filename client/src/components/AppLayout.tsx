@@ -30,8 +30,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   return (
     <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[390px] lg:max-w-[800px] flex flex-col">
       {!hideHeader && (
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[46px] flex items-center">
-          <div className="w-full relative">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[36px] flex items-center pt-0">
+          <div className="w-full relative -mt-1">
             {showBackButton && (
               <button 
                 onClick={handleBackClick} 
