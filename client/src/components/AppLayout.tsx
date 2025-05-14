@@ -26,9 +26,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   };
 
   return (
-    <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[390px] lg:max-w-[800px]">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="pb-1 pt-2 relative">
+    <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[390px] lg:max-w-[800px] flex flex-col">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[56px] flex items-center">
+        <div className="w-full pb-1 pt-1 relative">
           {showBackButton && (
             <button 
               onClick={handleBackClick} 
@@ -47,9 +47,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         </div>
       </header>
       
-      <main className="px-3 py-2 overflow-y-auto pb-16">
+      <main className="flex-1 px-3 py-2 overflow-y-auto" style={{ height: 'calc(100vh - 116px)' }}>
         {children}
-        <div className="h-16"></div> {/* 하단 여백 (탭 네비게이션 공간) */}
       </main>
       
       <TabNavigation />

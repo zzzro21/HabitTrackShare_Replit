@@ -21,6 +21,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 전역 스타일 설정 */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 /* 고정 그라데이션 배경 - 더 옅고 투명하게 */
 .aurora-gradient {
   background: linear-gradient(
