@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
 
 // 동기부여 문장
 const motivationalQuotes = [
@@ -25,12 +27,68 @@ const LandingPage: React.FC = () => {
   const [showGallery, setShowGallery] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
+  // 음성 인식 관련 상태
+  const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const { toast } = useToast();
+  
   useEffect(() => {
     // 초기 애니메이션 표시
     setTimeout(() => {
       setShowAnimation(true);
     }, 300);
-  }, []);
+    
+    // 음성 인식 초기화
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'ko-KR'; // 한국어 설정
+      
+      recognitionRef.current.onresult = (event: any) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        
+        setTranscript(finalTranscript || interimTranscript);
+      };
+      
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('음성 인식 오류:', event.error);
+        setIsRecording(false);
+        toast({
+          title: "음성 인식 오류",
+          description: `오류가 발생했습니다: ${event.error}`,
+          variant: "destructive"
+        });
+      };
+      
+      recognitionRef.current.onend = () => {
+        if (isRecording) {
+          recognitionRef.current.start();
+        }
+      };
+    }
+    
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, [isRecording, toast]);
 
   const handleBeginClick = () => {
     setLocation('/');
@@ -38,6 +96,65 @@ const LandingPage: React.FC = () => {
 
   const handleChangeProfileImage = (imageUrl: string) => {
     setSelectedImage(imageUrl);
+  };
+  
+  // 음성 인식 토글 함수
+  const toggleSpeechRecognition = () => {
+    if (isRecording) {
+      // 녹음 중지
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+      
+      // 녹음이 끝나면 Gemini API로 보냄
+      if (transcript.trim()) {
+        handleSpeechInput(transcript);
+      }
+    } else {
+      // 녹음 시작
+      setTranscript('');
+      recognitionRef.current?.start();
+      setIsRecording(true);
+      toast({
+        title: "음성 인식 시작",
+        description: "말씀하시면 텍스트로 변환됩니다.",
+      });
+    }
+  };
+  
+  // Gemini API로 음성 입력 처리
+  const handleSpeechInput = async (text: string) => {
+    if (!text.trim()) return;
+    
+    setIsProcessing(true);
+    try {
+      const response = await apiRequest('POST', '/api/assistant/classify', { input: text });
+      
+      toast({
+        title: "음성 입력 처리 완료",
+        description: `"${response.type}" 타입으로 분류되었습니다. 인사이트에서 확인하세요.`,
+      });
+      
+      // 음성 인식 결과를 localStorage에 저장 (인사이트 페이지에서 사용)
+      const storedResults = localStorage.getItem('moriResults');
+      const parsedResults = storedResults ? JSON.parse(storedResults) : [];
+      parsedResults.push({
+        ...response,
+        timestamp: new Date().toISOString(),
+        inputText: text
+      });
+      localStorage.setItem('moriResults', JSON.stringify(parsedResults));
+      
+    } catch (error) {
+      console.error('음성 입력 처리 오류:', error);
+      toast({
+        title: "처리 실패",
+        description: "음성 입력을 처리하는 중 오류가 발생했습니다.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+      setTranscript('');
+    }
   };
 
   // 현재 날짜를 기준으로 명언 선택
@@ -73,15 +190,27 @@ const LandingPage: React.FC = () => {
           
           {/* AI 비서 버블 - 우측 */}
           <div className={`absolute -right-14 top-[30%] bg-white rounded-full shadow-lg flex items-center p-1.5 px-3 transform transition-all duration-500 z-10 ${showAnimation ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'} delay-200`}>
-            <div className="bg-orange-400 rounded-full w-8 h-8 flex items-center justify-center mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                <line x1="12" y1="19" x2="12" y2="23" />
-                <line x1="8" y1="23" x2="16" y2="23" />
-              </svg>
-            </div>
-            <span className="text-sm font-medium">Mori</span>
+            <button
+              onClick={toggleSpeechRecognition}
+              disabled={isProcessing}
+              className={`bg-orange-400 rounded-full w-8 h-8 flex items-center justify-center mr-3 transition-all ${isRecording ? 'animate-pulse bg-red-500' : ''} ${isProcessing ? 'opacity-70' : 'hover:bg-orange-500'}`}
+            >
+              {isRecording ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="6" y="6" width="12" height="12" rx="1" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                  <line x1="12" y1="19" x2="12" y2="23" />
+                  <line x1="8" y1="23" x2="16" y2="23" />
+                </svg>
+              )}
+            </button>
+            <span className="text-sm font-medium">
+              {isRecording ? '녹음 중...' : (isProcessing ? '처리 중...' : 'Mori')}
+            </span>
           </div>
           <div className="w-full overflow-hidden bg-orange-100 shadow-md relative" style={{ height: '270px', width: '250px', borderRadius: '50% / 40%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
             <img
@@ -183,25 +312,19 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
 
+        {/* 음성 인식 중 텍스트 표시 영역 */}
+        {isRecording && transcript && (
+          <div className="mt-4 p-3 bg-white rounded-lg shadow-md border border-orange-200 w-full max-w-sm mx-auto animate-pulse">
+            <p className="text-gray-700 text-sm">{transcript}</p>
+          </div>
+        )}
+        
         {/* 시작하기 버튼 */}
         <button 
           onClick={handleBeginClick}
-          className={`w-full max-w-sm bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-md transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} mt-10 delay-500`}
+          className={`w-full max-w-sm bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-md transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} mt-6 delay-500`}
         >
           시작하기
-        </button>
-      </div>
-      
-      {/* MORI 비서 버튼 - 화면 우측 하단에 고정 */}
-      <div className="fixed bottom-20 right-4 z-20">
-        <button 
-          onClick={() => setLocation('/notes')}
-          className="bg-orange-500 text-white rounded-full p-3 shadow-lg"
-        >
-          <div className="flex flex-col items-center">
-            <span className="text-xl">🤖</span>
-            <span className="text-xs font-semibold">Mori</span>
-          </div>
         </button>
       </div>
     </div>
