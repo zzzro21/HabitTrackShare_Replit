@@ -419,20 +419,19 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-4">
-          <h1 className={`font-sans transition-all duration-500 tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ fontFamily: "'Poppins', 'Inter', 'Montserrat', sans-serif" }}>
-            <div className="flex flex-col space-y-1">
-              <span className="text-left ml-10 text-2xl font-light tracking-wide">"Little actions,</span>
-              <span className="text-right mr-10">
+          <h1 className={`transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} 
+            style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+            <div className="flex flex-col space-y-3 mt-3">
+              <span className="text-left ml-8 text-[28px] font-medium tracking-tight">Little actions,</span>
+              <span className="text-right mr-8">
                 <span 
-                  className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md font-semibold tracking-wide shadow-sm"
+                  className="inline-block bg-orange-400 px-3 py-1 text-white rounded-md font-bold"
                   style={{ 
-                    transform: 'rotate(-5deg)', 
-                    display: 'inline-block',
-                    fontSize: '1.4rem'
+                    fontSize: '24px'
                   }}
-                >Big results!</span><span className="text-2xl">,</span>
+                >Big results!</span>
               </span>
-              <span className="text-center text-xl font-light tracking-wide leading-relaxed">Set it, Do it, Repeat."</span>
+              <span className="text-center text-[22px] font-normal tracking-tight">Set it, Do it, Repeat.</span>
             </div>
           </h1>
 
@@ -447,12 +446,13 @@ const LandingPage: React.FC = () => {
 
               
               {/* 원래 명언 영역 */}
-              <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
+              <p className={`text-gray-700 text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
                 style={{ 
-                  fontSize: '1.5rem',
-                  fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive',
-                  lineHeight: '1.5',
-                  letterSpacing: '0.02em'
+                  fontSize: '1.2rem',
+                  fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+                  lineHeight: '1.6',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
                 }}>
                 "{quote}"
               </p>
@@ -472,10 +472,14 @@ const LandingPage: React.FC = () => {
           </div>
         )}
         
-        {/* 시작하기 버튼 - Let's Begin으로 변경 및 파란색 적용 */}
+        {/* 시작하기 버튼 - Let's Begin으로 변경 및 주황색 적용 */}
         <button 
           onClick={handleBeginClick}
-          className={`w-full max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-md transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} mt-6 delay-500`}
+          className={`w-full max-w-sm bg-orange-400 hover:bg-orange-500 text-white font-medium py-4 px-8 rounded-full text-lg shadow-md transform transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} mt-6 delay-500`}
+          style={{ 
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+            letterSpacing: '0.02em'
+          }}
         >
           Let's Begin
         </button>
