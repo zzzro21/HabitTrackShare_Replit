@@ -301,7 +301,7 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
         </div>
-      )
+      )}
       
       {/* 메인 콘텐츠 */}
       <div className="relative flex flex-col items-center px-8 pt-6 pb-12 z-10 flex-grow">

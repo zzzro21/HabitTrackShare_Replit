@@ -1,0 +1,221 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+
+/**
+ * AuthContext: 로그인 상태 및 사용자 정보, API Key/Notion Token, 비밀번호 관리
+ */
+const AuthContext = createContext(null);
+export const useAuth = () => useContext(AuthContext);
+
+/**
+ * 8명 고정 사용자 목록
+ */
+const defaultUsers = [
+  { id: 1, name: '곽완신', username: 'user1', avatar: '👨‍💼' },
+  { id: 2, name: '유은옥', username: 'user2', avatar: '👩‍💼' },
+  { id: 3, name: '이경희', username: 'user3', avatar: '👩‍🦰' },
+  { id: 4, name: '임용녀', username: 'user4', avatar: '👩‍🦳' },
+  { id: 5, name: '박혜경', username: 'user5', avatar: '👱‍♀️' },
+  { id: 6, name: '김유나', username: 'user6', avatar: '👧' },
+  { id: 7, name: '최지혜', username: 'user7', avatar: '👩‍🦱' },
+  { id: 8, name: '김미희', username: 'user8', avatar: '👧' }
+];
+
+/**
+ * AuthProvider: 로그인/키/비밀번호 상태 관리
+ */
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [keys, setKeys] = useState({ apiKey: '', notionToken: '' });
+  const [passwords, setPasswords] = useState({});
+
+  // 초기 로컬스토리지 로딩
+  useEffect(() => {
+    // 로그인 상태
+    const storedUser = localStorage.getItem('authUser');
+    if (storedUser) setUser(JSON.parse(storedUser));
+    // 키 상태
+    const storedKeys = localStorage.getItem('authKeys');
+    if (storedKeys) setKeys(JSON.parse(storedKeys));
+    // 비밀번호 매핑
+    const storedPw = localStorage.getItem('authPasswords');
+    if (storedPw) {
+      setPasswords(JSON.parse(storedPw));
+    } else {
+      // 초기 모든 사용자 비밀번호 password123
+      const init = {};
+      defaultUsers.forEach(u => { init[u.username] = 'password123'; });
+      setPasswords(init);
+      localStorage.setItem('authPasswords', JSON.stringify(init));
+    }
+  }, []);
+
+  // 로그인
+  const login = (u, apiKey, notionToken) => {
+    localStorage.setItem('authUser', JSON.stringify(u));
+    localStorage.setItem('authKeys', JSON.stringify({ apiKey, notionToken }));
+    setUser(u);
+    setKeys({ apiKey, notionToken });
+  };
+
+  // 로그아웃
+  const logout = () => {
+    localStorage.removeItem('authUser');
+    localStorage.removeItem('authKeys');
+    setUser(null);
+    setKeys({ apiKey: '', notionToken: '' });
+  };
+
+  // 비밀번호 변경
+  const changePassword = (username, newPassword) => {
+    const updated = { ...passwords, [username]: newPassword };
+    setPasswords(updated);
+    localStorage.setItem('authPasswords', JSON.stringify(updated));
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, keys, passwords, changePassword, defaultUsers }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+/**
+ * EmergencyLogin: 사용자 선택 + 비밀번호·API Key 입력 후 로그인
+ */
+const EmergencyLogin = () => {
+  const { defaultUsers, passwords, login } = useAuth();
+  const [selected, setSelected] = useState(null);
+  const [password, setPassword] = useState('');
+  const [apiKey, setApiKey] = useState('');
+  const [notionToken, setNotionToken] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    if (!selected || passwords[selected.username] !== password) {
+      alert('사용자 또는 비밀번호가 잘못되었습니다.');
+      return;
+    }
+    login(selected, apiKey.trim(), notionToken.trim());
+    navigate('/main');
+  };
+
+  return (
+    <div style={{ padding: 20, maxWidth: 400, margin: '0 auto' }}>
+      <h1>보안 로그인</h1>
+      <select
+        style={{ width: '100%', padding: 10, marginBottom: 10 }}
+        value={selected?.username || ''}
+        onChange={e => setSelected(defaultUsers.find(u => u.username === e.target.value))}>
+        <option value="" disabled>사용자 선택</option>
+        {defaultUsers.map(u => (
+          <option key={u.id} value={u.username}>{u.name}</option>
+        ))}
+      </select>
+      <input
+        type="password"
+        placeholder="비밀번호"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        style={{ width: '100%', padding: 10, marginBottom: 10 }}
+      />
+      <input
+        type="text"
+        placeholder="API Key (선택)"
+        value={apiKey}
+        onChange={e => setApiKey(e.target.value)}
+        style={{ width: '100%', padding: 10, marginBottom: 10 }}
+      />
+      <input
+        type="text"
+        placeholder="Notion Token (선택)"
+        value={notionToken}
+        onChange={e => setNotionToken(e.target.value)}
+        style={{ width: '100%', padding: 10, marginBottom: 20 }}
+      />
+      <button onClick={handleLogin} style={{ width: '100%', padding: 12, backgroundColor: '#2563eb', color: '#fff', border: 'none', borderRadius: 6 }}>
+        로그인
+      </button>
+    </div>
+  );
+};
+
+/**
+ * MainPage: 로그인 후 메인 페이지
+ * - AI 기능은 apiKey가 있을 때만 활성화
+ */
+const MainPage = () => {
+  const { user, keys, logout } = useAuth();
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>환영합니다, {user.name}님!</h2>
+      {keys.apiKey ? (
+        <p>AI 비서 기능을 사용할 수 있습니다.</p>
+      ) : (
+        <p>AI 비서 기능을 이용하려면 설정에서 API Key를 등록하세요.</p>
+      )}
+      <button onClick={logout} style={{ marginTop: 20 }}>로그아웃</button>
+    </div>
+  );
+};
+
+/**
+ * SettingsPage: 비밀번호 변경 & API Key/Notion Token 재설정
+ */
+const SettingsPage = () => {
+  const { user, passwords, changePassword, keys, login } = useAuth();
+  const [newPw, setNewPw] = useState('');
+  const [apiKey, setApiKey] = useState(keys.apiKey);
+  const [notionToken, setNotionToken] = useState(keys.notionToken);
+
+  const handleSave = () => {
+    if (newPw) {
+      changePassword(user.username, newPw);
+      alert('비밀번호가 변경되었습니다.');
+    }
+    login(user, apiKey.trim(), notionToken.trim());
+    alert('설정이 저장되었습니다.');
+  };
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>설정</h2>
+      <div style={{ marginBottom: 10 }}>
+        <label>새 비밀번호</label>
+        <input
+          type="password"
+          placeholder="변경할 비밀번호"
+          value={newPw}
+          onChange={e => setNewPw(e.target.value)}
+          style={{ width: '100%', padding: 8 }}
+        />
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <label>API Key</label>
+        <input value={apiKey} onChange={e => setApiKey(e.target.value)} style={{ width: '100%', padding: 8 }} />
+      </div>
+      <div style={{ marginBottom: 20 }}>
+        <label>Notion Token</label>
+        <input value={notionToken} onChange={e => setNotionToken(e.target.value)} style={{ width: '100%', padding: 8 }} />
+      </div>
+      <button onClick={handleSave} style={{ padding: 10, backgroundColor: '#10b981', color: '#fff', border: 'none', borderRadius: 6 }}>
+        저장
+      </button>
+    </div>
+  );
+};
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<EmergencyLogin />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/*" element={<EmergencyLogin />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}

@@ -1,138 +1,157 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import React, { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
+import { useAuth } from '@/hooks/useAuth';
 
-export default function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('password123');
-  const [error, setError] = useState('');
-  const { login, isLoading, isAuthenticated } = useAuth();
+// 8명의 고정 사용자 목록
+const defaultUsers = [
+  { id: 1, name: '곽완신', username: 'user1', avatar: '👨‍💼' },
+  { id: 2, name: '유은옥', username: 'user2', avatar: '👩‍💼' },
+  { id: 3, name: '이경희', username: 'user3', avatar: '👩‍🦰' },
+  { id: 4, name: '임용녀', username: 'user4', avatar: '👩‍🦳' },
+  { id: 5, name: '박혜경', username: 'user5', avatar: '👱‍♀️' },
+  { id: 6, name: '김유나', username: 'user6', avatar: '👧' },
+  { id: 7, name: '최지혜', username: 'user7', avatar: '👩‍🦱' },
+  { id: 8, name: '김미희', username: 'user8', avatar: '👧' }
+];
+
+const LoginPage: React.FC = () => {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const { login } = useAuth();
   
-  // 이미 로그인되어 있으면 홈으로 리다이렉트
-  useEffect(() => {
-    if (isAuthenticated) {
-      window.location.href = '/';
-    }
-  }, [isAuthenticated]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (!username) {
-      setError('사용자 이름을 입력해주세요.');
+  const [selectedUser, setSelectedUser] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [apiKey, setApiKey] = useState<string>('');
+  const [notionToken, setNotionToken] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  // 초기 비밀번호는 모두 'password123'으로 설정
+  const handleLogin = async () => {
+    if (!selectedUser) {
+      toast({
+        title: "사용자 선택 필요",
+        description: "로그인할 사용자를 선택해주세요.",
+        variant: "destructive"
+      });
       return;
     }
-
+    
+    if (password !== 'password123') {
+      toast({
+        title: "비밀번호 오류",
+        description: "비밀번호가 일치하지 않습니다.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
     try {
-      const response = await login(username, password);
+      // 선택된 사용자 찾기
+      const user = defaultUsers.find(u => u.username === selectedUser);
       
-      // 응답에서 사용자 정보 확인
-      if (response && response.user) {
-        // 로컬 스토리지에 인증 정보 수동으로 저장
-        localStorage.setItem('userAuth', JSON.stringify({
-          isLoggedIn: true,
-          user: response.user
-        }));
-        
-        // 홈으로 강제 이동
-        window.location.href = '/';
-      }
-    } catch (err: any) {
-      console.error('Login error:', err);
-      if (err?.message) {
-        setError(`오류: ${err.message}`);
-      } else {
-        setError('로그인에 실패했습니다. 사용자 이름을 확인해주세요.');
+      if (!user) {
+        throw new Error("선택된 사용자를 찾을 수 없습니다.");
       }
       
-      // 로그인 실패해도 기본 데이터로 로컬 스토리지 설정 (배포 환경 테스트용)
-      if (username === 'user1' || username === 'user2' || username === 'user6' || username === 'zzzro') {
-        // zzzro는 user6의 변경된 아이디
-        const userLookup = {
-          'user1': { id: 1, name: '곽완신', avatar: '👨‍💼' },
-          'user2': { id: 2, name: '유은옥', avatar: '👩‍💼' },
-          'user6': { id: 6, name: '김유나', avatar: '👩‍🦳' },
-          'zzzro': { id: 6, name: '김유나', avatar: '👩‍🦳' }
-        };
-        
-        const userData = userLookup[username as keyof typeof userLookup];
-        
-        if (userData) {
-          const fakeUser = {
-            ...userData,
-            username: username
-          };
-          
-          localStorage.setItem('userAuth', JSON.stringify({
-            isLoggedIn: true,
-            user: fakeUser
-          }));
-          
-          // 성공 메시지 출력 후 홈으로 리디렉션
-          console.log("로컬 인증 성공:", username);
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 300);
-        }
-      }
+      // Zustand store에 로그인 정보 저장
+      login(user, apiKey.trim(), notionToken.trim());
+      
+      // 로그인 성공
+      toast({
+        title: "로그인 성공",
+        description: `환영합니다, ${user.name}님!`
+      });
+      
+      // 메인 페이지로 리다이렉트
+      setLocation('/');
+    } catch (error) {
+      console.error('로그인 오류:', error);
+      toast({
+        title: "로그인 실패",
+        description: "로그인 처리 중 오류가 발생했습니다.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
-
+  
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">습관 트래커 로그인</h1>
-        
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-              사용자 이름
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
-              placeholder="사용자 이름 입력 (예: user1, user6)"
-            />
-          </div>
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-50 max-w-[390px] mx-auto">
+      <div className="flex-1 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold text-center mb-6">보안 로그인</h1>
           
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              비밀번호
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">사용자</label>
+              <select 
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="" disabled>사용자 선택</option>
+                {defaultUsers.map(user => (
+                  <option key={user.id} value={user.username}>
+                    {user.name} {user.avatar}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">비밀번호</label>
+              <input
+                type="password"
+                placeholder="비밀번호 입력"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Gemini API 키 (선택)</label>
+              <input
+                type="password"
+                placeholder="API 키 입력"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Notion 토큰 (선택)</label>
+              <input
+                type="password"
+                placeholder="Notion 토큰 입력"
+                value={notionToken}
+                onChange={(e) => setNotionToken(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            
+            <button
+              onClick={handleLogin}
+              disabled={isLoading}
+              className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-md transition-colors mt-4 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            >
+              {isLoading ? '로그인 중...' : '로그인'}
+            </button>
+            
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              모든 사용자의 기본 비밀번호는 'password123'입니다.
+            </p>
           </div>
-          
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none ${
-              isLoading ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
-          >
-            {isLoading ? '로그인 중...' : '로그인'}
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;
