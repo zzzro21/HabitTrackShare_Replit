@@ -6,10 +6,10 @@ import { useAuth } from '@/hooks/useAuth';
 
 // 동기부여 문장
 const motivationalQuotes = [
-  "\"작은 습관이 인생을 바꿉니다.\n오늘 한 마음이 결과 세상입니다.\n그것이 성공의 가장 큽니다.\"",
-  "\"작은 행동을 시작하고 인내하면,\n그것이 큰 미래를 만들어냅니다.\"",
-  "\"오늘 하루, 미래를 위한 투자입니다.\n작은 시작이 큰 변화를 만듭니다.\"",
-  "\"꾸준함이 천재를 이깁니다.\n매일의 작은 행동이 미래를 결정합니다.\"",
+  "작은 습관이 인생을 바꿉니다.\n오늘 한 마음이 결과 세상입니다.\n그것이 성공의 가장 큽니다.",
+  "작은 행동을 시작하고 인내하면,\n그것이 큰 미래를 만들어냅니다.",
+  "오늘 하루, 미래를 위한 투자입니다.\n작은 시작이 큰 변화를 만듭니다.",
+  "꾸준함이 천재를 이깁니다.\n매일의 작은 행동이 미래를 결정합니다.",
   // 추가 명언들을 여기에 넣을 수 있습니다
 ];
 
@@ -432,7 +432,11 @@ const LandingPage: React.FC = () => {
             </span>
             {/* 명언 가이드라인 영역 */}
             <div className="w-full max-w-[260px] mx-auto px-3 py-2 mt-2">
-              <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} style={{ fontSize: '1.3rem' }}>
+              <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
+                style={{ 
+                  fontSize: '1.3rem',
+                  fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive'
+                }}>
                 "{quote}"
               </p>
             </div>
