@@ -111,25 +111,19 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
           </div>
         </div>
         
-        {/* 범례 섹션 - 단순화된 인라인 표시 */}
-        <div className="border-t pt-3 pb-2 px-1">
-          <table className="w-full bg-white shadow-sm rounded-md">
-            <tbody>
-              <tr>
-                {categories.map(category => (
-                  <td key={category} className="text-center px-1 py-2">
-                    <div className="flex flex-col items-center space-y-1">
-                      <div 
-                        className="w-4 h-4 rounded-sm flex-shrink-0" 
-                        style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
-                      />
-                      <p className="text-xs font-medium whitespace-nowrap">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</p>
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
+        {/* 범례 섹션 - 심플한 인라인 표시 */}
+        <div className="pt-3 pb-2 px-1">
+          <div className="grid grid-cols-5 gap-1">
+            {categories.map(category => (
+              <div key={category} className="flex flex-col items-center">
+                <div 
+                  className="w-3 h-3 rounded-sm flex-shrink-0 mb-1" 
+                  style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
+                />
+                <p className="text-[10px] font-medium text-gray-600">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
