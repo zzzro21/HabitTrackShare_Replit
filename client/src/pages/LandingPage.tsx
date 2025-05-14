@@ -432,6 +432,19 @@ const LandingPage: React.FC = () => {
             </span>
             {/* 명언 가이드라인 영역 */}
             <div className="w-full max-w-[280px] mx-auto px-3 py-3 mt-2">
+              {/* Little actions, Big results 문구 */}
+              <div className={`text-black flex flex-col transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 mb-3`} 
+                style={{ 
+                  fontSize: '1.5rem',
+                  fontFamily: 'Arial, sans-serif',
+                  lineHeight: '1.3'
+                }}>
+                <p className="text-left ml-6">Little actions,</p>
+                <p className="text-right mr-10">Big results,</p>
+                <p className="text-center">Set it, Do it, Repeat.</p>
+              </div>
+              
+              {/* 원래 명언 영역 */}
               <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
                 style={{ 
                   fontSize: '1.6rem',
