@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { useHabit } from '@/lib/HabitContext';
 import { useAuth } from '@/hooks/useAuth';
-import TabNavigation from '@/components/TabNavigation';
+import AppLayout from '@/components/AppLayout';
 import MoriAssistant from '@/components/MoriAssistant';
 
 const Dashboard: React.FC = () => {
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen shadow-lg pb-16 relative">
+    <AppLayout title="홈" showBackButton={false}>
       {/* 인트로 화면으로 이동하는 버튼 추가 */}
       <div className="absolute top-3 left-3 z-10">
         <button 
@@ -257,8 +257,6 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <TabNavigation />
-      
       {/* AI 비서 모달 */}
       {showAssistant && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-20 backdrop-blur-sm transition-all duration-200">
@@ -276,7 +274,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </AppLayout>
   );
 };
 

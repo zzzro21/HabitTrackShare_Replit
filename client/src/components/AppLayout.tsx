@@ -26,7 +26,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   };
 
   return (
-    <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden">
+    <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[420px] lg:max-w-[800px]">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="pb-1 pt-2 relative">
           {showBackButton && (
