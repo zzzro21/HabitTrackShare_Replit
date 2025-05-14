@@ -79,16 +79,9 @@ const HabitTracker: React.FC = () => {
       const newValue = parseInt(e.target.value);
       console.log(`값 변경: habitId=${habitId}, day=${day}, value=${newValue} (원래값: ${value}, 타입: ${habitScoreType})`);
       
-      // binary 타입은 동그라미 선택시 value 2를 선택하지만, 서버에는 1로 저장
-      // (binary 타입은 checkbox로 처리되므로 0 또는 1만 저장 가능)
-      let valueToSave = newValue;
-      if (habitScoreType === 'binary' && newValue === 2) {
-        valueToSave = 1;
-        console.log(`Binary 타입 습관을 위한 값 변환: ${newValue} -> ${valueToSave}`);
-      }
-      
+      // 모든 값을 그대로 서버에 저장 (binary 타입은 0 또는 1만 가능)
       // 습관 ID는 현재 그대로 전달 (HabitContext에서 서버 ID로 변환됨)
-      handleValueChange(habitId, day, valueToSave);
+      handleValueChange(habitId, day, newValue);
     };
     
     // 자신의 데이터인 경우 수정 가능한 셀렉트 박스 표시
@@ -103,7 +96,7 @@ const HabitTracker: React.FC = () => {
             className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${value > 0 ? 'bg-green-100' : 'bg-white'}`}
           >
             <option value="0">-</option>
-            <option value="1">○</option>
+            <option value="1">○</option> {/* 1점으로 저장됨 */}
           </select>
         );
       } else {
