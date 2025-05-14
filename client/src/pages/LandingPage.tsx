@@ -419,16 +419,20 @@ const LandingPage: React.FC = () => {
 
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-4">
-          <h1 className={`text-2xl font-bold leading-tight transition-all duration-500 tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <div className="flex flex-col">
-              <span className="text-left ml-10">"Little actions,</span>
+          <h1 className={`font-sans transition-all duration-500 tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ fontFamily: "'Poppins', 'Inter', 'Montserrat', sans-serif" }}>
+            <div className="flex flex-col space-y-1">
+              <span className="text-left ml-10 text-2xl font-light tracking-wide">"Little actions,</span>
               <span className="text-right mr-10">
                 <span 
-                  className="inline-block bg-blue-500 px-2 py-0.5 text-white rounded-md"
-                  style={{ transform: 'rotate(-5deg)', display: 'inline-block' }}
-                >Big results!</span>,
+                  className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md font-semibold tracking-wide shadow-sm"
+                  style={{ 
+                    transform: 'rotate(-5deg)', 
+                    display: 'inline-block',
+                    fontSize: '1.4rem'
+                  }}
+                >Big results!</span><span className="text-2xl">,</span>
               </span>
-              <span className="text-center text-xl">Set it, Do it, Repeat."</span>
+              <span className="text-center text-xl font-light tracking-wide leading-relaxed">Set it, Do it, Repeat."</span>
             </div>
           </h1>
 
@@ -445,9 +449,10 @@ const LandingPage: React.FC = () => {
               {/* 원래 명언 영역 */}
               <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
                 style={{ 
-                  fontSize: '1.6rem',
+                  fontSize: '1.5rem',
                   fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive',
-                  lineHeight: '1.4'
+                  lineHeight: '1.5',
+                  letterSpacing: '0.02em'
                 }}>
                 "{quote}"
               </p>
