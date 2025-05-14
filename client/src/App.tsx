@@ -132,10 +132,17 @@ function NavBar() {
 }
 
 function App() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const isLandingPage = location === '/' || location === '/landing';
   const isLoginPage = location === '/login';
   const isWelcomePage = location === '/welcome';
+  
+  // 어플리케이션 초기화 시 로그인 페이지로 리디렉션
+  useEffect(() => {
+    if (location === '/') {
+      setLocation('/login');
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
