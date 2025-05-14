@@ -51,7 +51,7 @@ const UserSelector: React.FC = () => {
             }`}
           >
             <span className="mr-1">{user.avatar}</span>
-            {user.username}
+            {user.name}
           </button>
         ))}
       </div>
