@@ -7,6 +7,7 @@ interface AppLayoutProps {
   subtitle?: string;
   showBackButton?: boolean;
   onBackClick?: () => void;
+  hideHeader?: boolean;
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({
@@ -14,7 +15,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   title,
   subtitle,
   showBackButton = true,
-  onBackClick
+  onBackClick,
+  hideHeader = false
 }) => {
   const handleBackClick = () => {
     if (onBackClick) {
@@ -27,27 +29,30 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
   return (
     <div className="container mx-auto bg-white min-h-screen shadow-lg overflow-hidden max-w-[390px] lg:max-w-[800px] flex flex-col">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[56px] flex items-center">
-        <div className="w-full pb-1 pt-1 relative">
-          {showBackButton && (
-            <button 
-              onClick={handleBackClick} 
-              className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-              <span className="sr-only">뒤로 가기</span>
-            </button>
-          )}
-          <h1 className="text-base font-bold text-center">{title}</h1>
-          {subtitle && (
-            <p className="text-xs text-center text-gray-500 -mt-0.5">{subtitle}</p>
-          )}
-        </div>
-      </header>
+      {!hideHeader && (
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-10 h-[56px] flex items-center">
+          <div className="w-full pb-1 pt-1 relative">
+            {showBackButton && (
+              <button 
+                onClick={handleBackClick} 
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+                <span className="sr-only">뒤로 가기</span>
+              </button>
+            )}
+            <h1 className="text-base font-bold text-center">{title}</h1>
+            {subtitle && (
+              <p className="text-xs text-center text-gray-500 -mt-0.5">{subtitle}</p>
+            )}
+          </div>
+        </header>
+      )}
       
-      <main className="flex-1 px-3 py-2 overflow-y-auto" style={{ height: 'calc(100vh - 116px)' }}>
+      <main className={`flex-1 px-3 py-2 overflow-y-auto ${hideHeader ? 'pt-4' : ''}`} 
+        style={{ height: hideHeader ? 'calc(100vh - 60px)' : 'calc(100vh - 116px)' }}>
         {children}
       </main>
       
