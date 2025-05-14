@@ -166,36 +166,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       if (entriesResponse.ok) {
         const entriesData = await entriesResponse.json();
-        console.log(`사용자 ${userId}의 데이터 로드됨:`, entriesData);
-        
-        // Binary 타입 습관에 대해 표시 변환 (value 1 -> 값이 있으면 2로 표시)
-        const processedEntries = entriesData.map((entry: HabitEntry) => {
-          // 습관 정보 가져오기 (서버 ID로 매핑된 습관 ID 사용)
-          const serverHabitId = entry.habitId;
-          
-          // 서버 ID -> 클라이언트 ID 매핑
-          const clientHabitId = serverToClientHabitId(serverHabitId);
-          
-          // 클라이언트 ID로 습관 정보 조회
-          const habit = habits.find(h => h.id === clientHabitId);
-          
-          // 습관 데이터 로깅
-          console.log(`습관 매핑: 서버ID=${serverHabitId}, 클라이언트ID=${clientHabitId}, 타입=${habit?.scoreType}, 값=${entry.value}`);
-          
-          // 클라이언트에서 사용할 항목으로 변환
-          const clientEntry = {
-            ...entry,
-            habitId: clientHabitId, // 클라이언트 ID로 변환
-          };
-          
-          // Value 값은 그대로 유지 (1인 경우 그대로 1로 표시)
-          console.log(`습관 데이터 유지: habitId=${clientHabitId}, 타입=${habit?.scoreType}, 값=${entry.value}`);
-          // binary 타입은 값이 있으면 그대로 1로 표시 (동그라미)
-          
-          return clientEntry;
-        });
-        
-        setHabitEntries(processedEntries);
+        setHabitEntries(entriesData);
       } else {
         console.info('데이터 로드 오류: 서버에서 사용자 데이터를 가져올 수 없습니다.');
         setHabitEntries([]);
@@ -216,27 +187,14 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return;
       }
       
-      // 해당 습관 정보 가져오기
-      const habit = habits.find(h => h.id === habitId);
-      const habitType = habit?.scoreType;
+      console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${value}`);
       
-      // 디버깅: 습관 정보 확인
-      console.log(`습관 정보: id=${habitId}, type=${habitType}, 입력값=${value}`);
-      
-      // binary 타입 습관은 value=1으로 저장하고 표시
-      // UI에서 선택된 값 그대로 서버에 저장
-      let valueToSave = value;
-      
-      console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${valueToSave}, habitType=${habitType}`);
-      
-      // 클라이언트 ID를 서버 ID로 변환하여 전송
-      const serverHabitId = clientToServerHabitId(habitId);
-      
+      // 서버로 원래 habitId 그대로 전송 (서버에서 필요시 매핑)
       const requestData = {
         userId: currentUserId,
-        habitId: serverHabitId, // 서버 ID로 변환하여 전송
+        habitId: habitId, // 클라이언트 ID 그대로 전송 (서버에서 매핑)
         day,
-        value: valueToSave
+        value
       };
       
       console.log('서버 요청 데이터:', requestData);
@@ -245,18 +203,10 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       console.log('서버 응답:', response);
       
-      // binary 타입 습관은 UI 표시를 위해 값 변환 (1 -> 2, 동그라미로 표시)
-      let displayValue = response.value;
-      if (habitType === 'binary' && response.value === 1) {
-        displayValue = 2; // UI에서는 2로 표시 (동그라미)
-        console.log(`Binary 타입 습관의 UI 표시값 변환: ${response.value} → ${displayValue}`);
-      }
-      
       // 서버 응답에서 항상 클라이언트 ID 사용하도록 변환
       const clientResponse = {
         ...response,
-        habitId: habitId, // 항상 원래 habitId 사용 (서버 응답의 ID와 상관없이)
-        value: displayValue // UI 표시를 위한 값
+        habitId: habitId // 항상 원래 habitId 사용 (서버 응답의 ID와 상관없이)
       };
       
       console.log('로컬 상태에 저장될 데이터:', clientResponse);
@@ -276,9 +226,6 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           return [...prev, clientResponse];
         }
       });
-      
-      // 데이터 저장 후 즉시 다시 조회해서 UI 상태 유지
-      await fetchEntriesForUser(currentUserId);
     } catch (error) {
       const err = error as any;
       if (err?.response?.status === 401) {
@@ -377,19 +324,6 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         completionRate: calculateCompletionRate(user.id)
       }))
       .sort((a, b) => b.totalScore - a.totalScore);
-  };
-  
-  // 클라이언트 습관 ID를 서버 습관 ID로 변환 (1 -> 10, 2 -> 11, ...)
-  const clientToServerHabitId = (clientId: number): number => {
-    console.log(`클라이언트 ID를 서버 ID로 변환: ${clientId} -> ${clientId >= 1 && clientId <= 5 ? clientId + 9 : clientId}`);
-    return clientId >= 1 && clientId <= 5 ? clientId + 9 : clientId; // 클라이언트 ID가 1~5 범위에 있는 경우에만 변환
-  };
-  
-  // 서버 습관 ID를 클라이언트 습관 ID로 변환 (10 -> 1, 11 -> 2, ...)
-  const serverToClientHabitId = (serverId: number): number => {
-    // 음수가 나오는 경우를 방지하기 위해 ID 매핑 확인
-    console.log(`서버 ID를 클라이언트 ID로 변환: ${serverId} -> ${serverId > 9 ? serverId - 9 : serverId}`);
-    return serverId > 9 ? serverId - 9 : serverId; // 서버 ID에서 9를 빼서 클라이언트 ID로 변환 (단, 음수가 나오지 않도록)
   };
   
   // 사용자 데이터를 수정할 수 있는지 확인 (자신의 데이터만)

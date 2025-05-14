@@ -147,7 +147,7 @@ export const predefinedHabits = [
     label: "동영상 시청",
     scoreType: "binary",
     scoreValue: 1,
-    scoring: (value: number) => value === 1 ? 1 : 0 // 완료(○)=1, 미완료(-)=0
+    scoring: (value: number) => value ? 1 : 0
   },
   {
     label: "제품 애용 및 후기 작성",
@@ -159,7 +159,7 @@ export const predefinedHabits = [
     label: "미팅 참석 및 소감 작성",
     scoreType: "binary",
     scoreValue: 5,
-    scoring: (value: number) => value === 1 ? 5 : 0 // 완료(○)=5, 미완료(-)=0
+    scoring: (value: number) => value ? 5 : 0
   },
   {
     label: "소비자 제품전달",
