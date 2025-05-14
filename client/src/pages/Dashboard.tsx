@@ -329,7 +329,31 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           
-          {/* 진행 상황 원과 하단 버튼 제거됨 */}
+          <div className="mt-4 flex flex-wrap gap-2 justify-center">
+            {renderProgressCircles()}
+          </div>
+          
+          {/* 빠른 액션 버튼 */}
+          <div className="flex justify-center mt-4 gap-4">
+            <button 
+              className="bg-black text-white p-4 rounded-full"
+              onClick={() => setLocation('/')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </button>
+            
+            <button 
+              className="border border-gray-300 p-4 rounded-xl"
+              onClick={() => setLocation('/insights')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
