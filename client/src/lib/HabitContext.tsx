@@ -188,11 +188,9 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             habitId: clientHabitId, // 클라이언트 ID로 변환
           };
           
-          // Binary 타입이고 값이 있으면 UI에서 표시할 값을 2로 설정 (동그라미)
-          if (habit && habit.scoreType === 'binary' && entry.value > 0) {
-            console.log(`Binary 타입 습관 표시 변환: habitId=${clientHabitId}, value=${entry.value} -> 2`);
-            clientEntry.value = 2;
-          }
+          // Value 값은 그대로 유지 (1인 경우 그대로 1로 표시)
+          console.log(`습관 데이터 유지: habitId=${clientHabitId}, 타입=${habit?.scoreType}, 값=${entry.value}`);
+          // binary 타입은 값이 있으면 그대로 1로 표시 (동그라미)
           
           return clientEntry;
         });
@@ -225,8 +223,8 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       // 디버깅: 습관 정보 확인
       console.log(`습관 정보: id=${habitId}, type=${habitType}, 입력값=${value}`);
       
-      // binary 타입 습관의 값 처리 (UI에서는 value=2로 선택하지만 서버에는 value=1로 저장)
-      // 클라이언트에서 이미 변환되었으므로 value 그대로 전송
+      // binary 타입 습관은 value=1으로 저장하고 표시
+      // UI에서 선택된 값 그대로 서버에 저장
       let valueToSave = value;
       
       console.log(`습관 항목 업데이트 시도: userId=${currentUserId}, habitId=${habitId}, day=${day}, value=${valueToSave}, habitType=${habitType}`);
