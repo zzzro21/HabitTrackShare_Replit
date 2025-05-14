@@ -32,9 +32,9 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
     소비자관리: '#6CDFCB', // 파스텔 민트
   };
   
-  // 각 주차별 데이터를 생성
+  // 각 주차별 데이터를 생성 (8~14주차)
   const weekData = useMemo(() => {
-    const weeks = Array.from({ length: 8 }, (_, i) => i);
+    const weeks = Array.from({ length: 7 }, (_, i) => i + 8);
     
     return weeks.map(week => {
       const weeklyScores = calculateWeekScores(userId, week);
@@ -50,7 +50,7 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
       };
       
       return {
-        week: `${week + 1}w`,
+        week: `${week}w`,
         score: totalScore,
         categoryScores,
       };
@@ -60,13 +60,13 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   return (
     <div className="bg-blue-50 rounded-2xl shadow-md mb-4">
       <div className="pt-3 px-4 pb-2">
-        <h3 className="text-base font-bold text-gray-800 mb-3 text-center">8Weeks Growth</h3>
+        <h3 className="text-base font-bold text-gray-800 mb-3 text-center">Growth (8-14주차)</h3>
         
         {/* 그래프 영역 */}
         <div className="h-36 relative mb-0">
           <div className="flex h-full items-end justify-between">
             {weekData.map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center w-[10%]">
+              <div key={idx} className="flex flex-col items-center w-[11%]">
                 {/* 배경 막대 */}
                 <div className="w-full h-32 bg-white rounded-lg relative">
                   {/* 데이터 막대 */}
