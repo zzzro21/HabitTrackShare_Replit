@@ -431,11 +431,13 @@ const LandingPage: React.FC = () => {
               </svg>
             </span>
             {/* 명언 가이드라인 영역 */}
-            <div className="w-full max-w-[260px] mx-auto px-3 py-2 mt-2">
-              <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
+            <div className="w-full max-w-[280px] mx-auto px-3 py-3 mt-2">
+              <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line font-bold`} 
                 style={{ 
-                  fontSize: '1.3rem',
-                  fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive'
+                  fontSize: '1.6rem',
+                  fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive',
+                  lineHeight: '1.4',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.1)'
                 }}>
                 "{quote}"
               </p>
