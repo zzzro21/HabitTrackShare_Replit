@@ -420,8 +420,11 @@ const LandingPage: React.FC = () => {
         {/* 메인 텍스트 영역 */}
         <div className="w-full text-center mt-4">
           <h1 className={`text-2xl font-bold leading-tight transition-all duration-500 tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            "Little actions, <span className="inline-block bg-blue-500 px-2 py-0.5 text-white rounded-md">Big results</span>,<br />
-            <span className="text-xl">Set it, Do it, Repeat.</span>"
+            <div className="flex flex-col">
+              <span className="text-left ml-8">"Little actions,</span>
+              <span className="text-right mr-8"><span className="inline-block bg-blue-500 px-2 py-0.5 text-white rounded-md">Big results</span>,</span>
+              <span className="text-center text-xl">Set it, Do it, Repeat."</span>
+            </div>
           </h1>
 
           <div className="flex items-center mt-6 justify-center relative">
@@ -432,17 +435,7 @@ const LandingPage: React.FC = () => {
             </span>
             {/* 명언 가이드라인 영역 */}
             <div className="w-full max-w-[280px] mx-auto px-3 py-3 mt-2">
-              {/* Little actions, Big results 문구 */}
-              <div className={`text-black flex flex-col transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 mb-3`} 
-                style={{ 
-                  fontSize: '1.5rem',
-                  fontFamily: 'Arial, sans-serif',
-                  lineHeight: '1.3'
-                }}>
-                <p className="text-left ml-6">Little actions,</p>
-                <p className="text-right mr-10">Big results,</p>
-                <p className="text-center">Set it, Do it, Repeat.</p>
-              </div>
+
               
               {/* 원래 명언 영역 */}
               <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
