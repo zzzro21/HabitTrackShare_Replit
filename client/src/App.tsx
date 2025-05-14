@@ -94,9 +94,9 @@ function NavBar() {
   // 사용자 정보 없으면 빈 화면 또는 로그인 버튼 표시
   if (!isAuthenticated || !user) {
     return (
-      <div className="bg-blue-600 text-white p-3 flex justify-between items-center max-w-[390px] mx-auto">
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-semibold">습관 트래커</span>
+      <div className="bg-blue-600 text-white p-2 flex justify-between items-center max-w-[390px] mx-auto">
+        <div className="flex items-center gap-1">
+          <span className="text-lg font-semibold">습관 트래커</span>
         </div>
         <div>
           <button
@@ -111,9 +111,9 @@ function NavBar() {
   }
   
   return (
-    <div className="bg-blue-600 text-white p-3 flex justify-between items-center max-w-[390px] mx-auto">
-      <div className="flex items-center gap-2">
-        <span className="text-xl font-semibold">습관 트래커</span>
+    <div className="bg-blue-600 text-white p-2 flex justify-between items-center max-w-[390px] mx-auto">
+      <div className="flex items-center gap-1">
+        <span className="text-lg font-semibold">습관 트래커</span>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
