@@ -72,12 +72,23 @@ const HabitTracker: React.FC = () => {
     if (value === 1) bgColor = 'bg-blue-50';
     if (value === 2) bgColor = 'bg-green-100';
     
+    // 디버깅: 현재 셀의 값 확인
+    console.log(`HabitValueCell: habitId=${habitId}, day=${day}, value=${value}`);
+    
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newValue = parseInt(e.target.value);
+      console.log(`값 변경: habitId=${habitId}, day=${day}, value=${newValue} (원래값: ${value})`);
+      
+      // 습관 ID는 현재 그대로 전달 (HabitContext에서 서버 ID로 변환됨)
+      handleValueChange(habitId, day, newValue);
+    };
+    
     // 자신의 데이터인 경우 수정 가능한 셀렉트 박스 표시
     if (canModifyUserData(activeUser)) {
       return (
         <select
           value={value}
-          onChange={(e) => handleValueChange(habitId, day, parseInt(e.target.value))}
+          onChange={handleChange}
           className={`w-full text-[10px] py-0.5 text-center appearance-none focus:outline-none focus:ring-0 ${bgColor}`}
         >
           <option value="0">-</option>
