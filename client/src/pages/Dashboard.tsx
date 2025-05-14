@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <AppLayout title="홈" showBackButton={false}>
+    <AppLayout title="" showBackButton={false}>
       {/* 인트로 화면으로 이동하는 버튼 추가 */}
       <div className="absolute top-3 left-3 z-10">
         <button 
