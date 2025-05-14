@@ -1,0 +1,72 @@
+[
+  {
+    "userId": 15,
+    "habitId": 10,
+    "day": 0,
+    "value": 3,
+    "date": "2025-05-09T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 11,
+    "day": 0,
+    "value": 1,
+    "date": "2025-05-09T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 12,
+    "day": 0,
+    "value": 1,
+    "date": "2025-05-09T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 13,
+    "day": 0,
+    "value": 1,
+    "date": "2025-05-09T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 14,
+    "day": 0,
+    "value": 2,
+    "date": "2025-05-09T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 10,
+    "day": 1,
+    "value": 2,
+    "date": "2025-05-10T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 11,
+    "day": 1,
+    "value": 1,
+    "date": "2025-05-10T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 12,
+    "day": 1,
+    "value": 1,
+    "date": "2025-05-10T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 13,
+    "day": 1,
+    "value": 0,
+    "date": "2025-05-10T00:00:00.000Z"
+  },
+  {
+    "userId": 15,
+    "habitId": 14,
+    "day": 1,
+    "value": 1,
+    "date": "2025-05-10T00:00:00.000Z"
+  }
+]
