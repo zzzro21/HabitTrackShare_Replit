@@ -6,15 +6,15 @@ import { users } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 
 // 세션 저장소 설정
-const PgSession = connectPgSimple(session);
+// 인메모리 세션 저장소 사용 - 데이터베이스 연결 오류 때문에 변경함
+import MemoryStore from 'memorystore';
+const MemoryStoreSession = MemoryStore(session);
 
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 1주일
 
 export const sessionMiddleware = session({
-  store: new PgSession({
-    conObject: { connectionString: process.env.DATABASE_URL },
-    tableName: 'session',
-    createTableIfMissing: true // 필요한 경우 테이블 생성
+  store: new MemoryStoreSession({
+    checkPeriod: 86400000 // 24시간마다 만료된 세션 정리
   }),
   secret: process.env.SESSION_SECRET || 'habit-tracker-secret-key',
   resave: false,
