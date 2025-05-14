@@ -207,17 +207,25 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       console.log('서버 응답:', response);
       
       // Update local state with the new entry
+      // response에는 서버 ID가 포함되어 있지만, 클라이언트에서는 원래 ID 사용
       setHabitEntries(prev => {
+        // 클라이언트에 표시될 로컬 상태는 원래 ID 사용
+        const clientResponse = {
+          ...response,
+          habitId: habitId // 원래 habitId 사용 (서버에서 온 ID 대신)
+        };
+        
+        // 기존 항목이 있는지 확인
         const existingIndex = prev.findIndex(
           entry => entry.userId === currentUserId && entry.habitId === habitId && entry.day === day
         );
         
         if (existingIndex >= 0) {
           const updated = [...prev];
-          updated[existingIndex] = response;
+          updated[existingIndex] = clientResponse;
           return updated;
         } else {
-          return [...prev, response];
+          return [...prev, clientResponse];
         }
       });
     } catch (error) {
