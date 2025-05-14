@@ -166,7 +166,23 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
       if (entriesResponse.ok) {
         const entriesData = await entriesResponse.json();
-        setHabitEntries(entriesData);
+        console.log(`사용자 ${userId}의 데이터 로드됨:`, entriesData);
+        
+        // Binary 타입 습관에 대해 표시 변환 (value 1 -> 값이 있으면 2로 표시)
+        const processedEntries = entriesData.map((entry: HabitEntry) => {
+          // 습관 정보 가져오기
+          const habit = habits.find(h => h.id === entry.habitId);
+          
+          // Binary 타입이고 값이 있으면 2로 표시 (동그라미)
+          if (habit && habit.scoreType === 'binary' && entry.value > 0) {
+            console.log(`Binary 타입 습관 표시 변환: habitId=${entry.habitId}, value=${entry.value} -> 2`);
+            return { ...entry, displayValue: 2 };
+          }
+          
+          return entry;
+        });
+        
+        setHabitEntries(processedEntries);
       } else {
         console.info('데이터 로드 오류: 서버에서 사용자 데이터를 가져올 수 없습니다.');
         setHabitEntries([]);
