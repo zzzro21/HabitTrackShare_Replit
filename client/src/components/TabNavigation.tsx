@@ -5,7 +5,7 @@ const TabNavigation: React.FC = () => {
   const [location] = useLocation();
 
   return (
-    <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200 py-1 px-0">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-1 px-0">
       <div className="flex justify-between -mx-2">
         <a 
           href="/" 
