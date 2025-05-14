@@ -14,11 +14,11 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
   // 카테고리 정의
   const categories = ['독서', '동영상', '제품애용', '미팅참석', '소비자관리'];
   
-  // 카테고리 표시명 간소화
+  // 카테고리 표시명 간소화 - 모바일에서도 잘 보이도록 더 짧게 조정
   const categoryDisplayNames = {
     독서: '독서',
-    동영상: '동영상',
-    제품애용: '제품애용',
+    동영상: '영상',
+    제품애용: '제품',
     미팅참석: '미팅',
     소비자관리: '소비자'
   };
@@ -113,16 +113,18 @@ function GrowthGraph({ userId }: GrowthGraphProps) {
         
         {/* 범례 섹션 */}
         <div className="border-t pt-2 pb-1">
-          <div className="flex flex-nowrap justify-between px-1 overflow-x-auto whitespace-nowrap">
-            {categories.map(category => (
-              <div key={category} className="flex items-center gap-1 mx-1">
-                <div 
-                  className="w-3 h-3 rounded-sm flex-shrink-0" 
-                  style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
-                />
-                <span className="text-xs text-gray-800 font-medium">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</span>
-              </div>
-            ))}
+          <div className="w-full bg-white p-1 rounded flex items-center justify-center">
+            <div className="flex flex-row justify-center items-center space-x-3 md:space-x-4">
+              {categories.map(category => (
+                <div key={category} className="flex items-center">
+                  <div 
+                    className="w-2.5 h-2.5 rounded-sm mr-1 flex-shrink-0" 
+                    style={{ backgroundColor: categoryColors[category as keyof typeof categoryColors] }}
+                  />
+                  <span className="text-[10px] sm:text-xs font-medium">{categoryDisplayNames[category as keyof typeof categoryDisplayNames]}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
