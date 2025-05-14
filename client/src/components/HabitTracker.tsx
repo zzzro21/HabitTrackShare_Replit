@@ -49,7 +49,7 @@ const HabitTracker: React.FC = () => {
     );
   }
 
-  // Calculate start day for the current week
+  // Calculate start day for the current week (각 주는 14일을 포함)
   const startDay = activeWeek * 14;
 
   // 각 습관의 상태 아이콘 렌더링 함수
@@ -167,7 +167,8 @@ const HabitTracker: React.FC = () => {
               <tr key={habit.id}>
                 <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
-                  const day = startDay + i + 7;
+                  // 고정된 간격으로 두 번째 주차의 날짜 계산 - 헤더 숫자와 일치하도록 수정
+                  const day = startDay + i + 7; // 숫자가 8부터 시작하는 것을 맞추기 위해 7을 더함
                   const value = getValue(habit.id, day);
                   
                   return (
