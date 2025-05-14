@@ -137,11 +137,36 @@ function App() {
   const isLoginPage = location === '/login';
   const isWelcomePage = location === '/welcome';
   
-  // 어플리케이션 초기화 시 로그인 페이지로 리디렉션
+  // 어플리케이션 초기화 시 로그인 상태 확인 후 처리
   useEffect(() => {
-    if (location === '/') {
-      setLocation('/login');
-    }
+    const checkAuth = async () => {
+      try {
+        // 이미 인증된 상태인지 확인
+        const authStorage = localStorage.getItem('user-auth-storage');
+        if (authStorage) {
+          const parsedData = JSON.parse(authStorage);
+          if (parsedData?.state?.isAuthenticated && parsedData?.state?.user) {
+            // 이미 인증된 상태면 메인 페이지로
+            if (location === '/') {
+              setLocation('/checklist');
+            }
+            return;
+          }
+        }
+        
+        // 인증 상태가 아니라면 로그인 페이지로 리디렉션
+        if (location === '/') {
+          setLocation('/login');
+        }
+      } catch (error) {
+        console.error('인증 상태 확인 오류:', error);
+        if (location === '/') {
+          setLocation('/login');
+        }
+      }
+    };
+    
+    checkAuth();
   }, []);
 
   return (

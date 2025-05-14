@@ -10,16 +10,23 @@ export const defaultUser = {
   avatar: '👩‍🦳'
 };
 
-// 로그인 설정 함수
+// Zustand 저장소와 호환되는 형식으로 로그인 설정 함수
 export function setupNoAuth() {
-  // 로컬 스토리지에 기본 사용자 정보 저장
-  const authData = {
-    isLoggedIn: true,
-    user: defaultUser
+  // 로컬 스토리지에 기본 사용자 정보 저장 (Zustand persist 형식으로)
+  const authStateData = {
+    state: {
+      isAuthenticated: true,
+      user: defaultUser,
+      apiKey: '',
+      notionToken: '',
+      isLoading: false
+    },
+    version: 0
   };
   
   try {
-    localStorage.setItem('userAuth', JSON.stringify(authData));
+    // Zustand 저장소 키 사용
+    localStorage.setItem('user-auth-storage', JSON.stringify(authStateData));
     console.log('자동 로그인 설정 완료:', defaultUser.name);
   } catch (err) {
     console.error('로컬 스토리지 접근 오류:', err);
@@ -31,11 +38,12 @@ export function setupNoAuth() {
 // 사용자 정보 가져오기 (사용자가 없으면 기본 사용자 리턴)
 export function getCurrentUser() {
   try {
-    const authStr = localStorage.getItem('userAuth');
+    // Zustand 저장소 키 사용
+    const authStr = localStorage.getItem('user-auth-storage');
     if (authStr) {
-      const authData = JSON.parse(authStr);
-      if (authData && authData.user) {
-        return authData.user;
+      const parsedData = JSON.parse(authStr);
+      if (parsedData?.state?.isAuthenticated && parsedData?.state?.user) {
+        return parsedData.state.user;
       }
     }
   } catch (err) {
