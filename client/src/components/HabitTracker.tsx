@@ -131,6 +131,7 @@ const HabitTracker: React.FC = () => {
               <tr key={habit.id}>
                 <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
+                  // day는 0부터 시작하지만 화면에 표시되는 숫자는 day+1
                   const day = startDay + i;
                   const value = getValue(habit.id, day);
                   
@@ -152,7 +153,7 @@ const HabitTracker: React.FC = () => {
       </div>
       
       {/* Second week part - days 8-14 */}
-      <div className="w-full mt-1">
+      <div className="w-full mt-2">
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
@@ -168,7 +169,7 @@ const HabitTracker: React.FC = () => {
                 <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
                   // 고정된 간격으로 두 번째 주차의 날짜 계산 - 헤더 숫자와 일치하도록 수정
-                  const day = startDay + i + 7; // 숫자가 8부터 시작하는 것을 맞추기 위해 7을 더함
+                  const day = startDay + i + 7; // 숫자가 8부터 시작하는 것을 맞추기 위해 7을 더함 (day+1이 화면에 표시되는 숫자)
                   const value = getValue(habit.id, day);
                   
                   return (
