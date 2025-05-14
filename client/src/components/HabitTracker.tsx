@@ -120,7 +120,7 @@ const HabitTracker: React.FC = () => {
         <table className="w-full text-xs border-collapse mb-2">
           <thead>
             <tr>
-              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-left text-[10px]">습관</th>
+              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-center text-[10px]">습관</th>
               {[...Array(7)].map((_, i) => (
                 <th key={i} className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px]">{startDay + i + 1}</th>
               ))}
@@ -129,7 +129,7 @@ const HabitTracker: React.FC = () => {
           <tbody>
             {habits.map((habit) => (
               <tr key={habit.id}>
-                <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
+                <td className="border px-0.5 py-0.5 text-[10px] font-medium text-center">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
                   // day는 0부터 시작하지만 화면에 표시되는 숫자는 day+1
                   const day = startDay + i;
@@ -157,7 +157,7 @@ const HabitTracker: React.FC = () => {
         <table className="w-full text-xs border-collapse">
           <thead>
             <tr>
-              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-left text-[10px]">습관</th>
+              <th className="border px-0.5 py-0.5 w-1/3 bg-gray-50 text-center text-[10px]">습관</th>
               <th className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px] w-[9.52%]">{startDay + 8}</th>
               <th className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px] w-[9.52%]">{startDay + 9}</th>
               <th className="border px-0.5 py-0.5 bg-gray-50 text-center text-[10px] w-[9.52%]">{startDay + 10}</th>
@@ -170,7 +170,7 @@ const HabitTracker: React.FC = () => {
           <tbody>
             {habits.map((habit) => (
               <tr key={habit.id}>
-                <td className="border px-0.5 py-0.5 text-[10px] font-medium">{habit.label}</td>
+                <td className="border px-0.5 py-0.5 text-[10px] font-medium text-center">{habit.label}</td>
                 {[...Array(7)].map((_, i) => {
                   // 고정된 간격으로 두 번째 주차의 날짜 계산 - 헤더 숫자와 일치하도록 수정
                   const day = startDay + i + 7; // 숫자가 8부터 시작하는 것을 맞추기 위해 7을 더함 (day+1이 화면에 표시되는 숫자)
