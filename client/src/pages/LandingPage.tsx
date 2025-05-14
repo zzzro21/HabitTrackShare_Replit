@@ -37,21 +37,21 @@ const LandingPage: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-50">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 to-blue-50 max-w-[420px] mx-auto">
       {/* 상단 네비게이션 바 */}
-      <div className="bg-blue-600 text-white p-3 flex justify-between items-center">
-        <div>습관 트래커</div>
+      <header className="bg-blue-600 text-white p-3 flex justify-between items-center">
+        <div className="text-xl font-semibold">습관 트래커</div>
         <div className="flex space-x-2">
           <div className="text-xs px-2 py-1 bg-blue-700 rounded-md">김한나 님 🔔</div>
           <div className="text-xs px-2 py-1 bg-blue-500 rounded-md">사용자 변경</div>
         </div>
-      </div>
+      </header>
       
       {/* 메인 컨텐츠 */}
-      <div className="flex-1 flex flex-col items-center justify-between p-4">
+      <main className="flex-1 flex flex-col items-center justify-between p-4">
         {/* 원형 이미지 */}
-        <div className="relative w-[300px] h-[300px] mt-8">
-          <div className="absolute inset-0 rounded-full overflow-hidden">
+        <div className="relative w-[280px] h-[280px] mt-6">
+          <div className="absolute inset-0 rounded-full overflow-hidden bg-gray-100">
             <img 
               src="https://images.unsplash.com/photo-1497215842964-222b430dc094?q=80&w=1770&auto=format&fit=crop" 
               alt="Office chair"
@@ -71,7 +71,7 @@ const LandingPage: React.FC = () => {
         </div>
         
         {/* 문구 섹션 */}
-        <div className="text-center mt-8 mb-16">
+        <div className="text-center mt-6 mb-12">
           <h1 className="text-2xl font-bold text-black">
             "Little actions,<br />
             <span className="inline-block bg-blue-500 px-3 py-1 text-white rounded-md mb-1">Big results!</span>"
@@ -99,14 +99,14 @@ const LandingPage: React.FC = () => {
           </button>
         </div>
 
-        {/* 시작하기 버튼 - 원하시는 디자인으로 업데이트 */}
+        {/* 시작하기 버튼 */}
         <button 
           onClick={handleBeginClick}
-          className={`w-4/5 max-w-sm bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg shadow-xl transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
+          className={`w-full max-w-sm bg-black hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-md transform transition-all duration-500 tracking-wider ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-500`}
         >
-          Let's Begin
+          시작하기
         </button>
-      </div>
+      </main>
       
       {/* MORI 비서 버튼 - 화면 우측 하단에 고정 */}
       <div className="fixed bottom-20 right-4 z-20">
