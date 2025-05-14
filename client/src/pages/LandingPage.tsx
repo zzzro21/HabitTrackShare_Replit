@@ -434,8 +434,9 @@ const LandingPage: React.FC = () => {
             <div className="w-full max-w-[260px] mx-auto px-3 py-2 mt-2">
               <p className={`text-black text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} delay-300 whitespace-pre-line`} 
                 style={{ 
-                  fontSize: '1.3rem',
-                  fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive'
+                  fontSize: '1.7rem',
+                  fontFamily: 'Nanum Pen Script, Gaegu, Single Day, cursive',
+                  lineHeight: '1.3'
                 }}>
                 "{quote}"
               </p>
