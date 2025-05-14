@@ -12,15 +12,16 @@ const UserSelector: React.FC = () => {
   const { activeUser, setActiveUser, isLoading, currentUserId } = useHabit();
 
   // 8명의 사용자를 하드코딩 (곽완신, 유은옥, 이경희, 임용녀, 박혜경, 김유나, 최지혜, 김미희)
+  // ID는 서버 데이터베이스의 ID와 일치
   const fixedUsers: FixedUser[] = [
-    { id: 1, name: "곽완신", avatar: "👨🏻" },
-    { id: 2, name: "유은옥", avatar: "👩🏻" },
-    { id: 3, name: "이경희", avatar: "👩🏻" },
-    { id: 4, name: "임용녀", avatar: "👩🏻" },
-    { id: 5, name: "박혜경", avatar: "👩🏻" },
-    { id: 6, name: "김유나", avatar: "👧🏻" },
-    { id: 7, name: "최지혜", avatar: "👩🏻" },
-    { id: 8, name: "김미희", avatar: "👩🏻" },
+    { id: 10, name: "곽완신", avatar: "👨🏻" },
+    { id: 11, name: "유은옥", avatar: "👩🏻" },
+    { id: 12, name: "이경희", avatar: "👩🏻" },
+    { id: 13, name: "임용녀", avatar: "👩🏻" },
+    { id: 14, name: "박혜경", avatar: "👩🏻" },
+    { id: 15, name: "김유나", avatar: "👧🏻" },
+    { id: 16, name: "최지혜", avatar: "👩🏻" },
+    { id: 17, name: "김미희", avatar: "👩🏻" },
   ];
 
   if (isLoading) {
