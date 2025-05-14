@@ -421,11 +421,11 @@ const LandingPage: React.FC = () => {
         <div className="w-full text-center mt-4">
           <h1 className={`text-2xl font-bold leading-tight transition-all duration-500 tracking-wide ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="flex flex-col">
-              <span className="text-right mr-14">"Little actions,</span>
-              <span className="text-left ml-14">
+              <span className="text-left ml-8">"Little actions,</span>
+              <span className="text-right mr-8">
                 <span 
                   className="inline-block bg-blue-500 px-2 py-0.5 text-white rounded-md"
-                  style={{ transform: 'rotate(-15deg)', display: 'inline-block' }}
+                  style={{ transform: 'rotate(-10deg)', display: 'inline-block' }}
                 >Big results</span>,
               </span>
               <span className="text-center text-xl">Set it, Do it, Repeat."</span>
