@@ -210,49 +210,170 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* 진행 상황 */}
+      {/* 성공의 8단계 섹션 */}
       <div className="mt-8 mx-4">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="font-bold">Your progress</h3>
-          <button className="text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-            </svg>
-          </button>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <div className="text-6xl font-bold">{completionRate}%</div>
-          <div className="text-right text-gray-500 text-sm">
-            <p>Of the weekly</p>
-            <p>plan completed</p>
+          <h3 className="font-bold text-xl text-gray-800">성공의 8단계</h3>
+          <div className="text-sm text-blue-600 font-medium">
+            The 8 Steps to Success
           </div>
         </div>
         
-        <div className="mt-4 flex flex-wrap gap-2 justify-center">
-          {renderProgressCircles()}
+        {/* Daily Mood Log 라벨 */}
+        <div className="mb-3 text-center">
+          <h4 className="text-sm font-bold text-gray-700">Daily Mood Log</h4>
         </div>
         
-        {/* 빠른 액션 버튼 */}
-        <div className="flex justify-center mt-4 gap-4">
-          <button 
-            className="bg-black text-white p-4 rounded-full"
-            onClick={() => setLocation('/home')}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-          </button>
+        {/* 숫자 일러스트 그리드 - 첫 번째 줄 */}
+        <div className="grid grid-cols-4 gap-2 mb-2">
+          {[1, 2, 3, 4].map((num) => (
+            <button 
+              key={num}
+              onClick={() => num === 2 ? setLocation('/checklist') : null}
+              className={`p-1 aspect-square flex items-center justify-center transition-transform hover:scale-105`}
+            >
+              <div className={`w-full h-full rounded-full flex items-center justify-center ${
+                num === 1 ? 'bg-yellow-200 border-2 border-yellow-300' : 
+                num === 2 ? 'bg-green-200 border-2 border-green-300' : 
+                num === 3 ? 'bg-red-200 border-2 border-red-300' : 
+                'bg-blue-200 border-2 border-blue-300'
+              }`}>
+                <div className={`text-xl font-bold ${
+                  num === 1 ? 'text-yellow-700' : 
+                  num === 2 ? 'text-green-700' : 
+                  num === 3 ? 'text-red-700' : 
+                  'text-blue-700'
+                }`}>{num}</div>
+              </div>
+              {num === 1 && (
+                <div className="absolute w-full text-[10px] text-yellow-700 font-medium mt-16">
+                  행복
+                </div>
+              )}
+              {num === 2 && (
+                <div className="absolute w-full text-[10px] text-green-700 font-medium mt-16">
+                  평온
+                </div>
+              )}
+              {num === 3 && (
+                <div className="absolute w-full text-[10px] text-red-700 font-medium mt-16">
+                  슬픔
+                </div>
+              )}
+              {num === 4 && (
+                <div className="absolute w-full text-[10px] text-blue-700 font-medium mt-16">
+                  즐거움
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+        
+        {/* 숫자 일러스트 그리드 - 두 번째 줄 제목 */}
+        <div className="mt-6 mb-3 text-center">
+          <h4 className="text-sm font-bold text-gray-700">The 8 Steps to Success</h4>
+        </div>
+        
+        {/* 숫자 일러스트 그리드 - 두 번째 줄 */}
+        <div className="grid grid-cols-4 gap-2 mb-6">
+          {[5, 6, 7, 8].map((num) => (
+            <button 
+              key={num}
+              className={`p-1 aspect-square flex items-center justify-center transition-transform hover:scale-105`}
+            >
+              <div className={`w-full h-full rounded-full flex items-center justify-center ${
+                num === 5 ? 'bg-purple-200 border-2 border-purple-300' : 
+                num === 6 ? 'bg-teal-200 border-2 border-teal-300' : 
+                num === 7 ? 'bg-orange-200 border-2 border-orange-300' : 
+                'bg-indigo-200 border-2 border-indigo-300'
+              }`}>
+                <div className={`text-xl font-bold ${
+                  num === 5 ? 'text-purple-700' : 
+                  num === 6 ? 'text-teal-700' : 
+                  num === 7 ? 'text-orange-700' : 
+                  'text-indigo-700'
+                }`}>{num}</div>
+              </div>
+              {num === 5 && (
+                <div className="absolute w-full text-[10px] text-purple-700 font-medium mt-16">
+                  단계 5
+                </div>
+              )}
+              {num === 6 && (
+                <div className="absolute w-full text-[10px] text-teal-700 font-medium mt-16">
+                  단계 6
+                </div>
+              )}
+              {num === 7 && (
+                <div className="absolute w-full text-[10px] text-orange-700 font-medium mt-16">
+                  단계 7
+                </div>
+              )}
+              {num === 8 && (
+                <div className="absolute w-full text-[10px] text-indigo-700 font-medium mt-16">
+                  단계 8
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+        
+        {/* 숫자 2 클릭 안내 메시지 */}
+        <div className="text-center mt-4 mb-8">
+          <div className="bg-green-100 rounded-lg p-3 shadow-sm border border-green-200 inline-flex items-center">
+            <div className="bg-green-200 w-8 h-8 rounded-full flex items-center justify-center mr-3 border border-green-300">
+              <span className="text-xl font-bold text-green-700">2</span>
+            </div>
+            <span className="text-sm text-green-800">
+              숫자 <strong>2</strong>를 클릭하면 습관 점검표로 이동합니다
+            </span>
+          </div>
+        </div>
+        
+        {/* 진행 상황 */}
+        <div className="mt-8">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="font-bold">Your progress</h3>
+            <button className="text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+              </svg>
+            </button>
+          </div>
           
-          <button 
-            className="border border-gray-300 p-4 rounded-xl"
-            onClick={() => setLocation('/insights')}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-              <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-            </svg>
-          </button>
+          <div className="flex justify-between items-center">
+            <div className="text-6xl font-bold">{completionRate}%</div>
+            <div className="text-right text-gray-500 text-sm">
+              <p>Of the weekly</p>
+              <p>plan completed</p>
+            </div>
+          </div>
+          
+          <div className="mt-4 flex flex-wrap gap-2 justify-center">
+            {renderProgressCircles()}
+          </div>
+          
+          {/* 빠른 액션 버튼 */}
+          <div className="flex justify-center mt-4 gap-4">
+            <button 
+              className="bg-black text-white p-4 rounded-full"
+              onClick={() => setLocation('/')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </button>
+            
+            <button 
+              className="border border-gray-300 p-4 rounded-xl"
+              onClick={() => setLocation('/insights')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 

@@ -8,7 +8,7 @@ const TabNavigation: React.FC = () => {
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-[60px] flex items-center px-0">
       <div className="flex justify-between mx-auto max-w-[390px] w-full">
         <a 
-          href="/home" 
+          href="/" 
           className={`flex flex-col items-center justify-center w-1/5 ${location === '/home' || location === '/' ? 'text-primary' : 'text-gray-500'}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -48,7 +48,7 @@ function Router() {
       {/* 로그인 페이지 */}
       <Route path="/login" component={LoginPage} />
       
-      {/* 메인 대시보드 페이지 (인증 필요) */}
+      {/* 메인 대시보드 페이지 (인증 필요) - 루트 경로('/') */}
       <Route path="/" component={Dashboard} />
       
       {/* 인증이 필요한 습관 트래커 페이지들 */}
@@ -136,7 +136,7 @@ function NavBar() {
 
 function App() {
   const [location, setLocation] = useLocation();
-  const isLandingPage = location === '/' || location === '/landing';
+  const isLandingPage = location === '/landing';
   const isLoginPage = location === '/login';
   const isWelcomePage = location === '/welcome';
   
@@ -149,10 +149,8 @@ function App() {
         if (authStorage) {
           const parsedData = JSON.parse(authStorage);
           if (parsedData?.state?.isAuthenticated && parsedData?.state?.user) {
-            // 이미 인증된 상태면 메인 페이지로
-            if (location === '/') {
-              setLocation('/home');
-            }
+            // 이미 인증된 상태면 메인 페이지인 대시보드('/') 표시
+            // 현재 루트 경로에서는 자동으로 대시보드가 표시됨
             return;
           }
         }
