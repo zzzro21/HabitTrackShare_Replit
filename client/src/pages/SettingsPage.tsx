@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import AppLayout from '@/components/AppLayout';
+
+// 프로필 이미지 갤러리
+const profileImages = [
+  "https://images.unsplash.com/photo-1497215842964-222b430dc094?q=80&w=1770&auto=format&fit=crop", 
+  "https://images.unsplash.com/photo-1606787364406-a3cdf06c6d0c?q=80&w=1770&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1770&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1771&auto=format&fit=crop"
+];
 
 const SettingsPage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -15,6 +23,45 @@ const SettingsPage: React.FC = () => {
   const [newUsername, setNewUsername] = useState('');
   const [usernamePassword, setUsernamePassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 사진 업로드 관련 상태
+  const [showGallery, setShowGallery] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // 컴포넌트 로드 시 저장된 프로필 이미지 로드
+  useEffect(() => {
+    // localStorage에서 저장된 이미지 로드
+    const savedImage = localStorage.getItem('selectedProfileImage');
+    if (savedImage) {
+      setSelectedImage(savedImage);
+    } else {
+      // 기본 이미지 설정
+      setSelectedImage(profileImages[0]);
+    }
+  }, []);
+  
+  // 프로필 이미지 변경 처리
+  const handleImageChange = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    localStorage.setItem('selectedProfileImage', imageUrl);
+    setShowGallery(false);
+    
+    toast({
+      title: "프로필 이미지 변경",
+      description: "프로필 이미지가 변경되었습니다.",
+      duration: 3000
+    });
+  };
+  
+  // 파일 업로드 처리
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const imageUrl = URL.createObjectURL(file);
+      handleImageChange(imageUrl);
+    }
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -147,6 +194,91 @@ const SettingsPage: React.FC = () => {
         </div>
         
         <div>
+          <h2 className="text-lg font-medium mb-3">프로필 설정</h2>
+          <div className="bg-white border rounded-lg divide-y">
+            <div className="px-4 py-4">
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  {/* 프로필 이미지 */}
+                  <div 
+                    className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-200"
+                    style={{ backgroundImage: `url(${selectedImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                  >
+                  </div>
+                  
+                  {/* 카메라 아이콘 */}
+                  <button 
+                    onClick={() => setShowGallery(true)}
+                    className="absolute bottom-0 right-0 bg-blue-500 text-white p-1.5 rounded-full shadow-lg"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                      <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                  </button>
+                </div>
+                
+                <div className="flex-1">
+                  <h3 className="font-medium">{user?.name || "사용자"}</h3>
+                  <div className="text-sm text-gray-500">{user?.username || "-"}</div>
+                  
+                  <div className="mt-2">
+                    <button 
+                      onClick={() => fileInputRef.current?.click()}
+                      className="text-xs text-blue-600 hover:text-blue-800"
+                    >
+                      사진 업로드
+                    </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={handleFileUpload}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* 이미지 갤러리 모달 */}
+            {showGallery && (
+              <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
+                <div className="bg-white rounded-lg p-4 w-[90%] max-w-md max-h-[90%] overflow-y-auto">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">갤러리에서 선택</h3>
+                    <button onClick={() => setShowGallery(false)} className="text-gray-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {profileImages.map((img, index) => (
+                      <div 
+                        key={index} 
+                        className={`aspect-square overflow-hidden rounded-lg cursor-pointer border-2 ${selectedImage === img ? 'border-blue-500' : 'border-transparent'}`}
+                        onClick={() => handleImageChange(img)}
+                      >
+                        <img src={img} alt={`프로필 이미지 ${index + 1}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm"
+                    >
+                      내 사진 업로드
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div>
           <h2 className="text-lg font-medium mb-3">알림 설정</h2>
           <div className="bg-white border rounded-lg divide-y">
             <div className="px-4 py-3 flex items-center justify-between">
@@ -261,16 +393,14 @@ const SettingsPage: React.FC = () => {
             <button 
               onClick={() => setShowUsernameForm(!showUsernameForm)} 
               className="w-full px-4 py-3 text-left"
-              disabled={user?.hasChangedUsername}
             >
-              <div className={`font-medium ${user?.hasChangedUsername ? 'text-gray-400' : 'text-blue-600'}`}>
+              <div className="font-medium text-blue-600">
                 아이디 변경
-                {user?.hasChangedUsername && ' (변경 불가)'}
               </div>
               <div className="text-xs text-gray-500">※ 최초 1회만 변경 가능합니다</div>
             </button>
             
-            {showUsernameForm && !user?.hasChangedUsername && (
+            {showUsernameForm && (
               <div className="p-4 bg-gray-50">
                 <form onSubmit={handleChangeUsername}>
                   <div className="space-y-3">
